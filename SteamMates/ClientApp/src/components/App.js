@@ -1,7 +1,8 @@
 import React from "react";
+import UserPanel from "./UserPanel";
 
 const App = () => {
-  return <p>Hello world!</p>;
+  return <UserPanel />;
 };
 
 export default App;
