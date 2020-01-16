@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
+using SteamMates.Models;
+using SteamMates.Utils;
 
 namespace SteamMates.Controllers
 {
@@ -7,6 +9,13 @@ namespace SteamMates.Controllers
     [ApiController]
     public class UserController : ControllerBase
     {
+        private UserManager _userManager;
+
+        public UserController(UserManager userManager)
+        {
+            _userManager = userManager;
+        }
+
         [HttpPost("auth")]
         public IActionResult Authenticate()
         {
@@ -19,6 +28,20 @@ namespace SteamMates.Controllers
             var properties = new AuthenticationProperties { RedirectUri = referer };
 
             return Challenge(properties, "Steam");
+        }
+
+        [HttpGet("info")]
+        public ActionResult<User> GetUserInfo()
+        {
+            if (!User.Identity.IsAuthenticated)
+            {
+                return Unauthorized("User has not yet been authenticated.");
+            }
+
+            var userId = _userManager.GetUserId(User);
+            var user = new User { SteamId = userId };
+
+            return user;
         }
     }
 }
