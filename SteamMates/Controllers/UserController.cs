@@ -9,7 +9,7 @@ namespace SteamMates.Controllers
     [ApiController]
     public class UserController : ControllerBase
     {
-        private UserManager _userManager;
+        private readonly UserManager _userManager;
 
         public UserController(UserManager userManager)
         {
@@ -39,7 +39,7 @@ namespace SteamMates.Controllers
             }
 
             var userId = _userManager.GetUserId(User);
-            var user = new User { SteamId = userId };
+            var user = _userManager.GetUserInfo(userId);
 
             return user;
         }

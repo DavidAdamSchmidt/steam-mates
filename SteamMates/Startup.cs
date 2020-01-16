@@ -28,6 +28,8 @@ namespace SteamMates
 
             services.AddSingleton<UserManager, UserManager>();
 
+            services.Configure<AppSecrets>(options => Configuration.Bind(options));
+
             services.AddAuthentication(options =>
             {
                 options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
