@@ -8,8 +8,7 @@ const UserPanel = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    setLoading(true);
-    Axios.get(`${API_URL}/user/info`)
+    Axios.get(`${API_URL}/user/info`, { withCredentials: true })
       .then(response => {
         if (response.status === 200) {
           setUser({

@@ -67,9 +67,10 @@ namespace SteamMates
             app.UseCors(builder =>
             {
                 builder
-                .AllowAnyOrigin()
                 .AllowAnyHeader()
-                .AllowAnyMethod();
+                .AllowAnyMethod()
+                .AllowCredentials()
+                .WithOrigins("http://localhost:3000");
             });
 
             app.UseEndpoints(endpoints =>
