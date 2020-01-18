@@ -71,7 +71,7 @@ namespace SteamMates
                 .AllowAnyHeader()
                 .AllowAnyMethod()
                 .AllowCredentials()
-                .WithOrigins("http://localhost:3000");
+                .WithOrigins(Configuration.GetSection("AllowedOrigins").Get<string[]>());
             });
 
             app.UseEndpoints(endpoints =>
