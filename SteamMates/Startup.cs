@@ -36,6 +36,7 @@ namespace SteamMates
             })
             .AddCookie(options =>
             {
+                options.Cookie.Name = "SteamMates_user";
                 options.LoginPath = "/api/user/auth";
                 options.LogoutPath = "/api/user/logout";
             })

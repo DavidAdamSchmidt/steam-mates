@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import Axios from "axios";
 import LoginButton from "./LoginButton";
 import { API_URL } from "../constants";
+import LogoutButton from "./LogoutButton";
 
 const UserPanel = () => {
   const [user, setUser] = useState(null);
@@ -33,6 +34,7 @@ const UserPanel = () => {
       <p><strong>Welcome, {user.name}!</strong></p>
       <img src={user.avatar} alt="Avatar" />
       <p>Your id is {user.id}</p>
+      <LogoutButton path={`${API_URL}/user/logout`} onLogout={() => setUser(null)} />
     </div>
   ) : (
     <LoginButton path={`${API_URL}/user/auth`} />

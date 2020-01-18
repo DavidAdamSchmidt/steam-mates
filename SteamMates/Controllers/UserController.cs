@@ -43,5 +43,13 @@ namespace SteamMates.Controllers
 
             return user;
         }
+
+        [HttpPost("logout")]
+        public IActionResult Logout()
+        {
+            Response.Cookies.Delete("SteamMates_user");
+
+            return NoContent();
+        }
     }
 }
