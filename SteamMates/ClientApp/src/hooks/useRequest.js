@@ -1,12 +1,12 @@
 import { useReducer, useCallback, useEffect } from "react";
 import Axios from "axios";
-import fetchReducer from "../reducers/fetchReducer";
+import requestReducer from "../reducers/requestReducer";
 import {
   requestStarted,
   requestSuccessful,
   requestFailed,
   resetState
-} from "../actions/fetchActions";
+} from "../actions/requestActions";
 
 const useRequest = (
   url,
@@ -22,7 +22,7 @@ const useRequest = (
     error: null
   };
 
-  const [state, dispatch] = useReducer(fetchReducer, initialState, undefined);
+  const [state, dispatch] = useReducer(requestReducer, initialState, undefined);
 
   const sendGetRequest = useCallback(() => {
     Axios.get(url, { withCredentials: withCredentials })

@@ -5,7 +5,7 @@ import {
   RESET_STATE
 } from "../constants";
 
-const fetchReducer = (state, action) => {
+const requestReducer = (state, action) => {
   switch (action.type) {
     case REQUEST_STARTED:
       return {
@@ -38,4 +38,4 @@ const fetchReducer = (state, action) => {
   }
 };
 
-export default fetchReducer;
+export default requestReducer;
