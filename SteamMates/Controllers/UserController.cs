@@ -40,6 +40,7 @@ namespace SteamMates.Controllers
 
             var userId = _userManager.GetUserId(User);
             var user = _userManager.GetUserInfo(userId);
+            var friends = _userManager.GetFriends(userId); // TODO: send to client
 
             return user;
         }
