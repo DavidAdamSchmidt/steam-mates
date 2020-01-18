@@ -13,7 +13,7 @@ const UserPanel = () => {
         <strong>Welcome, {user.name}!</strong>
       </p>
       <img src={user.avatar} alt="Avatar" />
-      <p>Your id is {user.id}</p>
+      <p>Your id is {user.steamId}</p>
       <LogoutButton path={`${API_URL}/user/logout`} />
     </div>
   ) : (
