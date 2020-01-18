@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
 using SteamMates.Models;
-using SteamMates.Utils;
+using SteamMates.Services;
 
 namespace SteamMates.Controllers
 {
@@ -9,11 +9,11 @@ namespace SteamMates.Controllers
     [ApiController]
     public class UserController : ControllerBase
     {
-        private readonly UserManager _userManager;
+        private readonly UserService _userService;
 
-        public UserController(UserManager userManager)
+        public UserController(UserService userService)
         {
-            _userManager = userManager;
+            _userService = userService;
         }
 
         [HttpPost("auth")]
@@ -38,9 +38,9 @@ namespace SteamMates.Controllers
                 return Unauthorized("User has not yet been authenticated.");
             }
 
-            var userId = _userManager.GetUserId(User);
-            var user = _userManager.GetUserInfo(userId);
-            var friends = _userManager.GetFriends(userId); // TODO: send to client
+            var userId = _userService.GetUserId(User);
+            var user = _userService.GetUserInfo(userId);
+            var friends = _userService.GetFriends(userId); // TODO: send to client
 
             return user;
         }

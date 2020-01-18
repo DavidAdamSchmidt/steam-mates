@@ -1,16 +1,16 @@
 ﻿using System;
-using Microsoft.Extensions.Options;
-using Newtonsoft.Json.Linq;
-using SteamMates.Models;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Security.Claims;
 using System.Text.RegularExpressions;
+using Microsoft.Extensions.Options;
+using Newtonsoft.Json.Linq;
+using SteamMates.Models;
 
-namespace SteamMates.Utils
+namespace SteamMates.Services
 {
-    public class UserManager
+    public class UserService
     {
         private const string PlayerSummariesPattern =
             @"http://api.steampowered.com/ISteamUser/GetPlayerSummaries/v0002/?key={0}&steamids={1}";
@@ -20,7 +20,7 @@ namespace SteamMates.Utils
 
         private readonly IOptions<AppSecrets> _secrets;
 
-        public UserManager(IOptions<AppSecrets> secrets)
+        public UserService(IOptions<AppSecrets> secrets)
         {
             _secrets = secrets;
         }
