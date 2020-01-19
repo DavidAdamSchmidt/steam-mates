@@ -1,11 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using Microsoft.Extensions.Options;
+﻿using Microsoft.Extensions.Options;
 using Newtonsoft.Json.Linq;
 using SteamMates.Models;
 using SteamMates.Utils;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Net;
 
 namespace SteamMates.Services
 {
@@ -32,7 +32,10 @@ namespace SteamMates.Services
         {
             var ids = GetFriendIds(userId);
 
-            return GetFriendsInfo(ids);
+            var friends = GetFriendList(ids);
+            friends.Sort();
+
+            return friends;
         }
 
         private static string GetJsonStringFromSteam<T>(Func<T, string> getUrl, T arg)
@@ -59,9 +62,9 @@ namespace SteamMates.Services
                 .Select(token => token["steamid"].ToObject<string>());
         }
 
-        private IList<User> GetFriendsInfo(IEnumerable<string> ids)
+        private List<User> GetFriendList(IEnumerable<string> ids)
         {
-            var jsonObj = GetJsonObject(GetFriendsInfoUrl, ids);
+            var jsonObj = GetJsonObject(GetFriendListUrl, ids);
 
             return jsonObj["response"]["players"]
                 .Children()
@@ -79,7 +82,7 @@ namespace SteamMates.Services
             return string.Format(SteamApi.FriendIdsPattern, _secrets.Value.SteamApiKey, userId);
         }
 
-        private string GetFriendsInfoUrl(IEnumerable<string> ids)
+        private string GetFriendListUrl(IEnumerable<string> ids)
         {
             var joinedIds = string.Join(",", ids);
 

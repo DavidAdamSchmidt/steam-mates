@@ -1,10 +1,12 @@
-﻿using System.Collections.Generic;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using SteamMates.Utils;
+using System;
+using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 
 namespace SteamMates.Models
 {
-    public class User
+    public class User : IComparable<User>
     {
         private string _vanityId;
 
@@ -51,5 +53,10 @@ namespace SteamMates.Models
 
         [JsonIgnore]
         public IList<User> Friends { get; set; }
+
+        public int CompareTo([AllowNull] User other)
+        {
+            return string.Compare(PersonaName, other.PersonaName, StringComparison.OrdinalIgnoreCase);
+        }
     }
 }
