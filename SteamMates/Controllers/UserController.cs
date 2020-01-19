@@ -40,7 +40,11 @@ namespace SteamMates.Controllers
 
             var userId = _userService.GetUserId(User);
             var user = _userService.GetUserInfo(userId);
-            var friends = _userService.GetFriends(userId); // TODO: send to client
+
+            if (user.CommunityVisibilityState == 3)
+            {
+                user.Friends = _userService.GetFriends(userId);
+            }
 
             return user;
         }

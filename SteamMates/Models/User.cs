@@ -1,4 +1,7 @@
-﻿namespace SteamMates.Models
+﻿using System.Collections.Generic;
+using Newtonsoft.Json;
+
+namespace SteamMates.Models
 {
     public class User
     {
@@ -39,5 +42,8 @@
         // If the user is currently in-game, this will be the name of the game they are playing.
         // This may be the name of a non-Steam game shortcut.
         public string GameExtraInfo { get; set; }
+
+        [JsonIgnore]
+        public IList<User> Friends { get; set; }
     }
 }
