@@ -1,21 +1,18 @@
 import React from "react";
+import FriendInfo from "./FriendInfo";
 
 const SearchResult = ({ result, searchTerm }) => {
-  const {
-    friend: { personaName },
-    startIndex
-  } = result;
-  const endIndex = startIndex + searchTerm.length;
-  const firstChars = personaName.substring(0, startIndex);
-  const matchedChars = personaName.substring(startIndex, endIndex);
-  const lastChars = personaName.substring(endIndex);
-
   return (
-    <p>
-      {firstChars.length > 0 && <span>{firstChars}</span>}
-      {matchedChars.length > 0 && <strong>{matchedChars}</strong>}
-      {lastChars.length > 0 && <span>{lastChars}</span>}
-    </p>
+    <div>
+      {result.matches.map(match => (
+        <FriendInfo
+          key={match.type.ordinal}
+          match={match}
+          user={result.user}
+          searchTerm={searchTerm}
+        />
+      ))}
+    </div>
   );
 };
 

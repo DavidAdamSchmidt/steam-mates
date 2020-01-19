@@ -8,13 +8,13 @@ const SearchBox = () => {
   const {
     user: { friends }
   } = useContext(UserContext);
-  const [matches, setMatches] = useState([]);
+  const [results, setResults] = useState([]);
 
   const onInputChange = e => {
     const searchTerm = e.target.value;
 
     setInput(searchTerm);
-    setMatches(() => getMatchingFriends(friends, searchTerm.toLowerCase()));
+    setResults(() => getMatchingFriends(friends, searchTerm.toLowerCase()));
   };
 
   return (
@@ -26,9 +26,13 @@ const SearchBox = () => {
         value={input}
         onChange={onInputChange}
       />
-      {matches &&
-        matches.map(match => (
-          <SearchResult key={match.friend.steamId} result={match} searchTerm={input} />
+      {results &&
+        results.map(result => (
+          <SearchResult
+            key={result.user.steamId}
+            result={result}
+            searchTerm={input}
+          />
         ))}
     </div>
   );
