@@ -28,7 +28,7 @@ const SearchBox = () => {
       />
       {matches &&
         matches.map(match => (
-          <SearchResult key={match.friend.steamId} result={match} />
+          <SearchResult key={match.friend.steamId} result={match} searchTerm={input} />
         ))}
     </div>
   );
