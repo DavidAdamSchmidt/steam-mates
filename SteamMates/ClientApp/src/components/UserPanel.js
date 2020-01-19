@@ -10,9 +10,9 @@ const UserPanel = () => {
   return loading ? null : user ? (
     <div>
       <p>
-        <strong>Welcome, {user.name}!</strong>
+        <strong>Welcome, {user.personaName}!</strong>
       </p>
-      <img src={user.avatar} alt="Avatar" />
+      <img src={user.avatarFull} alt="Avatar" />
       <p>Your id is {user.steamId}</p>
       <LogoutButton path={`${API_URL}/user/logout`} />
     </div>
