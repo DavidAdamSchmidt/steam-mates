@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using SteamMates.Models;
 using SteamMates.Services;
+using SteamMates.Utils;
 
 namespace SteamMates.Controllers
 {
@@ -38,7 +39,8 @@ namespace SteamMates.Controllers
                 return Unauthorized("User has not yet been authenticated.");
             }
 
-            var userId = _userService.GetUserId(User);
+            var userId = SteamApi.GetUserIdFromClaim(User);
+
             var user = _userService.GetUserInfo(userId);
 
             if (user.CommunityVisibilityState == 3)

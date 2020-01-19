@@ -1,10 +1,13 @@
 ﻿using System.Collections.Generic;
 using Newtonsoft.Json;
+using SteamMates.Utils;
 
 namespace SteamMates.Models
 {
     public class User
     {
+        private string _vanityId;
+
         public string SteamId { get; set; }
 
         public string PersonaName { get; set; }
@@ -42,6 +45,9 @@ namespace SteamMates.Models
         // If the user is currently in-game, this will be the name of the game they are playing.
         // This may be the name of a non-Steam game shortcut.
         public string GameExtraInfo { get; set; }
+
+        [JsonIgnore]
+        public string VanityId => _vanityId ??= SteamApi.GetVanityIdFromProfileUrl(ProfileUrl);
 
         [JsonIgnore]
         public IList<User> Friends { get; set; }
