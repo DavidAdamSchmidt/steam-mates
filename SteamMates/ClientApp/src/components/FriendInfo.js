@@ -1,15 +1,25 @@
-import React from "react";
+import React, { useContext } from "react";
+import SearchTermContext from "../contexts/SearchTermContext";
 import { getPropertyValue } from "../utils/friendSearchUtils";
-import "./FriendInfo.css";
+import "../static/css/FriendInfo.css";
 
-const FriendInfo = ({ match, user, searchTerm }) => {
+const FriendInfo = ({ match, user }) => {
+  const searchTerm = useContext(SearchTermContext);
   const propertyValue = getPropertyValue(user, match.type);
+  const [container, propertyName, valueMatched, valueNotMatched] = [
+    "friend-info",
+    "property-name",
+    "match",
+    "no-match"
+  ];
 
   if (match.startIndex === -1) {
     return (
-      <span className="friend-info">
-        <span>{match.type}: </span>
-        <span>{propertyValue ? propertyValue : "N/A"}</span>
+      <span className={container}>
+        <span className={propertyName}>{match.type}: </span>
+        <span className={valueNotMatched}>
+          {propertyValue ? propertyValue : "N/A"}
+        </span>
       </span>
     );
   }
@@ -20,13 +30,17 @@ const FriendInfo = ({ match, user, searchTerm }) => {
   const lastChars = propertyValue.substring(endIndex);
 
   return (
-    <span className="friend-info">
-      <span>{match.type}: </span>
-      {firstChars.length > 0 && <span>{firstChars}</span>}
-      {matchedChars.length > 0 && (
-        <strong className="match">{matchedChars}</strong>
+    <span className={container}>
+      <span className={propertyName}>{match.type}: </span>
+      {firstChars.length > 0 && (
+        <span className={valueNotMatched}>{firstChars}</span>
       )}
-      {lastChars.length > 0 && <span>{lastChars}</span>}
+      {matchedChars.length > 0 && (
+        <span className={valueMatched}>{matchedChars}</span>
+      )}
+      {lastChars.length > 0 && (
+        <span className={valueNotMatched}>{lastChars}</span>
+      )}
     </span>
   );
 };

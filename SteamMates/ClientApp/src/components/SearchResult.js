@@ -1,16 +1,13 @@
 import React from "react";
 import FriendInfo from "./FriendInfo";
+import "../static/css/SearchResult.css";
 
-const SearchResult = ({ result, searchTerm }) => {
+const SearchResult = ({ result }) => {
   return (
-    <div>
+    <div className="search-result">
+      <img className="avatar" src={result.user.avatar} alt="Avatar" />
       {result.matches.map(match => (
-        <FriendInfo
-          key={match.type}
-          match={match}
-          user={result.user}
-          searchTerm={searchTerm}
-        />
+        <FriendInfo key={match.type} match={match} user={result.user} />
       ))}
     </div>
   );

@@ -1,5 +1,5 @@
 import React from "react";
-import "./LoginButton.css";
+import "../static/css/LoginButton.css";
 import login_button from "../static/images/login_button.png";
 
 const LoginButton = ({ path }) => {

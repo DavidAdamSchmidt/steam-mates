@@ -1,7 +1,15 @@
 import React, { useState, useContext } from "react";
 import UserContext from "../contexts/UserContext";
-import SearchResult from "./SearchResult";
+import SearchTermContext from "../contexts/SearchTermContext";
+import SearchResultContainer from "./SearchResultContainer";
 import { getMatchingFriends } from "../utils/friendSearchUtils";
+import {
+  PERSONA_NAME,
+  REAL_NAME,
+  STEAM_ID_64,
+  VANITY_ID
+} from "../constants/user";
+import "../static/css/SearchBox.css";
 
 const SearchBox = () => {
   const [input, setInput] = useState("");
@@ -18,22 +26,19 @@ const SearchBox = () => {
   };
 
   return (
-    <div>
-      <h2>Search for a friend</h2>
+    <div className="search-box">
       <input
+        className="search-field"
         type="text"
-        placeholder="Type here..."
+        placeholder={`Search friends by ${PERSONA_NAME}, ${REAL_NAME}, ${VANITY_ID} or ${STEAM_ID_64}...`}
         value={input}
         onChange={onInputChange}
       />
-      {results &&
-        results.map(result => (
-          <SearchResult
-            key={result.user.steamId}
-            result={result}
-            searchTerm={input}
-          />
-        ))}
+      {results && (
+        <SearchTermContext.Provider value={input}>
+          <SearchResultContainer results={results} />
+        </SearchTermContext.Provider>
+      )}
     </div>
   );
 };
