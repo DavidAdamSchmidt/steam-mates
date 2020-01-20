@@ -6,7 +6,7 @@ const SearchResult = ({ result, searchTerm }) => {
     <div>
       {result.matches.map(match => (
         <FriendInfo
-          key={match.type.ordinal}
+          key={match.type}
           match={match}
           user={result.user}
           searchTerm={searchTerm}

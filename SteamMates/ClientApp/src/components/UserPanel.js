@@ -3,7 +3,7 @@ import UserContext from "../contexts/UserContext";
 import LoginButton from "./LoginButton";
 import LogoutButton from "./LogoutButton";
 import FriendsTable from "./FriendsTable";
-import { API_URL } from "../constants";
+import { API_URL } from "../constants/api";
 import SearchBox from "./SearchBox";
 
 const UserPanel = () => {

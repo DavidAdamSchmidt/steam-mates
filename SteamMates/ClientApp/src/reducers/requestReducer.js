@@ -3,7 +3,7 @@ import {
   REQUEST_SUCCESSFUL,
   REQUEST_FAILED,
   RESET_STATE
-} from "../constants";
+} from "../constants/request";
 
 const requestReducer = (state, action) => {
   switch (action.type) {

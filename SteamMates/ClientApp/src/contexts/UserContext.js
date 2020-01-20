@@ -1,5 +1,5 @@
 import React, { createContext } from "react";
-import { API_URL } from "../constants";
+import { API_URL } from "../constants/api";
 import useRequest from "../hooks/useRequest";
 
 const UserContext = createContext(null);

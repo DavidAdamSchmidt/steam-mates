@@ -1,6 +1,11 @@
-import { PERSONA_NAME, REAL_NAME, VANITY_ID, STEAM_ID_64 } from "./constants";
+import {
+  PERSONA_NAME,
+  REAL_NAME,
+  VANITY_ID,
+  STEAM_ID_64
+} from "../constants/user";
 
-export const types = [PERSONA_NAME, REAL_NAME, VANITY_ID, STEAM_ID_64];
+const types = [PERSONA_NAME, REAL_NAME, VANITY_ID, STEAM_ID_64];
 
 export const getMatchingFriends = (friends, searchTerm) => {
   const results = [];
@@ -20,14 +25,14 @@ export const getMatchingFriends = (friends, searchTerm) => {
 };
 
 export const getPropertyValue = (user, type) => {
-  switch (type.ordinal) {
-    case PERSONA_NAME.ordinal:
+  switch (type) {
+    case PERSONA_NAME:
       return user.personaName;
-    case REAL_NAME.ordinal:
+    case REAL_NAME:
       return user.realName;
-    case VANITY_ID.ordinal:
+    case VANITY_ID:
       return user.vanityId;
-    case STEAM_ID_64.ordinal:
+    case STEAM_ID_64:
       return user.steamId;
     default:
       return null;
@@ -38,13 +43,13 @@ const getMatches = (user, searchTerm) => {
   const matches = [];
 
   for (const type of types) {
-    const property = getPropertyValue(user, type);
-    if (property === null) {
+    const propertyValue = getPropertyValue(user, type);
+    if (propertyValue === null) {
       matches.push({ type: type, startIndex: -1 });
       continue;
     }
 
-    const startIndex = property.toLowerCase().indexOf(searchTerm);
+    const startIndex = propertyValue.toLowerCase().indexOf(searchTerm);
     matches.push({ type: type, startIndex: startIndex });
   }
 
@@ -111,7 +116,7 @@ const comparePropertyValues = (a, b, type) => {
 };
 
 const getMatchesByType = (a, b, type) => {
-  const getMatchByType = match => match.type.ordinal === type.ordinal;
+  const getMatchByType = match => match.type === type;
   const aMatch = a.matches.find(getMatchByType);
   const bMatch = b.matches.find(getMatchByType);
 

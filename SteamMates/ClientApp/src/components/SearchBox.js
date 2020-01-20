@@ -1,7 +1,7 @@
 import React, { useState, useContext } from "react";
 import UserContext from "../contexts/UserContext";
 import SearchResult from "./SearchResult";
-import { getMatchingFriends } from "../utils";
+import { getMatchingFriends } from "../utils/friendSearchUtils";
 
 const SearchBox = () => {
   const [input, setInput] = useState("");
