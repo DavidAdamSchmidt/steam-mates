@@ -2,7 +2,6 @@ import React, { useContext } from "react";
 import UserContext from "../contexts/UserContext";
 import LoginButton from "./LoginButton";
 import LogoutButton from "./LogoutButton";
-import FriendsTable from "./FriendsTable";
 import { API_URL } from "../constants/api";
 import SearchBox from "./SearchBox";
 
@@ -18,7 +17,6 @@ const UserPanel = () => {
       <p>Your id is {user.steamId}</p>
       <LogoutButton path={`${API_URL}/user/logout`} />
       <SearchBox />
-      <FriendsTable />
     </div>
   ) : (
     <LoginButton path={`${API_URL}/user/auth`} />
