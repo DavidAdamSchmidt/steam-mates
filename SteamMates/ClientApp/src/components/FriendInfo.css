@@ -9,3 +9,7 @@
 .friend-info:last-of-type {
   margin-right: 0;
 }
+
+.match {
+  color: red;
+}
