@@ -1,25 +1,19 @@
 import React, { useContext } from "react";
+import {Redirect} from "react-router-dom";
 import UserContext from "../contexts/UserContext";
-import LoginButton from "./LoginButton";
 import LogoutButton from "./LogoutButton";
 import { API_URL } from "../constants/api";
-import SearchBox from "./SearchBox";
+import "./../static/css/UserPanel.css";
 
 const UserPanel = () => {
-  const { user, loading } = useContext(UserContext);
+  const { user } = useContext(UserContext);
 
-  return loading ? null : user ? (
-    <div>
-      <p>
-        <strong>Welcome, {user.personaName}!</strong>
-      </p>
-      <img src={user.avatarFull} alt="Avatar" />
-      <p>Your id is {user.steamId}</p>
+  return (
+    <div className="user-panel">
+      <img className="user-avatar" src={user.avatarMedium} alt="Avatar" />
       <LogoutButton path={`${API_URL}/user/logout`} />
-      <SearchBox />
+      <Redirect to="/search-friends"/>
     </div>
-  ) : (
-    <LoginButton path={`${API_URL}/user/auth`} />
   );
 };
 

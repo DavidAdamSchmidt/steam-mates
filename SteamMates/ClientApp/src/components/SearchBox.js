@@ -1,4 +1,5 @@
 import React, { useState, useContext } from "react";
+import { Redirect } from "react-router-dom";
 import UserContext from "../contexts/UserContext";
 import SearchTermContext from "../contexts/SearchTermContext";
 import SearchResultContainer from "./SearchResultContainer";
@@ -13,16 +14,17 @@ import "../static/css/SearchBox.css";
 
 const SearchBox = () => {
   const [input, setInput] = useState("");
-  const {
-    user: { friends }
-  } = useContext(UserContext);
   const [results, setResults] = useState([]);
+  const {user} = useContext(UserContext);
+  if (user == null) {
+    return <Redirect to="/" />
+  }
 
   const onInputChange = e => {
     const searchTerm = e.target.value;
 
     setInput(searchTerm);
-    setResults(() => getMatchingFriends(friends, searchTerm.toLowerCase()));
+    setResults(() => getMatchingFriends(user.friends, searchTerm.toLowerCase()));
   };
 
   return (

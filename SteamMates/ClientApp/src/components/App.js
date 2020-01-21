@@ -1,15 +1,17 @@
-import React from "react";
-import { UserContextProvider } from "../contexts/UserContext";
-import UserPanel from "./UserPanel";
+import React, { useContext } from "react";
+import UserContext, { UserContextProvider } from "../contexts/UserContext";
 import NavigationBar from "./NavigationBar";
+import MainContainer from "./MainContainer";
 
 const App = () => {
-  return (
+  const { loading } = useContext(UserContext);
+
+  return loading ? (
+    "Loading..."
+  ) : (
     <div className="app">
       <NavigationBar />
-      <UserContextProvider>
-        <UserPanel />
-      </UserContextProvider>
+      <MainContainer />
     </div>
   );
 };

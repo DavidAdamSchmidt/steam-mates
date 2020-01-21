@@ -1,6 +1,7 @@
 import React, { useState, useContext } from "react";
 import useRequest from "../hooks/useRequest";
 import UserContext from "../contexts/UserContext";
+import "./../static/css/LogoutButton.css";
 
 const LogoutButton = ({ path }) => {
   const [sendRequest, setSendRequest] = useState(false);
@@ -10,7 +11,11 @@ const LogoutButton = ({ path }) => {
     context.logout();
   }
 
-  return <button onClick={() => setSendRequest(true)}>Logout</button>;
+  return (
+    <button className="logout-button" onClick={() => setSendRequest(true)}>
+      Logout
+    </button>
+  );
 };
 
 export default LogoutButton;
