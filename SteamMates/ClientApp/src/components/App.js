@@ -1,12 +1,16 @@
 import React from "react";
 import { UserContextProvider } from "../contexts/UserContext";
 import UserPanel from "./UserPanel";
+import NavigationBar from "./NavigationBar";
 
 const App = () => {
   return (
-    <UserContextProvider>
-      <UserPanel />
-    </UserContextProvider>
+    <div className="app">
+      <NavigationBar />
+      <UserContextProvider>
+        <UserPanel />
+      </UserContextProvider>
+    </div>
   );
 };
 
