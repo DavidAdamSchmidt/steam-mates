@@ -20,8 +20,9 @@
   display: block;
   padding: 10px 20px;
   border-radius: 5px;
-  width: 120px;
+  min-width: 120px;
   height: 22px;
+  white-space: nowrap;
 }
 
 .tooltip .tooltip-text {

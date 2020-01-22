@@ -5,7 +5,7 @@
 }
 
 .search-result:hover {
-  background-color: #ffffff;
+  background-color: rgba(198, 198, 198, 0.41);
   cursor: pointer;
 }
 
