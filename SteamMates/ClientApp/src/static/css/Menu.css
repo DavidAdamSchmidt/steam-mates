@@ -1,0 +1,19 @@
+.menu {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  color: #b1b1b1;
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.menu-link {
+  text-decoration: none;
+}
+
+.menu:hover {
+  background-color: darkgreen;
+  color: white;
+  cursor: pointer;
+}

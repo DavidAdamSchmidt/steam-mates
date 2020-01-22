@@ -4,15 +4,19 @@ import UserContext from "../contexts/UserContext";
 import LogoutButton from "./LogoutButton";
 import { API_URL } from "../constants/api";
 import "./../static/css/UserPanel.css";
+import UserAvatar from "./UserAvatar";
 
 const UserPanel = () => {
   const { user } = useContext(UserContext);
 
   return (
     <div className="user-panel">
-      <img className="user-avatar" src={user.avatarMedium} alt="Avatar" />
+      <UserAvatar />
+      <UserAvatar />
+      <UserAvatar />
+      <UserAvatar src={user.avatarMedium} />
       <LogoutButton path={`${API_URL}/user/logout`} />
-      <Redirect to="/search-friends"/>
+      <Redirect to="/friends"/>
     </div>
   );
 };

@@ -1,5 +1,5 @@
 .navigation-bar {
-  height: 85px;
+  height: 70px;
   width: 100%;
   background: linear-gradient(12deg, rgb(7, 2, 6), rgb(21, 1, 66) 91.71%);
   top: 0;
@@ -11,5 +11,5 @@
   height: 100%;
   margin: auto;
   display: grid;
-  grid-template-columns: 1fr 170px;
+  grid-template-columns: repeat(4, 1fr) 1.3fr;
 }

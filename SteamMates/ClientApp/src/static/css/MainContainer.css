@@ -1,3 +1,4 @@
 .container {
-  margin-top: 125px;
+  margin: 125px auto 0 auto;
+  width: 65%;
 }

@@ -1,0 +1,19 @@
+.user-avatar-container {
+  margin-left: 2px;
+  padding: 2px;
+  border: 1px solid rgba(148, 92, 47, 0.81);
+}
+
+.user-avatar-container img {
+  width: 45px;
+  height: 45px;
+  display: block;
+}
+
+.user-avatar:hover {
+  cursor: pointer;
+}
+
+.no-user-avatar {
+  filter: brightness(50%);
+}

@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import UserContext, { UserContextProvider } from "../contexts/UserContext";
+import UserContext from "../contexts/UserContext";
 import NavigationBar from "./NavigationBar";
 import MainContainer from "./MainContainer";
 

@@ -1,0 +1,11 @@
+.logo {
+  color: white;
+  font-weight: bold;
+  font-size: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-style: italic;
+  padding: 10px;
+  margin: 0;
+}
