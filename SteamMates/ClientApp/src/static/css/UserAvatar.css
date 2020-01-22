@@ -17,10 +17,6 @@
   display: block;
 }
 
-.user-avatar:hover {
-  cursor: pointer;
-}
-
 .no-avatar {
   filter: brightness(50%);
 }
