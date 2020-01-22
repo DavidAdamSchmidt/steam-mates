@@ -16,8 +16,12 @@ export const FriendProvider = props => {
     return false;
   };
 
+  const removeFriend = friend => {
+    setFriends(friends.filter(x => x.steamId !== friend.steamId));
+  };
+
   return (
-    <FriendContext.Provider value={{ friends, tryToAddFriend }}>
+    <FriendContext.Provider value={{ friends, tryToAddFriend, removeFriend }}>
       {props.children}
     </FriendContext.Provider>
   );

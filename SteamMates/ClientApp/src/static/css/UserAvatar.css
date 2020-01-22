@@ -1,6 +1,7 @@
 .avatar-container {
   margin-left: 2px;
   padding: 2px;
+  cursor: pointer;
 }
 
 .user-avatar-container {
@@ -11,6 +12,10 @@
   border: 1px solid rgba(148, 92, 47, 0.81);
 }
 
+.friend-avatar-container:hover {
+  filter: brightness(50%);
+}
+
 .avatar-container img {
   width: 45px;
   height: 45px;
@@ -19,4 +24,18 @@
 
 .no-avatar {
   filter: brightness(50%);
+}
+
+.remove-friend {
+ display: none;
+}
+
+.friend-avatar-container:hover .remove-friend {
+  display: block;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 50px;
+  color: #ff0000
 }

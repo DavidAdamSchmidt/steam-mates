@@ -24,12 +24,12 @@ const UserPanel = () => {
         <UserAvatar key={index} />
       ))}
       {orderedFriends.map(friend => (
-        <Tooltip text={friend.personaName}>
-          <UserAvatar key={friend.steamId} src={friend.avatarMedium} />
+        <Tooltip key={friend.steamId} text={friend.personaName}>
+          <UserAvatar user={friend} isFriend={true} />
         </Tooltip>
       ))}
       <Tooltip text={`${user.personaName} (you)`}>
-        <UserAvatar src={user.avatarMedium} user={true} />
+        <UserAvatar user={user} isFriend={false} />
       </Tooltip>
       <LogoutButton path={`${API_URL}/user/logout`} />
       <Redirect to="/friends" />
