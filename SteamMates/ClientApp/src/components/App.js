@@ -2,6 +2,7 @@ import React, { useContext } from "react";
 import UserContext from "../contexts/UserContext";
 import NavigationBar from "./NavigationBar";
 import MainContainer from "./MainContainer";
+import { FriendProvider } from "../contexts/FriendContext";
 
 const App = () => {
   const { loading } = useContext(UserContext);
@@ -9,10 +10,10 @@ const App = () => {
   return loading ? (
     "Loading..."
   ) : (
-    <div className="app">
+    <FriendProvider>
       <NavigationBar />
       <MainContainer />
-    </div>
+    </FriendProvider>
   );
 };
 

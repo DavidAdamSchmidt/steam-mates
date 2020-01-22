@@ -1,10 +1,17 @@
-.user-avatar-container {
+.avatar-container {
   margin-left: 2px;
   padding: 2px;
+}
+
+.user-avatar-container {
+  border: 2px solid rgba(240, 243, 43, 0.81);
+}
+
+.friend-avatar-container {
   border: 1px solid rgba(148, 92, 47, 0.81);
 }
 
-.user-avatar-container img {
+.avatar-container img {
   width: 45px;
   height: 45px;
   display: block;
@@ -14,6 +21,6 @@
   cursor: pointer;
 }
 
-.no-user-avatar {
+.no-avatar {
   filter: brightness(50%);
 }

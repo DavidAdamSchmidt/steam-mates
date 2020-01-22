@@ -4,7 +4,7 @@ import useRequest from "../hooks/useRequest";
 
 const UserContext = createContext(null);
 
-export const UserContextProvider = props => {
+export const UserProvider = props => {
   const [loading, , user, , logout] = useRequest(`${API_URL}/user/info`, true);
 
   return (
