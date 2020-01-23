@@ -16,16 +16,17 @@ namespace SteamMates.Services
         public List<Game> GetGamesInCommon(ICollection<string> userIds)
         {
             var libraries = GetGameLibraries(userIds);
+
+            libraries.Sort();
+
             var filteredGames = GetFilteredLibraries(libraries);
 
             return filteredGames;
         }
 
-        private List<Game> GetFilteredLibraries(List<GameLibrary> libraries)
+        private List<Game> GetFilteredLibraries(IReadOnlyList<GameLibrary> libraries)
         {
             var filteredGames = new List<Game>();
-
-            libraries.Sort();
 
             foreach (var gameA in libraries[0].Games)
             {
@@ -68,7 +69,7 @@ namespace SteamMates.Services
             return new GameLibrary
             {
                 UserId = userId,
-                Games = games
+                Games = games ?? new List<Game>()
             };
         }
 

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 
 namespace SteamMates.Models
 {
@@ -10,7 +9,7 @@ namespace SteamMates.Models
 
         public List<Game> Games { get; set; }
 
-        public int CompareTo([AllowNull] GameLibrary other)
+        public int CompareTo(GameLibrary other)
         {
             return Games.Count.CompareTo(other.Games.Count);
         }
