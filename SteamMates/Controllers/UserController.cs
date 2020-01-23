@@ -39,13 +39,13 @@ namespace SteamMates.Controllers
                 return Unauthorized("User has not yet been authenticated.");
             }
 
-            var userId = SteamApi.GetUserIdFromClaim(User);
+            SteamApi.SetUserIdFromClaim(User);
 
-            var user = _userService.GetUserInfo(userId);
+            var user = _userService.GetUserInfo(SteamApi.UserId);
 
             if (user.CommunityVisibilityState == 3)
             {
-                user.Friends = _userService.GetFriends(userId);
+                user.Friends = _userService.GetFriends(SteamApi.UserId);
             }
 
             return user;

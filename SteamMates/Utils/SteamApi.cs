@@ -12,16 +12,23 @@ namespace SteamMates.Utils
         private const string FriendIds =
             @"http://api.steampowered.com/ISteamUser/GetFriendList/v0001/?key={0}&steamid={1}&relationship=friend";
 
+        private const string OwnedGames =
+            @"http://api.steampowered.com/IPlayerService/GetOwnedGames/v0001/?key={0}&steamid={1}&include_appinfo=true";
+
         public static string PlayerSummariesPattern => PlayerSummaries;
 
         public static string FriendIdsPattern => FriendIds;
 
-        public static string GetUserIdFromClaim(ClaimsPrincipal user)
+        public static string OwnedGamesPattern => OwnedGames;
+
+        public static string UserId { get; private set; }
+
+        public static void SetUserIdFromClaim(ClaimsPrincipal user)
         {
             var claim = user.Claims.ToArray()[0].Value;
             const string pattern = @"^https?://steamcommunity.com/openid/id/(7[0-9]{15,25})$";
 
-            return GetRegexMatch(claim, pattern);
+            UserId = GetRegexMatch(claim, pattern);
         }
 
         public static string GetVanityIdFromProfileUrl(string profileUrl)

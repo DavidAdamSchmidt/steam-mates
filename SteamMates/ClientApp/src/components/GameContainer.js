@@ -11,15 +11,16 @@ const GameContainer = () => {
   const { user } = useContext(UserContext);
   const { friends } = useContext(FriendContext);
   const [loading, status, data, error] = useRequest(
-    `${API_URL}/game/common?${url}`,
+    `${API_URL}/games/common?${url}`,
     sendRequest,
     "GET"
   );
+  console.log(data);
 
   if (user == null || friends.length === 0 || friends.length > 3) {
     return <Redirect to="/" />;
   } else if (!sendRequest) {
-    setUrl(friends.map((friend, index) => `${index ? "&" : ""}friendId=${friend.steamId}`).join(""));
+    setUrl(friends.map((friend, index) => `${index ? "&" : ""}userId=${friend.steamId}`).join(""));
     setSendRequest(true);
   }
 

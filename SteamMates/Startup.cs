@@ -27,6 +27,7 @@ namespace SteamMates
             services.AddSpaStaticFiles(configuration => configuration.RootPath = "ClientApp/build");
 
             services.AddSingleton<UserService, UserService>();
+            services.AddSingleton<GameService, GameService>();
 
             services.Configure<AppSecrets>(options => Configuration.Bind(options));
 

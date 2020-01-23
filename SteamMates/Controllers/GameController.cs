@@ -1,30 +1,53 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System.Collections.Generic;
+using Microsoft.AspNetCore.Mvc;
+using SteamMates.Models;
+using SteamMates.Services;
+using SteamMates.Utils;
 
 namespace SteamMates.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/[controller]s")]
     [ApiController]
     public class GameController : ControllerBase
     {
+        private readonly GameService _gameService;
+
+        public GameController(GameService gameService)
+        {
+            _gameService = gameService;
+        }
+
         [HttpGet("common")]
-        public IActionResult GetGamesInCommon([FromQuery(Name = "friendId")] string[] friendIds)
+        public ActionResult<List<Game>> GetGamesInCommon([FromQuery(Name = "userId")] ICollection<string> userIds)
         {
             if (!User.Identity.IsAuthenticated)
             {
                 return Unauthorized("User needs to be authenticated.");
             }
 
-            if (friendIds.Length == 0)
+            if (userIds.Count == 0)
             {
-                return BadRequest("No friend ID was received.");
+                return BadRequest("No user ID was received.");
             }
 
-            if (friendIds.Length > 3)
+            var tooManyIds = BadRequest("Too many user IDs were received.");
+
+            if (userIds.Count > 4)
             {
-                return BadRequest("Too many friend IDs were received.");
+                return tooManyIds;
             }
 
-            return Ok(); // TODO: send back games
+            if (!userIds.Contains(SteamApi.UserId))
+            {
+                if (userIds.Count > 3)
+                {
+                    return tooManyIds;
+                }
+
+                userIds.Add(SteamApi.UserId);
+            }
+
+            return _gameService.GetGamesInCommon(userIds);
         }
     }
 }

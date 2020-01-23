@@ -1,22 +1,16 @@
 ﻿using Microsoft.Extensions.Options;
-using Newtonsoft.Json.Linq;
 using SteamMates.Models;
 using SteamMates.Utils;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net;
 
 namespace SteamMates.Services
 {
-    public class UserService
+    public class UserService : ServiceBase
     {
-
-        private readonly IOptions<AppSecrets> _secrets;
-
         public UserService(IOptions<AppSecrets> secrets)
+            : base(secrets)
         {
-            _secrets = secrets;
         }
 
         public User GetUserInfo(string userId)
@@ -36,21 +30,6 @@ namespace SteamMates.Services
             friends.Sort();
 
             return friends;
-        }
-
-        private static string GetJsonStringFromSteam<T>(Func<T, string> getUrl, T arg)
-        {
-            using var client = new WebClient();
-            var endpoint = getUrl(arg);
-
-            return client.DownloadString(endpoint);
-        }
-
-        private static JObject GetJsonObject<T>(Func<T, string> getJsonStr, T arg)
-        {
-            var jsonStr = GetJsonStringFromSteam(getJsonStr, arg);
-
-            return JObject.Parse(jsonStr);
         }
 
         private IEnumerable<string> GetFriendIds(string userId)
@@ -74,19 +53,19 @@ namespace SteamMates.Services
 
         private string GetUserInfoUrl(string userId)
         {
-            return string.Format(SteamApi.PlayerSummariesPattern, _secrets.Value.SteamApiKey, userId);
+            return string.Format(SteamApi.PlayerSummariesPattern, Secrets.Value.SteamApiKey, userId);
         }
 
         private string GetFriendIdsUrl(string userId)
         {
-            return string.Format(SteamApi.FriendIdsPattern, _secrets.Value.SteamApiKey, userId);
+            return string.Format(SteamApi.FriendIdsPattern, Secrets.Value.SteamApiKey, userId);
         }
 
         private string GetFriendListUrl(IEnumerable<string> ids)
         {
             var joinedIds = string.Join(",", ids);
 
-            return string.Format(SteamApi.PlayerSummariesPattern, _secrets.Value.SteamApiKey, joinedIds);
+            return string.Format(SteamApi.PlayerSummariesPattern, Secrets.Value.SteamApiKey, joinedIds);
         }
     }
 }
