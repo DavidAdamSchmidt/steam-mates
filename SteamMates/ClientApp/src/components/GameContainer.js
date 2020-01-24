@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { Redirect } from "react-router-dom";
 import UserContext from "../contexts/UserContext";
 import FriendContext from "../contexts/FriendContext";
@@ -18,19 +18,25 @@ const GameContainer = () => {
     "GET"
   );
 
+  useEffect(() => {
+    if (friends) {
+      setUrl(friends.map((friend, index) => `${index ? "&" : ""}userId=${friend.steamId}`).join(""));
+      setSendRequest(true);
+    }
+  }, [friends]);
+
   if (user == null || friends.length === 0 || friends.length > 3) {
-    return <Redirect to="/" />;
-  } else if (!sendRequest) {
-    setUrl(friends.map((friend, index) => `${index ? "&" : ""}userId=${friend.steamId}`).join(""));
-    setSendRequest(true);
-  } else if (loading) {
+    return <Redirect to="/"/>;
+  }
+
+  if (loading) {
     return <span>Loading...</span>
   }
 
   return (
     <div className="game-container">
       {data && data.map(game => <GameLogo key={game.appId} game={game} />)}
-      <div>{data && `${data.length} games were found.`}</div>
+      {data && data.length === 0 && <div>{data.length} games were found</div>}
     </div>);
 };
 
