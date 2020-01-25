@@ -35,7 +35,7 @@ const GameContainer = () => {
 
   return (
     <div className="game-container">
-      {data && data.map(game => <GameLogo key={game.appId} game={game} />)}
+      {data && data.map(stat => <GameLogo key={stat.game.appId} game={stat.game} />)}
       {data && data.length === 0 && <div>{data.length} games were found</div>}
     </div>);
 };

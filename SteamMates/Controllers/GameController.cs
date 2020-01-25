@@ -18,7 +18,7 @@ namespace SteamMates.Controllers
         }
 
         [HttpGet("common")]
-        public ActionResult<List<Game>> GetGamesInCommon([FromQuery(Name = "userId")] ICollection<string> userIds)
+        public ActionResult<List<GameStat>> GetGamesInCommon([FromQuery(Name = "userId")] ICollection<string> userIds)
         {
             if (!User.Identity.IsAuthenticated)
             {

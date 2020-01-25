@@ -1,7 +1,9 @@
-﻿using Microsoft.Extensions.Options;
+﻿using System;
+using Microsoft.Extensions.Options;
 using SteamMates.Models;
 using SteamMates.Utils;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Linq;
 
 namespace SteamMates.Services
@@ -13,43 +15,37 @@ namespace SteamMates.Services
         {
         }
 
-        public List<Game> GetGamesInCommon(ICollection<string> userIds)
+        public List<GameStat> GetGamesInCommon(ICollection<string> userIds)
         {
             var libraries = GetGameLibraries(userIds);
 
             libraries.Sort();
 
-            var filteredGames = GetFilteredLibraries(libraries);
-
-            return filteredGames;
+            return GetFilteredLibraries(libraries).ToList();
         }
 
-        private List<Game> GetFilteredLibraries(IReadOnlyList<GameLibrary> libraries)
+        private IEnumerable<GameStat> GetFilteredLibraries(IList<GameLibrary> libraries)
         {
-            var filteredGames = new List<Game>();
+            return
+                from game in libraries[0].Games
+                let playTimes = GetPlayTimes(libraries, game.AppId)
+                where !playTimes.ContainsValue(null)
+                select new GameStat(game, ConvertToPlayTimeList(playTimes));
+        }
 
-            foreach (var gameA in libraries[0].Games)
-            {
-                var hasGame = true;
+        private ImmutableSortedDictionary<string, int?> GetPlayTimes(IEnumerable<GameLibrary> libraries, int gameId)
+        {
+            return libraries.ToImmutableSortedDictionary(
+                library => library.UserId,
+                library => library.Games
+                    .Find(game => game.AppId == gameId)?.PlayTime);
+        }
 
-                for (var i = 1; i < libraries.Count; i++)
-                {
-                    hasGame = libraries[i].Games.Any(game => game.AppId == gameA.AppId);
-
-                    if (!hasGame)
-                    {
-                        break;
-                    }
-                }
-
-                if (hasGame)
-                {
-                    filteredGames.Add(gameA);
-                }
-            }
-            filteredGames.Sort();
-
-            return filteredGames;
+        private List<PlayTimeInfo> ConvertToPlayTimeList(ImmutableSortedDictionary<string, int?> playTimes)
+        {
+            return playTimes
+                .Select(pair => new PlayTimeInfo(pair.Key, Convert.ToInt32(pair.Value)))
+                .ToList();
         }
 
         private List<GameLibrary> GetGameLibraries(IEnumerable<string> userIds)
@@ -60,17 +56,13 @@ namespace SteamMates.Services
         private GameLibrary GetGameLibrary(string userId)
         {
             var jsonObj = GetJsonObject(GetOwnedGamesUrl, userId);
-            
+
             var games = jsonObj["response"]["games"]
                 ?.Children()
-                .Select(token => token.ToObject<Game>())
+                .Select(token => token.ToObject<PlayedGame>())
                 .ToList();
 
-            return new GameLibrary
-            {
-                UserId = userId,
-                Games = games ?? new List<Game>()
-            };
+            return new GameLibrary(userId, games ?? new List<PlayedGame>());
         }
 
         private string GetOwnedGamesUrl(string userId)
