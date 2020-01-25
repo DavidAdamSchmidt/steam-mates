@@ -13,7 +13,7 @@ namespace SteamMates.Utils
             @"http://api.steampowered.com/ISteamUser/GetFriendList/v0001/?key={0}&steamid={1}&relationship=friend";
 
         private const string OwnedGames =
-            @"http://api.steampowered.com/IPlayerService/GetOwnedGames/v0001/?key={0}&steamid={1}&include_appinfo=true";
+            @"http://api.steampowered.com/IPlayerService/GetOwnedGames/v0001/?key={0}&steamid={1}&include_appinfo=true&include_played_free_games=true";
 
         public static string PlayerSummariesPattern => PlayerSummaries;
 
