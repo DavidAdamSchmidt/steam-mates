@@ -15,16 +15,18 @@ import "../static/css/SearchBox.css";
 const SearchBox = () => {
   const [input, setInput] = useState("");
   const [results, setResults] = useState([]);
-  const {user} = useContext(UserContext);
+  const { user } = useContext(UserContext);
   if (user == null) {
-    return <Redirect to="/" />
+    return <Redirect to="/" />;
   }
 
   const onInputChange = e => {
     const searchTerm = e.target.value;
 
     setInput(searchTerm);
-    setResults(() => getMatchingFriends(user.friends, searchTerm.toLowerCase()));
+    setResults(() =>
+      getMatchingFriends(user.friends, searchTerm.toLowerCase())
+    );
   };
 
   return (

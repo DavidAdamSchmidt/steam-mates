@@ -1,7 +1,7 @@
-﻿using System;
-using Microsoft.Extensions.Options;
+﻿using Microsoft.Extensions.Options;
 using SteamMates.Models;
 using SteamMates.Utils;
+using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;

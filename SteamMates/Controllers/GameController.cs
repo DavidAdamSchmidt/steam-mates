@@ -1,8 +1,8 @@
-﻿using System.Collections.Generic;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using SteamMates.Models;
 using SteamMates.Services;
 using SteamMates.Utils;
+using System.Collections.Generic;
 
 namespace SteamMates.Controllers
 {

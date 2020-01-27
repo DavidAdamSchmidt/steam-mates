@@ -20,24 +20,30 @@ const GameContainer = () => {
 
   useEffect(() => {
     if (friends) {
-      setUrl(friends.map((friend, index) => `${index ? "&" : ""}userId=${friend.steamId}`).join(""));
+      setUrl(
+        friends
+          .map((friend, index) => `${index ? "&" : ""}userId=${friend.steamId}`)
+          .join("")
+      );
       setSendRequest(true);
     }
   }, [friends]);
 
   if (user == null || friends.length === 0 || friends.length > 3) {
-    return <Redirect to="/"/>;
+    return <Redirect to="/" />;
   }
 
   if (loading) {
-    return <span>Loading...</span>
+    return <span>Loading...</span>;
   }
 
   return (
     <div className="game-container">
-      {data && data.map(stat => <GameLogo key={stat.game.appId} game={stat.game} />)}
-      {data && data.length === 0 && <div>{data.length} games were found</div>}
-    </div>);
+      {data &&
+        data.map(stat => <GameLogo key={stat.game.appId} game={stat.game} />)}
+      {data && data.length === 0 && <div>0 games were found</div>}
+    </div>
+  );
 };
 
 export default GameContainer;

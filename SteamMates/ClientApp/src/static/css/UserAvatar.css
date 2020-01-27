@@ -27,7 +27,7 @@
 }
 
 .remove-friend {
- display: none;
+  display: none;
 }
 
 .friend-avatar-container:hover .remove-friend {
@@ -37,5 +37,5 @@
   left: 50%;
   transform: translate(-50%, -50%);
   font-size: 50px;
-  color: #ff0000
+  color: #ff0000;
 }

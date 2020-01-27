@@ -1,7 +1,7 @@
-﻿using System;
-using System.Net;
-using Microsoft.Extensions.Options;
+﻿using Microsoft.Extensions.Options;
 using Newtonsoft.Json.Linq;
+using System;
+using System.Net;
 
 namespace SteamMates.Services
 {
