@@ -1,0 +1,13 @@
+.game-container-header {
+  padding: 20px;
+  margin-bottom: 40px;
+  font-size: 17px;
+  line-height: 2;
+  color: #1c3109;
+  background-color: rgba(17, 200, 163, 0.44);
+  border-radius: 20px;
+}
+
+.game-container-header span {
+  font-weight: bold;
+}

@@ -41,7 +41,9 @@ const GamePage = () => {
         loading={loading}
         onButtonClick={selectedTags => setTags(selectedTags)}
       />
-      {tags && <GameContainer loading={loading} data={data} />}
+      {(loading || data) && (
+        <GameContainer loading={loading} data={data} tags={tags} />
+      )}
     </div>
   );
 };

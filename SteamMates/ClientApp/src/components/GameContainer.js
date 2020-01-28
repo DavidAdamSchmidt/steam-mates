@@ -1,17 +1,16 @@
 import React from "react";
-import GameLogo from "./GameLogo";
-import "./../static/css/GameContainer.css";
+import GameContainerHeader from "./GameContainerHeader";
+import GameContainerBody from "./GameContainerBody";
 
-const GameContainer = ({ loading, data }) => {
+const GameContainer = ({ loading, data, tags }) => {
   if (loading) {
     return <span>Loading...</span>;
   }
 
   return (
     <div className="game-container">
-      {data &&
-        data.map(stat => <GameLogo key={stat.game.appId} game={stat.game} />)}
-      {data && data.length === 0 && <div>0 games were found</div>}
+      <GameContainerHeader tags={tags} gameCount={data ? data.length : 0} />
+      {data && <GameContainerBody data={data} />}
     </div>
   );
 };
