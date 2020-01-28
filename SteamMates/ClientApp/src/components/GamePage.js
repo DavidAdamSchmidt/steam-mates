@@ -1,11 +1,11 @@
-import React, {useState, useContext, useEffect} from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { Redirect } from "react-router-dom";
 import UserContext from "../contexts/UserContext";
 import FriendContext from "../contexts/FriendContext";
 import TagContainer from "./TagContainer";
 import GameContainer from "./GameContainer";
 import useRequest from "../hooks/useRequest";
-import {API_URL} from "../constants/api";
+import { API_URL } from "../constants/api";
 
 const GamePage = () => {
   const [sendRequest, setSendRequest] = useState(false);
@@ -37,7 +37,10 @@ const GamePage = () => {
 
   return (
     <div className="game-page">
-      <TagContainer loading={loading} onReady={selectedTags => setTags(selectedTags)} />
+      <TagContainer
+        loading={loading}
+        onButtonClick={selectedTags => setTags(selectedTags)}
+      />
       {tags && <GameContainer loading={loading} data={data} />}
     </div>
   );

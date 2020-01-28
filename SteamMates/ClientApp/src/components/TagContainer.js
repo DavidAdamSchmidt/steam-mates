@@ -1,7 +1,10 @@
 import React, { useState } from "react";
 import Tag from "./Tag";
+import "./../static/css/TagContainer.css";
 
-const TagContainer = ({ loading, onReady }) => {
+const TagContainer = ({ loading, onButtonClick }) => {
+  const [freezeButton, setFreezeButton] = useState(false);
+
   const initialTagsState = [
     "Multiplayer",
     "Local Multiplayer",
@@ -22,6 +25,11 @@ const TagContainer = ({ loading, onReady }) => {
     }
   };
 
+  const handleClick = () => {
+    onButtonClick(tags);
+    setFreezeButton(true);
+  };
+
   return (
     <div className="tag-container">
       {initialTagsState.map((tag, index) => (
@@ -31,9 +39,16 @@ const TagContainer = ({ loading, onReady }) => {
           checked={tags.includes(tag)}
           add={add}
           remove={remove}
+          onChange={() => setFreezeButton(false)}
         />
       ))}
-      <button disabled={loading} onClick={() => onReady(tags)}>Show Games</button>
+      <button
+        className="show-games-button"
+        disabled={loading || freezeButton || tags.length === 0}
+        onClick={handleClick}
+      >
+        Show Games
+      </button>
     </div>
   );
 };
