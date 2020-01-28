@@ -15,16 +15,8 @@ namespace SteamMates.Services
         {
         }
 
-        public List<GameStat> GetGamesInCommon(ICollection<string> userIds)
+        public List<GameStat> GetGamesInCommon(ICollection<string> userIds, ICollection<string> tags)
         {
-            var tags = new[]
-            {
-                "Multiplayer",
-                "Local Multiplayer",
-                "Online Co-Op",
-                "Local Co-Op"
-            };
-
             var libraries = GetGameLibraries(userIds);
 
             libraries.Sort();

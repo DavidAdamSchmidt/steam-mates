@@ -9,6 +9,12 @@ import "./../static/css/GameContainer.css";
 
 const GameContainer = () => {
   const [sendRequest, setSendRequest] = useState(false);
+  const [tags, setTags] = useState([
+    "Multiplayer",
+    "Local Multiplayer",
+    "Online Co-Op",
+    "Local Co-Op"
+  ]);
   const [url, setUrl] = useState("");
   const { user } = useContext(UserContext);
   const { friends } = useContext(FriendContext);
@@ -21,13 +27,13 @@ const GameContainer = () => {
   useEffect(() => {
     if (friends) {
       setUrl(
-        friends
+        `${friends
           .map((friend, index) => `${index ? "&" : ""}userId=${friend.steamId}`)
-          .join("")
+          .join("")}${tags.map(tag => `&tag=${tag}`).join("")}`
       );
       setSendRequest(true);
     }
-  }, [friends]);
+  }, [friends, tags]);
 
   if (user == null || friends.length === 0 || friends.length > 3) {
     return <Redirect to="/" />;

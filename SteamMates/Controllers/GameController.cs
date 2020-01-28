@@ -3,6 +3,7 @@ using SteamMates.Models;
 using SteamMates.Services;
 using SteamMates.Utils;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace SteamMates.Controllers
 {
@@ -18,7 +19,9 @@ namespace SteamMates.Controllers
         }
 
         [HttpGet("common")]
-        public ActionResult<List<GameStat>> GetGamesInCommon([FromQuery(Name = "userId")] ICollection<string> userIds)
+        public ActionResult<List<GameStat>> GetGamesInCommon(
+            [FromQuery(Name = "userId")] HashSet<string> userIds,
+            [FromQuery(Name = "tag")] HashSet<string> tags)
         {
             if (!User.Identity.IsAuthenticated)
             {
@@ -37,6 +40,21 @@ namespace SteamMates.Controllers
                 return tooManyIds;
             }
 
+            if (tags.Count == 0)
+            {
+                return BadRequest("No tag was received.");
+            }
+
+            var incorrectTags = tags.Where(tag => SteamSpyApi.Tags.All(correctTag => tag != correctTag)).ToArray();
+
+            if (incorrectTags.Length > 0)
+            {
+                var joinedTags = string.Join(", ", incorrectTags);
+                var grammarDiff = incorrectTags.Length == 1 ? " was" : "s were";
+
+                return BadRequest($"Incorrect tag{grammarDiff} received: {joinedTags}");
+            }
+
             if (!userIds.Contains(SteamApi.UserId))
             {
                 if (userIds.Count > 3)
@@ -47,7 +65,7 @@ namespace SteamMates.Controllers
                 userIds.Add(SteamApi.UserId);
             }
 
-            return _gameService.GetGamesInCommon(userIds);
+            return _gameService.GetGamesInCommon(userIds, tags);
         }
     }
 }
