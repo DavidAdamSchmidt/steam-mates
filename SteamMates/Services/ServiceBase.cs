@@ -1,6 +1,5 @@
 ﻿using Microsoft.Extensions.Options;
 using Newtonsoft.Json.Linq;
-using System;
 using System.Net;
 
 namespace SteamMates.Services
@@ -14,19 +13,18 @@ namespace SteamMates.Services
 
         protected IOptions<AppSecrets> Secrets { get; }
 
-        protected static string GetJsonStringFromSteam<T>(Func<T, string> getUrl, T arg)
+        protected static JObject GetJsonObject(string url)
         {
-            using var client = new WebClient();
-            var endpoint = getUrl(arg);
-
-            return client.DownloadString(endpoint);
-        }
-
-        protected static JObject GetJsonObject<T>(Func<T, string> getJsonStr, T arg)
-        {
-            var jsonStr = GetJsonStringFromSteam(getJsonStr, arg);
+            var jsonStr = GetJsonString(url);
 
             return JObject.Parse(jsonStr);
+        }
+
+        private static string GetJsonString(string url)
+        {
+            using var client = new WebClient();
+
+            return client.DownloadString(url);
         }
     }
 }

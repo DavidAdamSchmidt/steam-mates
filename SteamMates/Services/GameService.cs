@@ -55,7 +55,8 @@ namespace SteamMates.Services
 
         private GameLibrary GetGameLibrary(string userId)
         {
-            var jsonObj = GetJsonObject(GetOwnedGamesUrl, userId);
+            var url = SteamApi.GetOwnedGamesUrl(Secrets.Value.SteamApiKey, userId);
+            var jsonObj = GetJsonObject(url);
 
             var games = jsonObj["response"]["games"]
                 ?.Children()
@@ -63,11 +64,6 @@ namespace SteamMates.Services
                 .ToList();
 
             return new GameLibrary(userId, games ?? new List<PlayedGame>());
-        }
-
-        private string GetOwnedGamesUrl(string userId)
-        {
-            return string.Format(SteamApi.OwnedGamesPattern, Secrets.Value.SteamApiKey, userId);
         }
     }
 }

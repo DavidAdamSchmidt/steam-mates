@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using System.Security.Claims;
 using System.Text.RegularExpressions;
 
@@ -6,22 +7,38 @@ namespace SteamMates.Utils
 {
     public static class SteamApi
     {
-        private const string PlayerSummaries =
+        private const string PlayerSummariesPattern =
             @"http://api.steampowered.com/ISteamUser/GetPlayerSummaries/v0002/?key={0}&steamids={1}";
 
-        private const string FriendIds =
+        private const string FriendIdsPattern =
             @"http://api.steampowered.com/ISteamUser/GetFriendList/v0001/?key={0}&steamid={1}&relationship=friend";
 
-        private const string OwnedGames =
+        private const string OwnedGamesPattern =
             @"http://api.steampowered.com/IPlayerService/GetOwnedGames/v0001/?key={0}&steamid={1}&include_appinfo=true&include_played_free_games=true";
 
-        public static string PlayerSummariesPattern => PlayerSummaries;
-
-        public static string FriendIdsPattern => FriendIds;
-
-        public static string OwnedGamesPattern => OwnedGames;
-
         public static string UserId { get; private set; }
+
+        public static string GetUserInfoUrl(string apiKey, string userId)
+        {
+            return string.Format(PlayerSummariesPattern, apiKey, userId);
+        }
+
+        public static string GetFriendIdsUrl(string apiKey, string userId)
+        {
+            return string.Format(FriendIdsPattern, apiKey, userId);
+        }
+
+        public static string GetFriendListUrl(string apiKey, IEnumerable<string> ids)
+        {
+            var joinedIds = string.Join(",", ids);
+
+            return string.Format(PlayerSummariesPattern, apiKey, joinedIds);
+        }
+
+        public static string GetOwnedGamesUrl(string apiKey, string userId)
+        {
+            return string.Format(OwnedGamesPattern, apiKey, userId);
+        }
 
         public static void SetUserIdFromClaim(ClaimsPrincipal user)
         {

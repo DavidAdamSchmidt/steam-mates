@@ -15,7 +15,8 @@ namespace SteamMates.Services
 
         public User GetUserInfo(string userId)
         {
-            var jsonObj = GetJsonObject(GetUserInfoUrl, userId);
+            var url = SteamApi.GetUserInfoUrl(Secrets.Value.SteamApiKey, userId);
+            var jsonObj = GetJsonObject(url);
             var token = jsonObj["response"]["players"].First;
             var user = token.ToObject<User>();
 
@@ -34,7 +35,8 @@ namespace SteamMates.Services
 
         private IEnumerable<string> GetFriendIds(string userId)
         {
-            var jsonObj = GetJsonObject(GetFriendIdsUrl, userId);
+            var url = SteamApi.GetFriendIdsUrl(Secrets.Value.SteamApiKey, userId);
+            var jsonObj = GetJsonObject(url);
 
             return jsonObj["friendslist"]["friends"]
                 .Children()
@@ -43,29 +45,13 @@ namespace SteamMates.Services
 
         private List<User> GetFriendList(IEnumerable<string> ids)
         {
-            var jsonObj = GetJsonObject(GetFriendListUrl, ids);
+            var url = SteamApi.GetFriendListUrl(Secrets.Value.SteamApiKey, ids);
+            var jsonObj = GetJsonObject(url);
 
             return jsonObj["response"]["players"]
                 .Children()
                 .Select(token => token.ToObject<User>())
                 .ToList();
-        }
-
-        private string GetUserInfoUrl(string userId)
-        {
-            return string.Format(SteamApi.PlayerSummariesPattern, Secrets.Value.SteamApiKey, userId);
-        }
-
-        private string GetFriendIdsUrl(string userId)
-        {
-            return string.Format(SteamApi.FriendIdsPattern, Secrets.Value.SteamApiKey, userId);
-        }
-
-        private string GetFriendListUrl(IEnumerable<string> ids)
-        {
-            var joinedIds = string.Join(",", ids);
-
-            return string.Format(SteamApi.PlayerSummariesPattern, Secrets.Value.SteamApiKey, joinedIds);
         }
     }
 }
