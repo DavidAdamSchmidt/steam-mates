@@ -17,14 +17,24 @@ namespace SteamMates.Services
 
         public List<GameStat> GetGamesInCommon(ICollection<string> userIds)
         {
+            var tags = new[]
+            {
+                "Multiplayer",
+                "Local Multiplayer",
+                "Online Co-Op",
+                "Local Co-Op"
+            };
+
             var libraries = GetGameLibraries(userIds);
 
             libraries.Sort();
 
-            return GetFilteredLibraries(libraries).ToList();
+            var stats = ReduceLibraries(libraries);
+
+            return FilterByTags(stats, tags).ToList();
         }
 
-        private IEnumerable<GameStat> GetFilteredLibraries(IList<GameLibrary> libraries)
+        private IEnumerable<GameStat> ReduceLibraries(IList<GameLibrary> libraries)
         {
             return
                 from game in libraries[0].Games
@@ -64,6 +74,23 @@ namespace SteamMates.Services
                 .ToList();
 
             return new GameLibrary(userId, games ?? new List<PlayedGame>());
+        }
+
+        private IEnumerable<GameStat> FilterByTags(IEnumerable<GameStat> stats, IEnumerable<string> tags)
+        {
+            IEnumerable<KeyValuePair<int, object>> gamesByTag = new Dictionary<int, object>();
+
+            gamesByTag = tags.Aggregate(gamesByTag, (current, tag) => current.Concat(GetGamesByTag(tag)));
+
+            return stats.Where(stat => gamesByTag.Any(pair => pair.Key == stat.Game.AppId));
+        }
+
+        private Dictionary<int, object> GetGamesByTag(string tag)
+        {
+            var url = SteamSpyApi.GetGamesByTagUrl(tag);
+            var jsonObj = GetJsonObject(url);
+
+            return jsonObj.ToObject<Dictionary<int, object>>();
         }
     }
 }
