@@ -7,10 +7,14 @@ const GameContainer = ({ loading, data, tags }) => {
     return <span>Loading...</span>;
   }
 
+  const filteredGames = data.filter(x =>
+    x.tags.some(tag => tags.includes(tag))
+  );
+
   return (
     <div className="game-container">
-      <GameContainerHeader tags={tags} gameCount={data ? data.length : 0} />
-      {data && <GameContainerBody data={data} />}
+      <GameContainerHeader tags={tags} gameCount={filteredGames.length} />
+      <GameContainerBody data={filteredGames} tags={tags} />
     </div>
   );
 };

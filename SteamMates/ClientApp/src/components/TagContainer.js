@@ -3,8 +3,6 @@ import Tag from "./Tag";
 import "./../static/css/TagContainer.css";
 
 const TagContainer = ({ loading, onButtonClick }) => {
-  const [freezeButton, setFreezeButton] = useState(false);
-
   const initialTagsState = [
     "Multiplayer",
     "Local Multiplayer",
@@ -27,7 +25,6 @@ const TagContainer = ({ loading, onButtonClick }) => {
 
   const handleClick = () => {
     onButtonClick(tags);
-    setFreezeButton(true);
   };
 
   return (
@@ -39,12 +36,11 @@ const TagContainer = ({ loading, onButtonClick }) => {
           checked={tags.includes(tag)}
           add={add}
           remove={remove}
-          onChange={() => setFreezeButton(false)}
         />
       ))}
       <button
         className="show-games-button"
-        disabled={loading || freezeButton || tags.length === 0}
+        disabled={loading || tags.length === 0}
         onClick={handleClick}
       >
         Show Games

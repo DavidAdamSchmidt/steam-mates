@@ -8,6 +8,7 @@ import useRequest from "../hooks/useRequest";
 import { API_URL } from "../constants/api";
 
 const GamePage = () => {
+  const [fetchData, setFetchData] = useState(false);
   const [sendRequest, setSendRequest] = useState(false);
   const [queryString, setQueryString] = useState("");
   const [tags, setTags] = useState(null);
@@ -25,22 +26,26 @@ const GamePage = () => {
       setQueryString(
         `${friends
           .map((friend, index) => `${index ? "&" : ""}userId=${friend.steamId}`)
-          .join("")}${tags.map(tag => `&tag=${tag}`).join("")}`
+          .join("")}`
       );
       setSendRequest(true);
     }
-  }, [friends, tags]);
+  }, [friends, fetchData]);
 
   if (user == null || friends.length === 0 || friends.length > 3) {
     return <Redirect to="/" />;
   }
 
+  const handleButtonClick = selectedTags => {
+    setTags(selectedTags);
+    if (!fetchData) {
+      setFetchData(true);
+    }
+  };
+
   return (
     <div className="game-page">
-      <TagContainer
-        loading={loading}
-        onButtonClick={selectedTags => setTags(selectedTags)}
-      />
+      <TagContainer loading={loading} onButtonClick={handleButtonClick} />
       {(loading || data) && (
         <GameContainer loading={loading} data={data} tags={tags} />
       )}

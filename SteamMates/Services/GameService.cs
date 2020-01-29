@@ -15,24 +15,34 @@ namespace SteamMates.Services
         {
         }
 
-        public List<GameStat> GetGamesInCommon(ICollection<string> userIds, ICollection<string> tags)
+        public List<GameStat> GetGamesInCommon(ICollection<string> userIds)
         {
             var libraries = GetGameLibraries(userIds);
 
             libraries.Sort();
 
-            var stats = ReduceLibraries(libraries);
-
-            return FilterByTags(stats, tags).ToList();
+            return FilterLibraries(libraries).ToList();
         }
 
-        private IEnumerable<GameStat> ReduceLibraries(IList<GameLibrary> libraries)
+        private IEnumerable<GameStat> FilterLibraries(IList<GameLibrary> libraries)
+        {
+            var idsByTags = GetGameIdsByTags();
+
+            return OrganizeData(libraries, idsByTags).Where(stat => stat.Tags.Count > 0);
+        }
+
+        private IEnumerable<GameStat> OrganizeData(IList<GameLibrary> libraries, Dictionary<string, List<int>> idsByTags)
         {
             return
                 from game in libraries[0].Games
                 let playTimes = GetPlayTimes(libraries, game.AppId)
                 where !playTimes.ContainsValue(null)
-                select new GameStat(game, ConvertToPlayTimeList(playTimes));
+                select new GameStat
+                {
+                    Game = game,
+                    PlayTimes = ConvertToPlayTimeList(playTimes),
+                    Tags = GetTagsByGameId(game.AppId, idsByTags)
+                };
         }
 
         private ImmutableSortedDictionary<string, int?> GetPlayTimes(IEnumerable<GameLibrary> libraries, int gameId)
@@ -68,21 +78,26 @@ namespace SteamMates.Services
             return new GameLibrary(userId, games ?? new List<PlayedGame>());
         }
 
-        private IEnumerable<GameStat> FilterByTags(IEnumerable<GameStat> stats, IEnumerable<string> tags)
+        private Dictionary<string, List<int>> GetGameIdsByTags()
         {
-            IEnumerable<KeyValuePair<int, object>> gamesByTag = new Dictionary<int, object>();
-
-            gamesByTag = tags.Aggregate(gamesByTag, (current, tag) => current.Concat(GetGamesByTag(tag)));
-
-            return stats.Where(stat => gamesByTag.Any(pair => pair.Key == stat.Game.AppId));
+            return SteamSpyApi.Tags.ToDictionary(tag => tag, GetGameIdsByTag);
         }
 
-        private Dictionary<int, object> GetGamesByTag(string tag)
+        private List<int> GetGameIdsByTag(string tag)
         {
             var url = SteamSpyApi.GetGamesByTagUrl(tag);
             var jsonObj = GetJsonObject(url);
 
-            return jsonObj.ToObject<Dictionary<int, object>>();
+            return jsonObj.ToObject<Dictionary<int, object>>().Keys.ToList();
+        }
+
+        private List<string> GetTagsByGameId(int gameId, Dictionary<string, List<int>> idsByTags)
+        {
+            return
+                (from pair in idsByTags
+                 where pair.Value.Any(id => id == gameId)
+                 select pair.Key)
+                .ToList();
         }
     }
 }
