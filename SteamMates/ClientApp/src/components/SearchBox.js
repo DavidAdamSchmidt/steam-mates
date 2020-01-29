@@ -4,6 +4,7 @@ import UserContext from "../contexts/UserContext";
 import SearchTermContext from "../contexts/SearchTermContext";
 import SearchResultContainer from "./SearchResultContainer";
 import { getMatchingFriends } from "../utils/friendSearchUtils";
+import { getElapsedTimeText } from "../utils/updateInfoUtils";
 import {
   PERSONA_NAME,
   REAL_NAME,
@@ -43,6 +44,9 @@ const SearchBox = () => {
           <SearchResultContainer results={results} />
         </SearchTermContext.Provider>
       )}
+      <div className="friend-list-latest-update">
+        Friends were updated {getElapsedTimeText(new Date(user.latestUpdate))}
+      </div>
     </div>
   );
 };

@@ -50,6 +50,8 @@ namespace SteamMates.Services
                 user.Friends = FetchFriends(userId);
             }
 
+            user.LatestUpdate = DateTime.Now;
+
             return user;
         }
 

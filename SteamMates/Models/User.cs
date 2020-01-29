@@ -54,6 +54,9 @@ namespace SteamMates.Models
         [JsonIgnore]
         public IList<User> Friends { get; set; }
 
+        [JsonIgnore]
+        public DateTime LatestUpdate { get; set; }
+
         public int CompareTo([AllowNull] User other)
         {
             return string.Compare(PersonaName, other.PersonaName, StringComparison.OrdinalIgnoreCase);
