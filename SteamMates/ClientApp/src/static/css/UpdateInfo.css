@@ -1,0 +1,16 @@
+.update-info {
+  font-size: 14px;
+  margin: 0 10px;
+}
+
+.update-info:first-of-type {
+  margin-left: 0;
+}
+
+.update-info:last-of-type {
+  margin-right: 0;
+}
+
+.update-info-value {
+  font-style: italic;
+}
