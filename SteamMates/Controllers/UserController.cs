@@ -43,11 +43,6 @@ namespace SteamMates.Controllers
 
             var user = _userService.GetUserInfo(SteamApi.UserId);
 
-            if (user.CommunityVisibilityState == 3)
-            {
-                user.Friends = _userService.GetFriends(SteamApi.UserId);
-            }
-
             return user;
         }
 

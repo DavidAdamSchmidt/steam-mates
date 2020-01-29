@@ -44,20 +44,15 @@ namespace SteamMates.Services
             var token = jsonObj["response"]["players"].First;
             var user = token.ToObject<User>();
 
+            if (user.CommunityVisibilityState == 3)
+            {
+                user.Friends = FetchFriends(userId);
+            }
+
             return user;
         }
 
-        public IList<User> GetFriends(string userId)
-        {
-            return Cache.GetOrCreate("friends", entry =>
-            {
-                entry.SetAbsoluteExpiration(TimeSpan.FromHours(1));
-
-                return FetchFriendList(userId);
-            });
-        }
-
-        private IList<User> FetchFriendList(string userId)
+        private IList<User> FetchFriends(string userId)
         {
             var ids = FetchFriendIds(userId);
 
