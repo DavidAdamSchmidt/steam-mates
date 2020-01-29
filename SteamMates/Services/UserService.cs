@@ -1,10 +1,10 @@
-﻿using System;
+﻿using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Options;
 using SteamMates.Models;
 using SteamMates.Utils;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using Microsoft.Extensions.Caching.Memory;
 
 namespace SteamMates.Services
 {
@@ -16,6 +16,28 @@ namespace SteamMates.Services
         }
 
         public User GetUserInfo(string userId)
+        {
+            User user;
+
+            do
+            {
+                user = Cache.GetOrCreate("user", entry =>
+                {
+                    entry.SetAbsoluteExpiration(TimeSpan.FromHours(1));
+
+                    return FetchUserInfo(userId);
+                });
+
+                if (userId != user.SteamId)
+                {
+                    Cache.Remove("user");
+                }
+            } while (userId != user.SteamId);
+
+            return user;
+        }
+
+        private User FetchUserInfo(string userId)
         {
             var url = SteamApi.GetUserInfoUrl(Secrets.Value.SteamApiKey, userId);
             var jsonObj = GetJsonObject(url);
