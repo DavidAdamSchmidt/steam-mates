@@ -41,7 +41,7 @@ const GamePage = () => {
       {!loading && data && (
         <TagProvider>
           <TagContainer />
-          <GameContainer data={data} />
+          <GameContainer data={data.games} />
         </TagProvider>
       )}
     </div>

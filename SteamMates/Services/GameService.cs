@@ -16,54 +16,15 @@ namespace SteamMates.Services
         {
         }
 
-        public List<GameStat> GetGamesInCommon(ICollection<string> userIds)
+        public GameList GetGamesInCommon(ICollection<string> userIds)
         {
             var libraries = GetGameLibraries(userIds);
 
             libraries.Sort();
 
-            return FilterLibraries(libraries).ToList();
-        }
+            var tags = GetGameIdsByTags();
 
-        private IEnumerable<GameStat> FilterLibraries(IList<GameLibrary> libraries)
-        {
-            var idsByTags = Cache.GetOrCreate("tags", entry =>
-            {
-                entry.SetAbsoluteExpiration(TimeSpan.FromHours(6));
-
-                return FetchGameIdsByTags();
-            });
-
-            return OrganizeData(libraries, idsByTags).Where(stat => stat.Tags.Count > 0);
-        }
-
-        private IEnumerable<GameStat> OrganizeData(IList<GameLibrary> libraries, Dictionary<string, List<int>> idsByTags)
-        {
-            return
-                from game in libraries[0].Games
-                let playTimes = GetPlayTimes(libraries, game.AppId)
-                where !playTimes.ContainsValue(null)
-                select new GameStat
-                {
-                    Game = game,
-                    PlayTimes = ConvertToPlayTimeList(playTimes),
-                    Tags = GetTagsByGameId(game.AppId, idsByTags)
-                };
-        }
-
-        private ImmutableSortedDictionary<string, int?> GetPlayTimes(IEnumerable<GameLibrary> libraries, int gameId)
-        {
-            return libraries.ToImmutableSortedDictionary(
-                library => library.UserId,
-                library => library.Games
-                    .Find(game => game.AppId == gameId)?.PlayTime);
-        }
-
-        private List<PlayTimeInfo> ConvertToPlayTimeList(ImmutableSortedDictionary<string, int?> playTimes)
-        {
-            return playTimes
-                .Select(pair => new PlayTimeInfo(pair.Key, Convert.ToInt32(pair.Value)))
-                .ToList();
+            return GetGameList(libraries, tags);
         }
 
         private List<GameLibrary> GetGameLibraries(IEnumerable<string> userIds)
@@ -88,12 +49,31 @@ namespace SteamMates.Services
                 .Select(token => token.ToObject<PlayedGame>())
                 .ToList();
 
-            return new GameLibrary(userId, games ?? new List<PlayedGame>());
+            return new GameLibrary
+            {
+                UserId = userId,
+                Games = games ?? new List<PlayedGame>(),
+                LatestUpdate = DateTime.Now
+            };
         }
 
-        private Dictionary<string, List<int>> FetchGameIdsByTags()
+        private TagList GetGameIdsByTags()
         {
-            return SteamSpyApi.Tags.ToDictionary(tag => tag, FetchGameIdsByTag);
+            return Cache.GetOrCreate("tags", entry =>
+            {
+                entry.SetAbsoluteExpiration(TimeSpan.FromHours(6));
+
+                return FetchGameIdsByTags();
+            });
+        }
+
+        private TagList FetchGameIdsByTags()
+        {
+            return new TagList
+            {
+                Tags = SteamSpyApi.Tags.ToDictionary(tag => tag, FetchGameIdsByTag),
+                LatestUpdate = DateTime.Now
+            };
         }
 
         private List<int> FetchGameIdsByTag(string tag)
@@ -104,13 +84,61 @@ namespace SteamMates.Services
             return jsonObj.ToObject<Dictionary<int, object>>().Keys.ToList();
         }
 
-        private List<string> GetTagsByGameId(int gameId, Dictionary<string, List<int>> idsByTags)
+        private GameList GetGameList(IList<GameLibrary> libraries, TagList tagList)
+        {
+            return new GameList
+            {
+                Games = FilterLibraries(libraries, tagList).ToList(),
+                LatestUpdates = GetLatestUpdates(libraries, tagList)
+            };
+        }
+
+        private IEnumerable<GameStat> FilterLibraries(IList<GameLibrary> libraries, TagList idsByTags)
         {
             return
-                (from pair in idsByTags
+                from game in libraries[0].Games
+                let playTimes = GetPlayTimes(game.AppId, libraries)
+                let tags = GetTags(game.AppId, idsByTags)
+                where !playTimes.ContainsValue(null) && tags.Count > 0
+                select new GameStat
+                {
+                    Game = game,
+                    PlayTimes = ConvertToPlayTimeList(playTimes),
+                    Tags = tags
+                };
+        }
+
+        private ImmutableSortedDictionary<string, int?> GetPlayTimes(int gameId, IEnumerable<GameLibrary> libraries)
+        {
+            return libraries.ToImmutableSortedDictionary(
+                library => library.UserId,
+                library => library.Games
+                    .Find(game => game.AppId == gameId)?.PlayTime);
+        }
+
+        private List<PlayTimeInfo> ConvertToPlayTimeList(ImmutableSortedDictionary<string, int?> playTimes)
+        {
+            return playTimes
+                .Select(pair => new PlayTimeInfo(pair.Key, Convert.ToInt32(pair.Value)))
+                .ToList();
+        }
+
+        private List<string> GetTags(int gameId, TagList tagList)
+        {
+            return
+                (from pair in tagList.Tags
                  where pair.Value.Any(id => id == gameId)
                  select pair.Key)
                 .ToList();
+        }
+
+        private Dictionary<string, DateTime> GetLatestUpdates(IEnumerable<GameLibrary> libraries, TagList tagList)
+        {
+            var dict = libraries.ToDictionary(x => x.UserId, x => x.LatestUpdate);
+
+            dict.Add("tags", tagList.LatestUpdate);
+
+            return dict;
         }
     }
 }
