@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Options;
+﻿using Microsoft.Extensions.Caching.Memory;
+using Microsoft.Extensions.Options;
 using SteamMates.Models;
 using SteamMates.Utils;
 using System;
@@ -10,8 +11,8 @@ namespace SteamMates.Services
 {
     public class GameService : ServiceBase
     {
-        public GameService(IOptions<AppSecrets> secrets)
-            : base(secrets)
+        public GameService(IOptions<AppSecrets> secrets, IMemoryCache cache)
+            : base(secrets, cache)
         {
         }
 
@@ -26,7 +27,12 @@ namespace SteamMates.Services
 
         private IEnumerable<GameStat> FilterLibraries(IList<GameLibrary> libraries)
         {
-            var idsByTags = GetGameIdsByTags();
+            var idsByTags = Cache.GetOrCreate("tags", entry =>
+            {
+                entry.SetAbsoluteExpiration(TimeSpan.FromHours(6));
+
+                return FetchGameIdsByTags();
+            });
 
             return OrganizeData(libraries, idsByTags).Where(stat => stat.Tags.Count > 0);
         }
@@ -62,10 +68,17 @@ namespace SteamMates.Services
 
         private List<GameLibrary> GetGameLibraries(IEnumerable<string> userIds)
         {
-            return userIds.Select(GetGameLibrary).ToList();
+            return userIds
+                .Select(id => Cache.GetOrCreate(id, entry =>
+                {
+                    entry.SetAbsoluteExpiration(TimeSpan.FromHours(1));
+
+                    return FetchGameLibrary(id);
+                }))
+                .ToList();
         }
 
-        private GameLibrary GetGameLibrary(string userId)
+        private GameLibrary FetchGameLibrary(string userId)
         {
             var url = SteamApi.GetOwnedGamesUrl(Secrets.Value.SteamApiKey, userId);
             var jsonObj = GetJsonObject(url);
@@ -78,12 +91,12 @@ namespace SteamMates.Services
             return new GameLibrary(userId, games ?? new List<PlayedGame>());
         }
 
-        private Dictionary<string, List<int>> GetGameIdsByTags()
+        private Dictionary<string, List<int>> FetchGameIdsByTags()
         {
-            return SteamSpyApi.Tags.ToDictionary(tag => tag, GetGameIdsByTag);
+            return SteamSpyApi.Tags.ToDictionary(tag => tag, FetchGameIdsByTag);
         }
 
-        private List<int> GetGameIdsByTag(string tag)
+        private List<int> FetchGameIdsByTag(string tag)
         {
             var url = SteamSpyApi.GetGamesByTagUrl(tag);
             var jsonObj = GetJsonObject(url);

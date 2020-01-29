@@ -1,15 +1,17 @@
-﻿using Microsoft.Extensions.Options;
+﻿using System;
+using Microsoft.Extensions.Options;
 using SteamMates.Models;
 using SteamMates.Utils;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.Extensions.Caching.Memory;
 
 namespace SteamMates.Services
 {
     public class UserService : ServiceBase
     {
-        public UserService(IOptions<AppSecrets> secrets)
-            : base(secrets)
+        public UserService(IOptions<AppSecrets> secrets, IMemoryCache cache)
+            : base(secrets, cache)
         {
         }
 
@@ -25,15 +27,25 @@ namespace SteamMates.Services
 
         public IList<User> GetFriends(string userId)
         {
-            var ids = GetFriendIds(userId);
+            return Cache.GetOrCreate("friends", entry =>
+            {
+                entry.SetAbsoluteExpiration(TimeSpan.FromHours(1));
 
-            var friends = GetFriendList(ids);
+                return FetchFriendList(userId);
+            });
+        }
+
+        private IList<User> FetchFriendList(string userId)
+        {
+            var ids = FetchFriendIds(userId);
+
+            var friends = FetchFriendDetails(ids);
             friends.Sort();
 
             return friends;
         }
 
-        private IEnumerable<string> GetFriendIds(string userId)
+        private IEnumerable<string> FetchFriendIds(string userId)
         {
             var url = SteamApi.GetFriendIdsUrl(Secrets.Value.SteamApiKey, userId);
             var jsonObj = GetJsonObject(url);
@@ -43,7 +55,7 @@ namespace SteamMates.Services
                 .Select(token => token["steamid"].ToObject<string>());
         }
 
-        private List<User> GetFriendList(IEnumerable<string> ids)
+        private List<User> FetchFriendDetails(IEnumerable<string> ids)
         {
             var url = SteamApi.GetFriendListUrl(Secrets.Value.SteamApiKey, ids);
             var jsonObj = GetJsonObject(url);

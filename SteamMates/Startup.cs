@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
+using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -28,6 +29,7 @@ namespace SteamMates
 
             services.AddSingleton<UserService, UserService>();
             services.AddSingleton<GameService, GameService>();
+            services.AddSingleton<IMemoryCache, MemoryCache>();
 
             services.Configure<AppSecrets>(options => Configuration.Bind(options));
 

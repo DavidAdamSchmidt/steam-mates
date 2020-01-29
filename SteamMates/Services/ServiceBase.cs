@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Options;
+﻿using Microsoft.Extensions.Caching.Memory;
+using Microsoft.Extensions.Options;
 using Newtonsoft.Json.Linq;
 using System.Net;
 
@@ -6,12 +7,15 @@ namespace SteamMates.Services
 {
     public class ServiceBase
     {
-        public ServiceBase(IOptions<AppSecrets> secrets)
+        public ServiceBase(IOptions<AppSecrets> secrets, IMemoryCache cache)
         {
             Secrets = secrets;
+            Cache = cache;
         }
 
         protected IOptions<AppSecrets> Secrets { get; }
+
+        protected IMemoryCache Cache { get; }
 
         protected static JObject GetJsonObject(string url)
         {
