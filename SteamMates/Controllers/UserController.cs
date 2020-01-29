@@ -49,7 +49,7 @@ namespace SteamMates.Controllers
         [HttpPost("logout")]
         public IActionResult Logout()
         {
-            Response.Cookies.Delete("SteamMates_user");
+            Response.Cookies.Delete(SiteUtils.UserCookieName);
 
             return NoContent();
         }

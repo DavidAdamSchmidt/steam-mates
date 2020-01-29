@@ -59,7 +59,7 @@ namespace SteamMates.Services
 
         private TagList GetGameIdsByTags()
         {
-            return Cache.GetOrCreate("tags", entry =>
+            return Cache.GetOrCreate(SiteUtils.CacheKeys.Tags, entry =>
             {
                 entry.SetAbsoluteExpiration(TimeSpan.FromHours(6));
 

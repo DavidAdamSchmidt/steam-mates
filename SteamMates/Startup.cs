@@ -7,6 +7,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using SteamMates.Services;
+using SteamMates.Utils;
 
 namespace SteamMates
 {
@@ -39,7 +40,7 @@ namespace SteamMates
             })
             .AddCookie(options =>
             {
-                options.Cookie.Name = "SteamMates_user";
+                options.Cookie.Name = SiteUtils.UserCookieName;
                 options.LoginPath = "/api/user/auth";
                 options.LogoutPath = "/api/user/logout";
             })

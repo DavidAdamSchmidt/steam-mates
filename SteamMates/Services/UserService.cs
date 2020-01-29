@@ -18,10 +18,11 @@ namespace SteamMates.Services
         public User GetUserInfo(string userId)
         {
             User user;
+            var key = SiteUtils.CacheKeys.UserInfo;
 
             do
             {
-                user = Cache.GetOrCreate("user", entry =>
+                user = Cache.GetOrCreate(key, entry =>
                 {
                     entry.SetAbsoluteExpiration(TimeSpan.FromHours(1));
 
@@ -30,7 +31,7 @@ namespace SteamMates.Services
 
                 if (userId != user.SteamId)
                 {
-                    Cache.Remove("user");
+                    Cache.Remove(key);
                 }
             } while (userId != user.SteamId);
 
