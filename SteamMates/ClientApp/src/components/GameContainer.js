@@ -1,11 +1,10 @@
-import React from "react";
+import React, {useContext} from "react";
+import TagContext from "../contexts/TagContext";
 import GameContainerHeader from "./GameContainerHeader";
 import GameContainerBody from "./GameContainerBody";
 
-const GameContainer = ({ loading, data, tags }) => {
-  if (loading) {
-    return <span>Loading...</span>;
-  }
+const GameContainer = ({ data }) => {
+  const { tags } = useContext(TagContext);
 
   const filteredGames = data.filter(x =>
     x.tags.some(tag => tags.includes(tag))
@@ -13,8 +12,8 @@ const GameContainer = ({ loading, data, tags }) => {
 
   return (
     <div className="game-container">
-      <GameContainerHeader tags={tags} gameCount={filteredGames.length} />
-      <GameContainerBody data={filteredGames} tags={tags} />
+      <GameContainerHeader gameCount={filteredGames.length} />
+      <GameContainerBody data={filteredGames} />
     </div>
   );
 };

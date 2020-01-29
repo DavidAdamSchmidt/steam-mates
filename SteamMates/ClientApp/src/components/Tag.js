@@ -1,11 +1,14 @@
-import React from "react";
+import React, { useContext } from "react";
+import TagContext from "../contexts/TagContext";
 
-const Tag = ({ name, checked, add, remove, onChange }) => {
+const Tag = ({ name, checked }) => {
+  const { tags, setTags } = useContext(TagContext);
+
   const handleClick = e => {
     if (e.target.checked) {
-      add(e.target.value);
+      setTags([...tags, e.target.value]);
     } else {
-      remove(e.target.value);
+      setTags(tags.filter(tag => tag !== e.target.value));
     }
   };
 
@@ -16,7 +19,6 @@ const Tag = ({ name, checked, add, remove, onChange }) => {
         value={name}
         defaultChecked={checked}
         onClick={handleClick}
-        onChange={onChange}
       />
       {name}
     </div>

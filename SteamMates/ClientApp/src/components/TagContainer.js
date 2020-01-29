@@ -1,31 +1,10 @@
-import React, { useState } from "react";
+import React, { useContext } from "react";
+import TagContext from "../contexts/TagContext";
 import Tag from "./Tag";
 import "./../static/css/TagContainer.css";
 
-const TagContainer = ({ loading, onButtonClick }) => {
-  const initialTagsState = [
-    "Multiplayer",
-    "Local Multiplayer",
-    "Online Co-Op",
-    "Local Co-Op"
-  ];
-  const [tags, setTags] = useState(initialTagsState);
-
-  const add = tagToAdd => {
-    if (!tags.includes(tagToAdd)) {
-      setTags([...tags, tagToAdd]);
-    }
-  };
-
-  const remove = tagToRemove => {
-    if (tags.includes(tagToRemove)) {
-      setTags(tags.filter(tag => tag !== tagToRemove));
-    }
-  };
-
-  const handleClick = () => {
-    onButtonClick(tags);
-  };
+const TagContainer = () => {
+  const { initialTagsState, tags } = useContext(TagContext);
 
   return (
     <div className="tag-container">
@@ -34,17 +13,8 @@ const TagContainer = ({ loading, onButtonClick }) => {
           key={index}
           name={tag}
           checked={tags.includes(tag)}
-          add={add}
-          remove={remove}
         />
       ))}
-      <button
-        className="show-games-button"
-        disabled={loading || tags.length === 0}
-        onClick={handleClick}
-      >
-        Show Games
-      </button>
     </div>
   );
 };
