@@ -30,21 +30,12 @@ namespace SteamMates.Controllers
                 return BadRequest("No user ID was received.");
             }
 
-            var tooManyIds = BadRequest("Too many user IDs were received.");
+            var userId = SteamUtils.GetUserIdFromClaim(User);
+            userIds.Add(userId);
 
             if (userIds.Count > 4)
             {
-                return tooManyIds;
-            }
-
-            if (!userIds.Contains(SteamUtils.UserId))
-            {
-                if (userIds.Count > 3)
-                {
-                    return tooManyIds;
-                }
-
-                userIds.Add(SteamUtils.UserId);
+                return BadRequest("Too many user IDs were received.");
             }
 
             return _gameService.GetGamesInCommon(userIds);

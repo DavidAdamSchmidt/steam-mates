@@ -16,8 +16,6 @@ namespace SteamMates.Utils
         private const string OwnedGamesPattern =
             @"http://api.steampowered.com/IPlayerService/GetOwnedGames/v0001/?key={0}&steamid={1}&include_appinfo=true&include_played_free_games=true";
 
-        public static string UserId { get; private set; }
-
         public static string GetUserInfoUrl(string apiKey, string userId)
         {
             return string.Format(PlayerSummariesPattern, apiKey, userId);
@@ -40,12 +38,12 @@ namespace SteamMates.Utils
             return string.Format(OwnedGamesPattern, apiKey, userId);
         }
 
-        public static void SetUserIdFromClaim(ClaimsPrincipal user)
+        public static string GetUserIdFromClaim(ClaimsPrincipal user)
         {
             var claim = user.Claims.ToArray()[0].Value;
             const string pattern = @"^https?://steamcommunity.com/openid/id/(7[0-9]{15,25})$";
 
-            UserId = GetRegexMatch(claim, pattern);
+            return GetRegexMatch(claim, pattern);
         }
 
         public static string GetVanityIdFromProfileUrl(string profileUrl)
