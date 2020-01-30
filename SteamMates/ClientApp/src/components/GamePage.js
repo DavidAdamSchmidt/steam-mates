@@ -5,6 +5,7 @@ import FriendContext from "../contexts/FriendContext";
 import { TagProvider } from "../contexts/TagContext";
 import TagContainer from "./TagContainer";
 import GameContainer from "./GameContainer";
+import LibraryError from "./LibraryError";
 import useRequest from "../hooks/useRequest";
 import { API_URL } from "../constants/api";
 
@@ -20,8 +21,17 @@ const GamePage = () => {
     "GET"
   );
 
+  let privateProfile;
+  if (status === 404 && error.userId) {
+    privateProfile = [user, ...friends].find(x => x.steamId === error.userId);
+  } else {
+    privateProfile = [user, ...friends].find(
+      x => x.communityVisibilityState === 2
+    );
+  }
+
   useEffect(() => {
-    if (friends) {
+    if (friends && !privateProfile) {
       setQueryString(
         `${friends
           .map((friend, index) => `${index ? "&" : ""}userId=${friend.steamId}`)
@@ -29,10 +39,14 @@ const GamePage = () => {
       );
       setSendRequest(true);
     }
-  }, [friends]);
+  }, [friends, privateProfile]);
 
   if (user == null || friends.length === 0 || friends.length > 3) {
     return <Redirect to="/" />;
+  }
+
+  if (privateProfile) {
+    return <LibraryError userName={privateProfile.personaName} />;
   }
 
   return (

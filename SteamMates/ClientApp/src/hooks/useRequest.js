@@ -26,14 +26,14 @@ const useRequest = (
 
   const sendGetRequest = useCallback(() => {
     Axios.get(url, { withCredentials: withCredentials })
-      .then(res => dispatch(requestSuccessful(res)))
-      .catch(err => dispatch(requestFailed(err.message)));
+      .then(response => dispatch(requestSuccessful(response)))
+      .catch(error => dispatch(requestFailed(error)));
   }, [url, withCredentials]);
 
   const sendPostRequest = useCallback(() => {
     Axios.post(url, data, { withCredentials: withCredentials })
-      .then(res => dispatch(requestSuccessful(res)))
-      .catch(err => dispatch(requestFailed(err.message)));
+      .then(response => dispatch(requestSuccessful(response)))
+      .catch(error => dispatch(requestFailed(error)));
   }, [url, data, withCredentials]);
 
   useEffect(() => {

@@ -24,6 +24,7 @@ const requestReducer = (state, action) => {
       return {
         ...state,
         loading: false,
+        status: action.status,
         error: action.error
       };
     case RESET_STATE:

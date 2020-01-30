@@ -9,15 +9,16 @@ export const requestStarted = () => ({
   type: REQUEST_STARTED
 });
 
-export const requestSuccessful = req => ({
+export const requestSuccessful = response => ({
   type: REQUEST_SUCCESSFUL,
-  status: req.status,
-  data: req.data
+  status: response.status,
+  data: response.data
 });
 
-export const requestFailed = ({ error }) => ({
+export const requestFailed = error => ({
   type: REQUEST_FAILED,
-  error
+  status: error.response.status,
+  error: error.response.data
 });
 
 export const resetState = () => ({
