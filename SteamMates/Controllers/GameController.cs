@@ -1,8 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using SteamMates.Exceptions;
 using SteamMates.Models;
 using SteamMates.Services;
-using System.Collections.Generic;
 using SteamMates.Utils;
+using System.Collections.Generic;
 
 namespace SteamMates.Controllers
 {
@@ -38,7 +39,14 @@ namespace SteamMates.Controllers
                 return BadRequest("Too many user IDs were received.");
             }
 
-            return _gameService.GetGamesInCommon(userIds);
+            try
+            {
+                return _gameService.GetGamesInCommon(userIds);
+            }
+            catch (LibraryUnavailableException e)
+            {
+                return NotFound(new { UserId = e.Message, Error = "Could not access library." });
+            }
         }
     }
 }

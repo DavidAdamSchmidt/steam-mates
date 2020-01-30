@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Options;
+using SteamMates.Exceptions;
 using SteamMates.Models;
 using SteamMates.Utils;
 using System;
@@ -53,10 +54,15 @@ namespace SteamMates.Services
                 .Select(token => token.ToObject<PlayedGame>())
                 .ToList();
 
+            if (games == null)
+            {
+                throw new LibraryUnavailableException(userId);
+            }
+
             return new GameLibrary
             {
                 UserId = userId,
-                Games = games ?? new List<PlayedGame>(),
+                Games = games,
                 LatestUpdate = DateTime.Now
             };
         }
