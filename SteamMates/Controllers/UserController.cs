@@ -39,9 +39,9 @@ namespace SteamMates.Controllers
                 return Unauthorized("User has not yet been authenticated.");
             }
 
-            SteamApi.SetUserIdFromClaim(User);
+            SteamUtils.SetUserIdFromClaim(User);
 
-            var user = _userService.GetUserInfo(SteamApi.UserId);
+            var user = _userService.GetUserInfo(SteamUtils.UserId);
 
             return user;
         }

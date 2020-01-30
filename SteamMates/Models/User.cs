@@ -49,7 +49,7 @@ namespace SteamMates.Models
         public string GameExtraInfo { get; set; }
 
         [JsonIgnore]
-        public string VanityId => _vanityId ??= SteamApi.GetVanityIdFromProfileUrl(ProfileUrl);
+        public string VanityId => _vanityId ??= SteamUtils.GetVanityIdFromProfileUrl(ProfileUrl);
 
         [JsonIgnore]
         public IList<User> Friends { get; set; }

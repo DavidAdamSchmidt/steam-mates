@@ -18,7 +18,7 @@ namespace SteamMates.Controllers
         }
 
         [HttpGet("common")]
-        public ActionResult<GameList> GetGamesInCommon([FromQuery(Name = "userId")] HashSet<string> userIds)
+        public ActionResult<GameCollection> GetGamesInCommon([FromQuery(Name = "userId")] HashSet<string> userIds)
         {
             if (!User.Identity.IsAuthenticated)
             {
@@ -37,15 +37,14 @@ namespace SteamMates.Controllers
                 return tooManyIds;
             }
 
-
-            if (!userIds.Contains(SteamApi.UserId))
+            if (!userIds.Contains(SteamUtils.UserId))
             {
                 if (userIds.Count > 3)
                 {
                     return tooManyIds;
                 }
 
-                userIds.Add(SteamApi.UserId);
+                userIds.Add(SteamUtils.UserId);
             }
 
             return _gameService.GetGamesInCommon(userIds);

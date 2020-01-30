@@ -3,9 +3,9 @@ using System.Collections.Generic;
 
 namespace SteamMates.Models
 {
-    public class TagList
+    public class TagCollection
     {
-        public Dictionary<string, List<int>> Tags { get; set; }
+        public Dictionary<string, List<int>> GameIdsByTags { get; set; }
 
         public DateTime LatestUpdate { get; set; }
     }

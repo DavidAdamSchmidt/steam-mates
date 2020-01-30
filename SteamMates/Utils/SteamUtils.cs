@@ -5,7 +5,7 @@ using System.Text.RegularExpressions;
 
 namespace SteamMates.Utils
 {
-    public static class SteamApi
+    public static class SteamUtils
     {
         private const string PlayerSummariesPattern =
             @"http://api.steampowered.com/ISteamUser/GetPlayerSummaries/v0002/?key={0}&steamids={1}";

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace SteamMates.Models
 {
-    public class GameList
+    public class GameCollection
     {
         public List<GameStat> Games { get; set; }
 

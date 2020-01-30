@@ -16,15 +16,19 @@ namespace SteamMates.Services
         {
         }
 
-        public GameList GetGamesInCommon(ICollection<string> userIds)
+        public GameCollection GetGamesInCommon(ICollection<string> userIds)
         {
             var libraries = GetGameLibraries(userIds);
 
             libraries.Sort();
 
-            var tags = GetGameIdsByTags();
+            var tagCollection = GetGameIdsByTags();
 
-            return GetGameList(libraries, tags);
+            return new GameCollection
+            {
+                Games = FilterLibraries(libraries, tagCollection).ToList(),
+                LatestUpdates = GetLatestUpdates(libraries, tagCollection.LatestUpdate)
+            };
         }
 
         private List<GameLibrary> GetGameLibraries(IEnumerable<string> userIds)
@@ -41,7 +45,7 @@ namespace SteamMates.Services
 
         private GameLibrary FetchGameLibrary(string userId)
         {
-            var url = SteamApi.GetOwnedGamesUrl(Secrets.Value.SteamApiKey, userId);
+            var url = SteamUtils.GetOwnedGamesUrl(Secrets.Value.SteamApiKey, userId);
             var jsonObj = GetJsonObject(url);
 
             var games = jsonObj["response"]["games"]
@@ -57,7 +61,7 @@ namespace SteamMates.Services
             };
         }
 
-        private TagList GetGameIdsByTags()
+        private TagCollection GetGameIdsByTags()
         {
             return Cache.GetOrCreate(SiteUtils.CacheKeys.Tags, entry =>
             {
@@ -67,11 +71,11 @@ namespace SteamMates.Services
             });
         }
 
-        private TagList FetchGameIdsByTags()
+        private TagCollection FetchGameIdsByTags()
         {
-            return new TagList
+            return new TagCollection
             {
-                Tags = SteamSpyApi.Tags.ToDictionary(tag => tag, FetchGameIdsByTag),
+                GameIdsByTags = SteamSpyApi.Tags.ToDictionary(tag => tag, FetchGameIdsByTag),
                 LatestUpdate = DateTime.Now
             };
         }
@@ -84,21 +88,12 @@ namespace SteamMates.Services
             return jsonObj.ToObject<Dictionary<int, object>>().Keys.ToList();
         }
 
-        private GameList GetGameList(IList<GameLibrary> libraries, TagList tagList)
-        {
-            return new GameList
-            {
-                Games = FilterLibraries(libraries, tagList).ToList(),
-                LatestUpdates = GetLatestUpdates(libraries, tagList)
-            };
-        }
-
-        private IEnumerable<GameStat> FilterLibraries(IList<GameLibrary> libraries, TagList idsByTags)
+        private IEnumerable<GameStat> FilterLibraries(IList<GameLibrary> libraries, TagCollection tagCollection)
         {
             return
                 from game in libraries[0].Games
                 let playTimes = GetPlayTimes(game.AppId, libraries)
-                let tags = GetTags(game.AppId, idsByTags)
+                let tags = GetTags(game.AppId, tagCollection)
                 where !playTimes.ContainsValue(null) && tags.Count > 0
                 select new GameStat
                 {
@@ -123,20 +118,20 @@ namespace SteamMates.Services
                 .ToList();
         }
 
-        private List<string> GetTags(int gameId, TagList tagList)
+        private List<string> GetTags(int gameId, TagCollection tagCollection)
         {
             return
-                (from pair in tagList.Tags
+                (from pair in tagCollection.GameIdsByTags
                  where pair.Value.Any(id => id == gameId)
                  select pair.Key)
                 .ToList();
         }
 
-        private Dictionary<string, DateTime> GetLatestUpdates(IEnumerable<GameLibrary> libraries, TagList tagList)
+        private Dictionary<string, DateTime> GetLatestUpdates(IEnumerable<GameLibrary> libraries, DateTime tagUpdate)
         {
             var dict = libraries.ToDictionary(x => x.UserId, x => x.LatestUpdate);
 
-            dict.Add("tags", tagList.LatestUpdate);
+            dict.Add("tags", tagUpdate);
 
             return dict;
         }
