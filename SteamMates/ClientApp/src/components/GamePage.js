@@ -21,17 +21,20 @@ const GamePage = () => {
     "GET"
   );
 
-  let privateProfile;
-  if (status === 404 && error.userId) {
-    privateProfile = [user, ...friends].find(x => x.steamId === error.userId);
-  } else {
-    privateProfile = [user, ...friends].find(
-      x => x.communityVisibilityState === 1
-    );
-  }
+  const getPrivateProfiles = () => {
+    if (user) {
+      return [user, ...friends].filter(x => x.communityVisibilityState === 1);
+    }
+    if (status === 404 && error.userId) {
+      return [user, ...friends].filter(x => x.steamId === error.userId);
+    }
+    return [];
+  };
+
+  const privateProfiles = getPrivateProfiles();
 
   useEffect(() => {
-    if (friends && !privateProfile) {
+    if (friends && privateProfiles.length === 0) {
       setQueryString(
         `${friends
           .map((friend, index) => `${index ? "&" : ""}userId=${friend.steamId}`)
@@ -39,14 +42,14 @@ const GamePage = () => {
       );
       setSendRequest(true);
     }
-  }, [friends, privateProfile]);
+  }, [friends, privateProfiles]);
 
   if (user == null || friends.length === 0 || friends.length > 3) {
     return <Redirect to="/" />;
   }
 
-  if (privateProfile) {
-    return <LibraryError userName={privateProfile.personaName} />;
+  if (privateProfiles.length > 0) {
+    return <LibraryError privateProfiles={privateProfiles} />;
   }
 
   return (
