@@ -26,7 +26,7 @@ const GamePage = () => {
     privateProfile = [user, ...friends].find(x => x.steamId === error.userId);
   } else {
     privateProfile = [user, ...friends].find(
-      x => x.communityVisibilityState === 2
+      x => x.communityVisibilityState === 1
     );
   }
 
