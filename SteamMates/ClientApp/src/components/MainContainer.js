@@ -2,6 +2,7 @@ import React from "react";
 import { Switch, Route } from "react-router-dom";
 import SearchBox from "./pages/friends/SearchBox";
 import GamePage from "./pages/games/GamePage";
+import ErrorPage from "./pages/error/ErrorPage";
 import Home from "./pages/home/Home";
 import "./../static/css/MainContainer.css";
 
@@ -11,6 +12,7 @@ const MainContainer = () => {
       <Switch>
         <Route path="/friends" component={SearchBox} />
         <Route path="/games" component={GamePage} />
+        <Route path="/error" component={ErrorPage} />
         <Route path="/" component={Home} />
       </Switch>
     </div>

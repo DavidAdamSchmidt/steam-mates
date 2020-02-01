@@ -1,11 +1,16 @@
 import React, { useContext } from "react";
+import { Redirect } from "react-router-dom";
 import UserContext from "../../../contexts/UserContext";
 
 const Home = () => {
   const { status, error } = useContext(UserContext);
 
   if (status === 503 && (error || {}).apiName === "Steam") {
-    return <div>{error.message}</div>;
+    return (
+      <Redirect
+        to={{ pathname: "/error", state: { message: error.message } }}
+      />
+    );
   }
 
   return (

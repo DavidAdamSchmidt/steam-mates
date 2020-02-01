@@ -53,7 +53,11 @@ const GamePage = () => {
   }
 
   if ((status === 503 && error.apiName) || (status === 404 && error.tagName)) {
-    return <div>{error.message}</div>;
+    return (
+      <Redirect
+        to={{ pathname: "/error", state: { message: error.message } }}
+      />
+    );
   }
 
   return (
