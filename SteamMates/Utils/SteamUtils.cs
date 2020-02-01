@@ -16,6 +16,8 @@ namespace SteamMates.Utils
         private const string OwnedGamesPattern =
             @"http://api.steampowered.com/IPlayerService/GetOwnedGames/v0001/?key={0}&steamid={1}&include_appinfo=true&include_played_free_games=true";
 
+        public static string ApiName { get; } = "Steam";
+
         public static string GetUserInfoUrl(string apiKey, string userId)
         {
             return string.Format(PlayerSummariesPattern, apiKey, userId);

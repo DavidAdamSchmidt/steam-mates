@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
+using SteamMates.Exceptions;
 using SteamMates.Models;
 using SteamMates.Services;
 using SteamMates.Utils;
@@ -40,9 +41,17 @@ namespace SteamMates.Controllers
             }
 
             var userId = SteamUtils.GetUserIdFromClaim(User);
-            var user = _userService.GetUserInfo(userId);
 
-            return user;
+            try
+            {
+                var user = _userService.GetUserInfo(userId);
+
+                return user;
+            }
+            catch (ApiUnavailableException e)
+            {
+                return StatusCode(503, new { e.ApiName, e.Message });
+            }
         }
 
         [HttpPost("logout")]

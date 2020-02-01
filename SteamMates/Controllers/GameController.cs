@@ -43,6 +43,10 @@ namespace SteamMates.Controllers
             {
                 return _gameService.GetGamesInCommon(userIds);
             }
+            catch (ApiUnavailableException e)
+            {
+                return StatusCode(503, new { e.ApiName, e.Message });
+            }
             catch (LibraryUnavailableException e)
             {
                 return NotFound(new { UserId = e.Message, Error = "Could not access library." });

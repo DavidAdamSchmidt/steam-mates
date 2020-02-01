@@ -6,6 +6,8 @@ namespace SteamMates.Utils
     {
         private const string GamesByTagPattern = @"https://steamspy.com/api.php?request=tag&tag={0}";
 
+        public static string ApiName { get; } = "SteamSpy";
+
         public static IReadOnlyCollection<string> Tags { get; } = new[]
         {
             "Multiplayer",

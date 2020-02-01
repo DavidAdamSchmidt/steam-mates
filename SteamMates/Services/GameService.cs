@@ -47,7 +47,7 @@ namespace SteamMates.Services
         private GameLibrary FetchGameLibrary(string userId)
         {
             var url = SteamUtils.GetOwnedGamesUrl(Secrets.Value.SteamApiKey, userId);
-            var jsonObj = GetJsonObject(url);
+            var jsonObj = GetJsonObject(url, SteamUtils.ApiName);
 
             var games = jsonObj["response"]["games"]
                 ?.Children()
@@ -89,7 +89,7 @@ namespace SteamMates.Services
         private List<int> FetchGameIdsByTag(string tag)
         {
             var url = SteamSpyApi.GetGamesByTagUrl(tag);
-            var jsonObj = GetJsonObject(url);
+            var jsonObj = GetJsonObject(url, SteamSpyApi.ApiName);
 
             return jsonObj.ToObject<Dictionary<int, object>>().Keys.ToList();
         }

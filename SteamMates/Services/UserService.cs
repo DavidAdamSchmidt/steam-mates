@@ -41,7 +41,7 @@ namespace SteamMates.Services
         private User FetchUserInfo(string userId)
         {
             var url = SteamUtils.GetUserInfoUrl(Secrets.Value.SteamApiKey, userId);
-            var jsonObj = GetJsonObject(url);
+            var jsonObj = GetJsonObject(url, SteamUtils.ApiName);
             var token = jsonObj["response"]["players"].First;
             var user = token.ToObject<User>();
 
@@ -68,7 +68,7 @@ namespace SteamMates.Services
         private IEnumerable<string> FetchFriendIds(string userId)
         {
             var url = SteamUtils.GetFriendIdsUrl(Secrets.Value.SteamApiKey, userId);
-            var jsonObj = GetJsonObject(url);
+            var jsonObj = GetJsonObject(url, SteamUtils.ApiName);
 
             return jsonObj["friendslist"]["friends"]
                 .Children()
@@ -78,7 +78,7 @@ namespace SteamMates.Services
         private List<User> FetchFriendDetails(IEnumerable<string> ids)
         {
             var url = SteamUtils.GetFriendListUrl(Secrets.Value.SteamApiKey, ids);
-            var jsonObj = GetJsonObject(url);
+            var jsonObj = GetJsonObject(url, SteamUtils.ApiName);
 
             return jsonObj["response"]["players"]
                 .Children()

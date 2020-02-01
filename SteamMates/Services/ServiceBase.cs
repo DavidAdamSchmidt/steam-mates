@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json.Linq;
+using SteamMates.Exceptions;
 using System.Net;
 
 namespace SteamMates.Services
@@ -17,9 +18,20 @@ namespace SteamMates.Services
 
         protected IMemoryCache Cache { get; }
 
-        protected static JObject GetJsonObject(string url)
+        protected static JObject GetJsonObject(string url, string apiName)
         {
-            var jsonStr = GetJsonString(url);
+            string jsonStr;
+
+            try
+            {
+                jsonStr = GetJsonString(url);
+            }
+            catch (WebException e)
+            {
+                var message = $"An error occured while trying to communicate with the {apiName} API.";
+
+                throw new ApiUnavailableException(message, apiName, e);
+            }
 
             return JObject.Parse(jsonStr);
         }
