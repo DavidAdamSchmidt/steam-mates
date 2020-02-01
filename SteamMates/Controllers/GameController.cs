@@ -45,15 +45,15 @@ namespace SteamMates.Controllers
             }
             catch (ApiUnavailableException e)
             {
-                return StatusCode(503, new { e.ApiName, e.Message });
+                return StatusCode(503, new { e.Message, e.ApiName });
             }
             catch (LibraryUnavailableException e)
             {
-                return NotFound(new { UserId = e.Message, Error = "Could not access library." });
+                return NotFound(new { e.Message, e.UserId });
             }
             catch (TagUnavailableException e)
             {
-                return NotFound(new { e.TagName, e.Message });
+                return NotFound(new { e.Message, e.TagName });
             }
         }
     }

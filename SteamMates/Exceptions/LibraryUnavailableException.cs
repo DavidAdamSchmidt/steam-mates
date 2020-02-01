@@ -1,28 +1,35 @@
 ﻿using System;
-using System.Runtime.Serialization;
 
 namespace SteamMates.Exceptions
 {
-    [Serializable]
     public class LibraryUnavailableException : Exception
     {
         public LibraryUnavailableException()
         {
         }
 
-        public LibraryUnavailableException(string userId)
-            : base(userId)
+        public LibraryUnavailableException(string message)
+            : base(message)
         {
         }
 
-        public LibraryUnavailableException(string userId, Exception innerException)
-            : base(userId, innerException)
+        public LibraryUnavailableException(string message, Exception innerException)
+            : base(message, innerException)
         {
         }
 
-        protected LibraryUnavailableException(SerializationInfo info, StreamingContext context)
-            : base(info, context)
+        public LibraryUnavailableException(string message, string userId)
+            : base(message)
         {
+            UserId = userId;
         }
+
+        public LibraryUnavailableException(string message, string userId, Exception innerException)
+            : base(message, innerException)
+        {
+            UserId = userId;
+        }
+
+        public string UserId { get; }
     }
 }

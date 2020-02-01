@@ -56,7 +56,7 @@ namespace SteamMates.Services
 
             if (games == null)
             {
-                throw new LibraryUnavailableException(userId);
+                throw new LibraryUnavailableException("Could not access library.", userId);
             }
 
             return new GameLibrary
