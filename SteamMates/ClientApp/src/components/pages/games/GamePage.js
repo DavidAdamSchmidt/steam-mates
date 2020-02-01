@@ -3,10 +3,10 @@ import { Redirect } from "react-router-dom";
 import useRequest from "../../../hooks/useRequest";
 import UserContext from "../../../contexts/UserContext";
 import FriendContext from "../../../contexts/FriendContext";
-import LibraryError from "./LibraryError";
 import { TagProvider } from "../../../contexts/TagContext";
 import TagContainer from "./TagContainer";
 import GameContainer from "./GameContainer";
+import { showError, getLibraryError } from "../../../utils/errorUtils";
 import { API_URL } from "../../../constants/api";
 
 const GamePage = () => {
@@ -49,15 +49,11 @@ const GamePage = () => {
   }
 
   if (privateProfiles.length > 0) {
-    return <LibraryError privateProfiles={privateProfiles} />;
+    return showError(getLibraryError(privateProfiles));
   }
 
   if ((status === 503 && error.apiName) || (status === 404 && error.tagName)) {
-    return (
-      <Redirect
-        to={{ pathname: "/error", state: { message: error.message } }}
-      />
-    );
+    return showError(error.message);
   }
 
   return (
