@@ -1,6 +1,6 @@
 import React from "react";
-import { getElapsedTimeText } from "../utils/updateInfoUtils";
-import "./../static/css/UpdateInfo.css";
+import { getElapsedTimeText } from "../../../utils/updateInfoUtils";
+import "../../../static/css/UpdateInfo.css";
 
 const UpdateInfo = ({ updateInfo }) => {
   return (

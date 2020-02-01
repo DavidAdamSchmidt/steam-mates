@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import TagContext from "../contexts/TagContext";
+import TagContext from "../../../contexts/TagContext";
 import GameContainerHeader from "./GameContainerHeader";
 import GameContainerBody from "./GameContainerBody";
 

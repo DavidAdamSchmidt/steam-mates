@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
-import FriendContext from "../contexts/FriendContext";
-import no_user from "./../static/images/no_user.png";
-import "./../static/css/UserAvatar.css";
+import FriendContext from "../../contexts/FriendContext";
+import no_user from "../../static/images/no_user.png";
+import "../../static/css/UserAvatar.css";
 
 const UserAvatar = ({ user, isFriend }) => {
   const { removeFriend } = useContext(FriendContext);

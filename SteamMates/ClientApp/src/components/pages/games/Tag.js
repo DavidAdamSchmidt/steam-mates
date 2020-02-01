@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import TagContext from "../contexts/TagContext";
+import TagContext from "../../../contexts/TagContext";
 
 const Tag = ({ name, checked }) => {
   const { tags, setTags } = useContext(TagContext);

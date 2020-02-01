@@ -1,13 +1,13 @@
 import React, { useState, useContext, useEffect } from "react";
 import { Redirect } from "react-router-dom";
-import UserContext from "../contexts/UserContext";
-import FriendContext from "../contexts/FriendContext";
-import { TagProvider } from "../contexts/TagContext";
+import useRequest from "../../../hooks/useRequest";
+import UserContext from "../../../contexts/UserContext";
+import FriendContext from "../../../contexts/FriendContext";
+import LibraryError from "./LibraryError";
+import { TagProvider } from "../../../contexts/TagContext";
 import TagContainer from "./TagContainer";
 import GameContainer from "./GameContainer";
-import LibraryError from "./LibraryError";
-import useRequest from "../hooks/useRequest";
-import { API_URL } from "../constants/api";
+import { API_URL } from "../../../constants/api";
 
 const GamePage = () => {
   const [sendRequest, setSendRequest] = useState(false);

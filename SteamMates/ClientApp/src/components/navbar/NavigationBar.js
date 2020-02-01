@@ -1,10 +1,10 @@
 import React, { useContext } from "react";
-import UserContext from "../contexts/UserContext";
+import UserContext from "../../contexts/UserContext";
+import Logo from "./Logo";
 import Menu from "./Menu";
 import UserPanel from "./UserPanel";
 import LoginPanel from "./LoginPanel";
-import "./../static/css/NavigationBar.css";
-import Logo from "./Logo";
+import "../../static/css/NavigationBar.css";
 
 const NavigationBar = () => {
   const { user } = useContext(UserContext);

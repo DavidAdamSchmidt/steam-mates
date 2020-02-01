@@ -1,17 +1,17 @@
 import React, { useState, useContext } from "react";
 import { Redirect } from "react-router-dom";
-import UserContext from "../contexts/UserContext";
-import SearchTermContext from "../contexts/SearchTermContext";
+import UserContext from "../../../contexts/UserContext";
+import SearchTermContext from "../../../contexts/SearchTermContext";
 import SearchResultContainer from "./SearchResultContainer";
-import { getMatchingFriends } from "../utils/friendSearchUtils";
-import { getElapsedTimeText } from "../utils/updateInfoUtils";
+import { getMatchingFriends } from "../../../utils/friendSearchUtils";
+import { getElapsedTimeText } from "../../../utils/updateInfoUtils";
 import {
   PERSONA_NAME,
   REAL_NAME,
   STEAM_ID_64,
   VANITY_ID
-} from "../constants/user";
-import "../static/css/SearchBox.css";
+} from "../../../constants/user";
+import "../../../static/css/SearchBox.css";
 
 const SearchBox = () => {
   const [input, setInput] = useState("");

@@ -1,8 +1,8 @@
 import React, { useContext } from "react";
 import UserContext from "../contexts/UserContext";
-import NavigationBar from "./NavigationBar";
-import MainContainer from "./MainContainer";
 import { FriendProvider } from "../contexts/FriendContext";
+import NavigationBar from "./navbar/NavigationBar";
+import MainContainer from "./MainContainer";
 
 const App = () => {
   const { loading } = useContext(UserContext);

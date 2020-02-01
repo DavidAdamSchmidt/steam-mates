@@ -1,12 +1,12 @@
 import React, { useContext } from "react";
 import { Redirect } from "react-router-dom";
-import UserContext from "../contexts/UserContext";
-import FriendContext from "../contexts/FriendContext";
+import UserContext from "../../contexts/UserContext";
+import FriendContext from "../../contexts/FriendContext";
 import UserAvatar from "./UserAvatar";
 import Tooltip from "./Tooltip";
 import LogoutButton from "./LogoutButton";
-import { API_URL } from "../constants/api";
-import "./../static/css/UserPanel.css";
+import { API_URL } from "../../constants/api";
+import "../../static/css/UserPanel.css";
 
 const UserPanel = () => {
   const { user } = useContext(UserContext);

@@ -1,8 +1,8 @@
 import React from "react";
 import { Switch, Route } from "react-router-dom";
-import SearchBox from "./SearchBox";
-import GamePage from "./GamePage";
-import Home from "./Home";
+import SearchBox from "./pages/friends/SearchBox";
+import GamePage from "./pages/games/GamePage";
+import Home from "./pages/home/Home";
 import "./../static/css/MainContainer.css";
 
 const MainContainer = () => {

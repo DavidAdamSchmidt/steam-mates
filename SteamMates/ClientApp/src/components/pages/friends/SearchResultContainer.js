@@ -1,6 +1,6 @@
 import React from "react";
-import "./../static/css/SearchResultContainer.css";
 import SearchResult from "./SearchResult";
+import "../../../static/css/SearchResultContainer.css";
 
 const SearchResultContainer = ({ results }) => {
   return (

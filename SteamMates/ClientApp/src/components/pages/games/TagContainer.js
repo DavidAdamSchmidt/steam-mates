@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
-import TagContext from "../contexts/TagContext";
+import TagContext from "../../../contexts/TagContext";
 import Tag from "./Tag";
-import "./../static/css/TagContainer.css";
+import "../../../static/css/TagContainer.css";
 
 const TagContainer = () => {
   const { initialTagsState, tags } = useContext(TagContext);

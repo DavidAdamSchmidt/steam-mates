@@ -1,5 +1,5 @@
 import React from "react";
-import { LOGO_URL } from "../constants/steam";
+import { LOGO_URL } from "../../../constants/steam";
 
 const GameLogo = ({ game }) => {
   return (

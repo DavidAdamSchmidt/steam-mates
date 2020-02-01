@@ -1,5 +1,5 @@
 import React from "react";
-import "./../static/css/LibraryError.css";
+import "../../../static/css/LibraryError.css";
 
 const LibraryError = ({ privateProfiles }) => {
   const names = privateProfiles.map(x => x.personaName);

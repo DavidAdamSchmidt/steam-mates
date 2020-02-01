@@ -1,8 +1,7 @@
 import React, { useState, useContext } from "react";
-import useRequest from "../hooks/useRequest";
-import UserContext from "../contexts/UserContext";
-import "./../static/css/LogoutButton.css";
-import { Redirect } from "react-router-dom";
+import useRequest from "../../hooks/useRequest";
+import UserContext from "../../contexts/UserContext";
+import "../../static/css/LogoutButton.css";
 
 const LogoutButton = ({ path }) => {
   const [sendRequest, setSendRequest] = useState(false);

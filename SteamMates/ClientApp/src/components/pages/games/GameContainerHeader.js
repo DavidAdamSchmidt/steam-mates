@@ -1,9 +1,9 @@
 import React, { useContext } from "react";
-import UserContext from "../contexts/UserContext";
-import FriendContext from "../contexts/FriendContext";
-import TagContext from "../contexts/TagContext";
-import "./../static/css/GameContainerHeader.css";
+import UserContext from "../../../contexts/UserContext";
+import FriendContext from "../../../contexts/FriendContext";
+import TagContext from "../../../contexts/TagContext";
 import UpdateInfoContainer from "./UpdateInfoContainer";
+import "../../../static/css/GameContainerHeader.css";
 
 const GameContainerHeader = ({ gameCount, latestUpdates }) => {
   const { user } = useContext(UserContext);

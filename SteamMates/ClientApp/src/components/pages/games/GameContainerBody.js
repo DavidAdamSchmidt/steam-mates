@@ -1,6 +1,6 @@
 import React from "react";
 import GameLogo from "./GameLogo";
-import "./../static/css/GameContainerBody.css";
+import "../../../static/css/GameContainerBody.css";
 
 const GameContainerBody = ({ data }) => {
   return (

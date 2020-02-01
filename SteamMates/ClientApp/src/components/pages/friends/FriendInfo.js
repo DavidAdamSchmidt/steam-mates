@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
-import SearchTermContext from "../contexts/SearchTermContext";
-import { getPropertyValue } from "../utils/friendSearchUtils";
-import "../static/css/FriendInfo.css";
+import SearchTermContext from "../../../contexts/SearchTermContext";
+import { getPropertyValue } from "../../../utils/friendSearchUtils";
+import "../../../static/css/FriendInfo.css";
 
 const FriendInfo = ({ match, user }) => {
   const searchTerm = useContext(SearchTermContext);

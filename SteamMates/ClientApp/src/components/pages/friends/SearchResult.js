@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
+import FriendContext from "../../../contexts/FriendContext";
 import FriendInfo from "./FriendInfo";
-import FriendContext from "../contexts/FriendContext";
-import "../static/css/SearchResult.css";
+import "../../../static/css/SearchResult.css";
 
 const SearchResult = ({ result }) => {
   const { tryToAddFriend } = useContext(FriendContext);

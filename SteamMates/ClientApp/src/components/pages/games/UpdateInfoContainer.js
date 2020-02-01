@@ -1,8 +1,8 @@
 import React, { useContext } from "react";
-import UserContext from "../contexts/UserContext";
-import FriendContext from "../contexts/FriendContext";
+import UserContext from "../../../contexts/UserContext";
+import FriendContext from "../../../contexts/FriendContext";
 import UpdateInfo from "./UpdateInfo";
-import "./../static/css/UpdateInfoContainer.css";
+import "../../../static/css/UpdateInfoContainer.css";
 
 const UpdateInfoContainer = ({ latestUpdates }) => {
   const { user } = useContext(UserContext);
