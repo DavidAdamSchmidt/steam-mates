@@ -5,10 +5,13 @@ import useRequest from "../hooks/useRequest";
 const UserContext = createContext(null);
 
 export const UserProvider = props => {
-  const [loading, , user, , logout] = useRequest(`${API_URL}/user/info`, true);
+  const [loading, status, user, error, logout] = useRequest(
+    `${API_URL}/user/info`,
+    true
+  );
 
   return (
-    <UserContext.Provider value={{ user, loading, logout }}>
+    <UserContext.Provider value={{ loading, status, user, error, logout }}>
       {props.children}
     </UserContext.Provider>
   );

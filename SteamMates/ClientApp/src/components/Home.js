@@ -1,6 +1,13 @@
-import React from "react";
+import React, { useContext } from "react";
+import UserContext from "../contexts/UserContext";
 
 const Home = () => {
+  const { status, error } = useContext(UserContext);
+
+  if (status === 503 && (error || {}).apiName === "Steam") {
+    return <div>{error.message}</div>;
+  }
+
   return (
     <div>
       Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris placerat

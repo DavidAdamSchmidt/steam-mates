@@ -52,6 +52,10 @@ const GamePage = () => {
     return <LibraryError privateProfiles={privateProfiles} />;
   }
 
+  if (status === 503 && (error || {}).message) {
+    return <div>{error.message}</div>
+  }
+
   return (
     <div className="game-page">
       {loading && <span>Loading...</span>}
