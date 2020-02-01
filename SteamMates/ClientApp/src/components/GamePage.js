@@ -52,8 +52,8 @@ const GamePage = () => {
     return <LibraryError privateProfiles={privateProfiles} />;
   }
 
-  if (status === 503 && (error || {}).message) {
-    return <div>{error.message}</div>
+  if ((status === 503 && error.apiName) || (status === 404 && error.tagName)) {
+    return <div>{error.message}</div>;
   }
 
   return (
