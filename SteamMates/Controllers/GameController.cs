@@ -51,6 +51,10 @@ namespace SteamMates.Controllers
             {
                 return NotFound(new { UserId = e.Message, Error = "Could not access library." });
             }
+            catch (TagUnavailableException e)
+            {
+                return NotFound(new { e.TagName, e.Message });
+            }
         }
     }
 }

@@ -91,7 +91,14 @@ namespace SteamMates.Services
             var url = SteamSpyUtils.GetGamesByTagUrl(tag);
             var jsonObj = GetJsonObject(url, SteamSpyUtils.ApiName);
 
-            return jsonObj.ToObject<Dictionary<int, object>>().Keys.ToList();
+            var gameIds = jsonObj.ToObject<Dictionary<int, object>>().Keys.ToList();
+
+            if (gameIds.Count == 0)
+            {
+                throw new TagUnavailableException("Could not fetch tag data from the SteamSpy API.", tag);
+            }
+
+            return gameIds;
         }
 
         private IEnumerable<GameStat> FilterLibraries(IList<GameLibrary> libraries, TagCollection tagCollection)
