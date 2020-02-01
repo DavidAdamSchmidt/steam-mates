@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using SteamMates.Exceptions;
-using SteamMates.Models;
 using SteamMates.Services;
 using SteamMates.Utils;
 using System.Collections.Generic;
@@ -19,7 +18,7 @@ namespace SteamMates.Controllers
         }
 
         [HttpGet("common")]
-        public ActionResult<GameCollection> GetGamesInCommon([FromQuery(Name = "userId")] HashSet<string> userIds)
+        public IActionResult GetGamesInCommon([FromQuery(Name = "userId")] HashSet<string> userIds)
         {
             if (!User.Identity.IsAuthenticated)
             {
@@ -41,7 +40,9 @@ namespace SteamMates.Controllers
 
             try
             {
-                return _gameService.GetGamesInCommon(userIds);
+                var games = _gameService.GetGamesInCommon(userIds);
+
+                return Ok(games);
             }
             catch (ApiUnavailableException e)
             {

@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
 using SteamMates.Exceptions;
-using SteamMates.Models;
 using SteamMates.Services;
 using SteamMates.Utils;
 
@@ -33,7 +32,7 @@ namespace SteamMates.Controllers
         }
 
         [HttpGet("info")]
-        public ActionResult<User> GetUserInfo()
+        public IActionResult GetUserInfo()
         {
             if (!User.Identity.IsAuthenticated)
             {
@@ -46,7 +45,7 @@ namespace SteamMates.Controllers
             {
                 var user = _userService.GetUserInfo(userId);
 
-                return user;
+                return Ok(user);
             }
             catch (ApiUnavailableException e)
             {
