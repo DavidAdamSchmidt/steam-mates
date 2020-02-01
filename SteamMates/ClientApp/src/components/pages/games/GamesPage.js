@@ -9,7 +9,7 @@ import GameContainer from "./GameContainer";
 import { showError, getLibraryError } from "../../../utils/errorUtils";
 import { API_URL } from "../../../constants/api";
 
-const GamePage = () => {
+const GamesPage = () => {
   const [sendRequest, setSendRequest] = useState(false);
   const [queryString, setQueryString] = useState("");
   const { user } = useContext(UserContext);
@@ -57,7 +57,7 @@ const GamePage = () => {
   }
 
   return (
-    <div className="game-page">
+    <div className="games-page">
       {loading && <span>Loading...</span>}
       {!loading && data && (
         <TagProvider>
@@ -69,4 +69,4 @@ const GamePage = () => {
   );
 };
 
-export default GamePage;
+export default GamesPage;

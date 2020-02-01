@@ -1,19 +1,19 @@
 import React from "react";
 import { Switch, Route } from "react-router-dom";
-import SearchBox from "./pages/friends/SearchBox";
-import GamePage from "./pages/games/GamePage";
+import FriendsPage from "./pages/friends/FriendsPage";
+import GamesPage from "./pages/games/GamesPage";
 import ErrorPage from "./pages/error/ErrorPage";
-import Home from "./pages/home/Home";
+import HomePage from "./pages/home/HomePage";
 import "./../static/css/MainContainer.css";
 
 const MainContainer = () => {
   return (
     <div className="container">
       <Switch>
-        <Route path="/friends" component={SearchBox} />
-        <Route path="/games" component={GamePage} />
+        <Route path="/friends" component={FriendsPage} />
+        <Route path="/games" component={GamesPage} />
         <Route path="/error" component={ErrorPage} />
-        <Route path="/" component={Home} />
+        <Route path="/" component={HomePage} />
       </Switch>
     </div>
   );
