@@ -2,7 +2,7 @@
 
 namespace SteamMates.Utils
 {
-    public static class SteamSpyApi
+    public static class SteamSpyUtils
     {
         private const string GamesByTagPattern = @"https://steamspy.com/api.php?request=tag&tag={0}";
 

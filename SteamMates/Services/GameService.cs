@@ -81,15 +81,15 @@ namespace SteamMates.Services
         {
             return new TagCollection
             {
-                GameIdsByTags = SteamSpyApi.Tags.ToDictionary(tag => tag, FetchGameIdsByTag),
+                GameIdsByTags = SteamSpyUtils.Tags.ToDictionary(tag => tag, FetchGameIdsByTag),
                 LatestUpdate = DateTime.Now
             };
         }
 
         private List<int> FetchGameIdsByTag(string tag)
         {
-            var url = SteamSpyApi.GetGamesByTagUrl(tag);
-            var jsonObj = GetJsonObject(url, SteamSpyApi.ApiName);
+            var url = SteamSpyUtils.GetGamesByTagUrl(tag);
+            var jsonObj = GetJsonObject(url, SteamSpyUtils.ApiName);
 
             return jsonObj.ToObject<Dictionary<int, object>>().Keys.ToList();
         }
