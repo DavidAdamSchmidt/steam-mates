@@ -1,5 +1,4 @@
 import React, { useContext } from "react";
-import { Redirect } from "react-router-dom";
 import UserContext from "../../contexts/UserContext";
 import FriendContext from "../../contexts/FriendContext";
 import UserAvatar from "./UserAvatar";
@@ -32,7 +31,6 @@ const UserPanel = () => {
         <UserAvatar user={user} isFriend={false} />
       </Tooltip>
       <LogoutButton path={`${API_URL}/user/logout`} />
-      <Redirect to="/friends" />
     </div>
   );
 };
