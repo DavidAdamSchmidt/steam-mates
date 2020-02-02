@@ -12,5 +12,5 @@
   margin: auto;
   padding: 0 15px;
   display: grid;
-  grid-template-columns: repeat(4, 1fr) 1.3fr;
+  grid-template-columns: 192px repeat(3, 1fr) 1.3fr;
 }

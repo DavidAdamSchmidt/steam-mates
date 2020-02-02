@@ -11,6 +11,7 @@ const UserPanel = () => {
   const { user } = useContext(UserContext);
   const { friends } = useContext(FriendContext);
   const orderedFriends = [...friends].reverse();
+  const ids = [3, 2, 1];
   const emptySlots = [];
 
   for (let i = 3 - orderedFriends.length; i > 0; i--) {
@@ -20,7 +21,9 @@ const UserPanel = () => {
   return (
     <div className="user-panel">
       {emptySlots.map((obj, index) => (
-        <UserAvatar key={index} />
+        <Tooltip key={index} text={`Friend slot #${ids[index]}`}>
+          {obj}
+        </Tooltip>
       ))}
       {orderedFriends.map(friend => (
         <Tooltip key={friend.steamId} text={friend.personaName}>

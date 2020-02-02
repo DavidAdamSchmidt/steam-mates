@@ -9,11 +9,7 @@ const TagContainer = () => {
   return (
     <div className="tag-container">
       {initialTagsState.map((tag, index) => (
-        <Tag
-          key={index}
-          name={tag}
-          checked={tags.includes(tag)}
-        />
+        <Tag key={index} name={tag} checked={tags.includes(tag)} />
       ))}
     </div>
   );

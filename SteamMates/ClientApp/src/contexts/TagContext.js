@@ -12,9 +12,7 @@ export const TagProvider = props => {
   const [tags, setTags] = useState(initialTagsState);
 
   return (
-    <TagContext.Provider
-      value={{ initialTagsState, tags, setTags }}
-    >
+    <TagContext.Provider value={{ initialTagsState, tags, setTags }}>
       {props.children}
     </TagContext.Provider>
   );

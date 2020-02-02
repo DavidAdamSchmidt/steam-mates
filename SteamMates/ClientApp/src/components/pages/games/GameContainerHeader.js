@@ -8,8 +8,8 @@ import "../../../static/css/GameContainerHeader.css";
 const GameContainerHeader = ({ gameCount, latestUpdates }) => {
   const { user } = useContext(UserContext);
   const { friends } = useContext(FriendContext);
-  const { tags } = useContext(TagContext);
-  const spanClassName = "game-container-header-key";
+  const { initialTagsState, tags } = useContext(TagContext);
+  const spanClassName = "game-result-key";
 
   return (
     <div className="game-container-header">
@@ -19,7 +19,9 @@ const GameContainerHeader = ({ gameCount, latestUpdates }) => {
       </div>
       <div>
         <span className={spanClassName}>Tags:</span>{" "}
-        {tags.length > 0 ? tags.join(", ") : "N/A"}
+        {tags.length > 0
+          ? initialTagsState.filter(tag => tags.includes(tag)).join(", ")
+          : "N/A"}
       </div>
       <div>
         <span className={spanClassName}>Games Found:</span> {gameCount}
