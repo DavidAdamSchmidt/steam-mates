@@ -1,16 +1,16 @@
-import React, { useState, useContext, useEffect } from "react";
+import React, { useRef, useContext, useEffect } from "react";
 import { useHistory, Redirect } from "react-router-dom";
 import FriendContext from "../../../contexts/FriendContext";
 import "./../../../static/css/ErrorPage.css";
 
 const ErrorPage = props => {
-  const [isFirstRun, setFirstRun] = useState(true);
+  const isFirstRun = useRef(true);
   const { friends } = useContext(FriendContext);
   const history = useHistory();
 
   useEffect(() => {
-    if (isFirstRun) {
-      setFirstRun(false);
+    if (isFirstRun.current) {
+      isFirstRun.current = false;
     } else {
       history.goBack();
     }
