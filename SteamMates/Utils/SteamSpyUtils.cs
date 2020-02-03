@@ -20,5 +20,10 @@ namespace SteamMates.Utils
         {
             return string.Format(GamesByTagPattern, tag);
         }
+
+        public static string GetTagErrorMessage(bool isBackupUsed)
+        {
+            return $"Could not get tag data from the SteamSpy API{(isBackupUsed ? " or backup" : "")}.";
+        }
     }
 }

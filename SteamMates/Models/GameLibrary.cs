@@ -9,7 +9,7 @@ namespace SteamMates.Models
 
         public List<PlayedGame> Games { get; set; }
 
-        public DateTime LatestUpdate { get; set; }
+        public DateTime? LatestUpdate { get; set; }
 
         public int CompareTo(GameLibrary other)
         {

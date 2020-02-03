@@ -7,6 +7,6 @@ namespace SteamMates.Models
     {
         public Dictionary<string, List<int>> GameIdsByTags { get; set; }
 
-        public DateTime LatestUpdate { get; set; }
+        public DateTime? LatestUpdate { get; set; }
     }
 }

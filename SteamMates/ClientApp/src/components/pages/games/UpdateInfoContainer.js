@@ -11,7 +11,7 @@ const UpdateInfoContainer = ({ latestUpdates }) => {
   const createUpdateInfo = (name, latestUpdate) => {
     return {
       name: name,
-      latestUpdate: new Date(latestUpdate)
+      latestUpdate: latestUpdate
     };
   };
 

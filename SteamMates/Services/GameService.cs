@@ -1,11 +1,14 @@
 ﻿using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Options;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using SteamMates.Exceptions;
 using SteamMates.Models;
 using SteamMates.Utils;
 using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
+using System.IO;
 using System.Linq;
 
 namespace SteamMates.Services
@@ -23,7 +26,18 @@ namespace SteamMates.Services
 
             libraries.Sort();
 
-            var tagCollection = GetGameIdsByTags();
+            TagCollection tagCollection;
+            try
+            {
+                tagCollection = GetGameIdsByTags(false);
+            }
+            catch (Exception e) when (
+                e is TagUnavailableException ||
+                e is ApiUnavailableException ||
+                e is JsonReaderException)
+            {
+                tagCollection = GetGameIdsByTags(true);
+            }
 
             return new GameCollection
             {
@@ -67,35 +81,75 @@ namespace SteamMates.Services
             };
         }
 
-        private TagCollection GetGameIdsByTags()
+        private TagCollection GetGameIdsByTags(bool useBackup)
         {
+            if (useBackup)
+            {
+                return CreateTagCollection(GetGameIdsByTagFromBackup, true);
+            }
+
             return Cache.GetOrCreate(SiteUtils.CacheKeys.Tags, entry =>
             {
                 entry.SetAbsoluteExpiration(TimeSpan.FromHours(6));
 
-                return FetchGameIdsByTags();
+                return CreateTagCollection(GetGameIdsByTagFromApi, false);
             });
         }
 
-        private TagCollection FetchGameIdsByTags()
+        private TagCollection CreateTagCollection(Func<string, JObject> getJsonObject, bool isBackupUsed)
         {
-            return new TagCollection
+            var tagCollection = new TagCollection
             {
-                GameIdsByTags = SteamSpyUtils.Tags.ToDictionary(tag => tag, FetchGameIdsByTag),
-                LatestUpdate = DateTime.Now
+                GameIdsByTags = SteamSpyUtils.Tags.ToDictionary(tag => tag,
+                    tag => GetGameIdsByTag(tag, getJsonObject, isBackupUsed))
             };
+
+            if (!isBackupUsed)
+            {
+                tagCollection.LatestUpdate = DateTime.Now;
+            }
+
+            return tagCollection;
         }
 
-        private List<int> FetchGameIdsByTag(string tag)
+        private JObject GetGameIdsByTagFromApi(string tag)
         {
             var url = SteamSpyUtils.GetGamesByTagUrl(tag);
-            var jsonObj = GetJsonObject(url, SteamSpyUtils.ApiName);
+
+            return GetJsonObject(url, SteamSpyUtils.ApiName);
+        }
+
+        private JObject GetGameIdsByTagFromBackup(string tag)
+        {
+            try
+            {
+                string jsonStr;
+                using (var r = new StreamReader($"Backups/Tags/{tag}.json"))
+                {
+                    jsonStr = r.ReadToEnd();
+                }
+
+                return JObject.Parse(jsonStr);
+            }
+            catch (Exception e) when (
+                e is FileNotFoundException ||
+                e is DirectoryNotFoundException ||
+                e is IOException ||
+                e is JsonReaderException)
+            {
+                throw new TagUnavailableException(SteamSpyUtils.GetTagErrorMessage(true), tag, e);
+            }
+        }
+
+        private List<int> GetGameIdsByTag(string tag, Func<string, JObject> getJsonObject, bool isBackupUsed)
+        {
+            var jsonObj = getJsonObject(tag);
 
             var gameIds = jsonObj.ToObject<Dictionary<int, object>>().Keys.ToList();
 
             if (gameIds.Count == 0)
             {
-                throw new TagUnavailableException("Could not fetch tag data from the SteamSpy API.", tag);
+                throw new TagUnavailableException(SteamSpyUtils.GetTagErrorMessage(isBackupUsed), tag);
             }
 
             return gameIds;
@@ -140,7 +194,7 @@ namespace SteamMates.Services
                 .ToList();
         }
 
-        private Dictionary<string, DateTime> GetLatestUpdates(IEnumerable<GameLibrary> libraries, DateTime tagUpdate)
+        private Dictionary<string, DateTime?> GetLatestUpdates(IEnumerable<GameLibrary> libraries, DateTime? tagUpdate)
         {
             var dict = libraries.ToDictionary(x => x.UserId, x => x.LatestUpdate);
 

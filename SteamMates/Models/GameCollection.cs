@@ -7,6 +7,6 @@ namespace SteamMates.Models
     {
         public List<GameStat> Games { get; set; }
 
-        public Dictionary<string, DateTime> LatestUpdates { get; set; }
+        public Dictionary<string, DateTime?> LatestUpdates { get; set; }
     }
 }

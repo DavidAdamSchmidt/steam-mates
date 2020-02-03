@@ -1,4 +1,8 @@
 export const getElapsedTimeText = latestUpdate => {
+  if (latestUpdate === null) {
+    return "N/A (used backup)";
+  }
+
   const diff = new Date(Date.now()) - latestUpdate;
 
   const hours = Math.floor(diff / 1000 / 60 / 60);
