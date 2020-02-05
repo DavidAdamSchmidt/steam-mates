@@ -1,9 +1,22 @@
 import React, { useContext } from "react";
+import styled from "styled-components";
 import { Redirect } from "react-router-dom";
 import UserContext from "../../../contexts/UserContext";
 import SearchBox from "./SearchBox";
 import { getElapsedTimeText } from "../../../utils/updateInfoUtils";
-import "./../../../static/css/FriendsPage.css";
+
+const Wrapper = styled.div`
+  display: inline-block;
+  width: 100%;
+`;
+
+const LatestUpdate = styled.div`
+  float: right;
+  padding: 20px;
+  font-size: 14px;
+  font-style: italic;
+  color: #a4a4a4;
+`;
 
 const FriendsPage = () => {
   const { user } = useContext(UserContext);
@@ -13,12 +26,12 @@ const FriendsPage = () => {
   }
 
   return (
-    <div className="friends-page">
+    <Wrapper>
       <SearchBox />
-      <div className="friends-latest-update">
+      <LatestUpdate>
         Friends were updated {getElapsedTimeText(new Date(user.latestUpdate))}
-      </div>
-    </div>
+      </LatestUpdate>
+    </Wrapper>
   );
 };
 

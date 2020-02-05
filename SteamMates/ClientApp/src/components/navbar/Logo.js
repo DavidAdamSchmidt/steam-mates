@@ -1,8 +1,19 @@
 import React from "react";
-import "../../static/css/Logo.css";
+import styled from "styled-components";
+
+const Wrapper = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0;
+  font-size: 28px;
+  font-weight: bold;
+  font-style: italic;
+  color: white;
+`;
 
 const Logo = () => {
-  return <div className="logo">SteamMates</div>;
+  return <Wrapper>SteamMates</Wrapper>;
 };
 
 export default Logo;

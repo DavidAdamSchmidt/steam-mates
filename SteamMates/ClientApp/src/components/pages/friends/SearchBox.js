@@ -1,4 +1,5 @@
 import React, { useState, useContext } from "react";
+import styled from "styled-components";
 import UserContext from "../../../contexts/UserContext";
 import SearchTermContext from "../../../contexts/SearchTermContext";
 import SearchResultContainer from "./SearchResultContainer";
@@ -9,7 +10,29 @@ import {
   STEAM_ID_64,
   VANITY_ID
 } from "../../../constants/user";
-import "../../../static/css/SearchBox.css";
+
+const InputField = styled.input`
+  box-sizing: border-box;
+  box-shadow: 0 0 5px #9d9d9d;
+  -moz-box-shadow: 0 0 5px #9d9d9d;
+  -webkit-box-shadow: 0 0 5px #9d9d9d;
+  border: none;
+  border-radius: 25px;
+  width: 100%;
+  height: 45px;
+  padding-left: 25px;
+  font-size: 16px;
+  color: gray;
+
+  &:focus {
+    outline: 0;
+  }
+
+  ::placeholder {
+    font-style: italic;
+    color: #bababa;
+  }
+`;
 
 const SearchBox = () => {
   const [input, setInput] = useState("");
@@ -26,8 +49,8 @@ const SearchBox = () => {
   };
 
   return (
-    <div className="search-box">
-      <input
+    <div>
+      <InputField
         className="search-field"
         type="text"
         placeholder={`Search friends by ${PERSONA_NAME}, ${REAL_NAME}, ${VANITY_ID} or ${STEAM_ID_64}...`}

@@ -1,42 +1,54 @@
 import React, { useContext } from "react";
+import styled from "styled-components";
 import { Link } from "react-router-dom";
 import UserContext from "../../../contexts/UserContext";
 import FriendContext from "../../../contexts/FriendContext";
 import { showError } from "../../../utils/errorUtils";
-import "./../../../static/css/HomePage.css";
+
+const Wrapper = styled.div`
+  margin: 0 10px;
+`;
+
+const Welcome = styled.div`
+  font-size: 24px;
+  font-weight: bold;
+`;
+
+const Instruction = styled.div`
+  padding-top: 20px;
+`;
 
 const HomePage = () => {
   const { user, status, error } = useContext(UserContext);
   const { friends } = useContext(FriendContext);
-  const instruction = "instruction";
 
   if (status === 503 && (error || {}).apiName === "Steam") {
     return showError(error.message);
   }
 
   return (
-    <div className="home-page">
-      <div className="welcome-message">
+    <Wrapper>
+      <Welcome>
         {user
           ? `Good to see you, ${user.personaName}!`
           : "Welcome to SteamMates!"}
-      </div>
+      </Welcome>
       {!user ? (
-        <div className={instruction}>
+        <Instruction>
           Please sign in through Steam to begin using our services.
-        </div>
+        </Instruction>
       ) : friends.length > 0 ? (
-        <div className={instruction}>
+        <Instruction>
           Find out which <Link to="/games">games</Link> you and your selected
           friends can play together.
-        </div>
+        </Instruction>
       ) : (
-        <div className={instruction}>
+        <Instruction>
           Select some <Link to="/friends">friends</Link> first who you want to
           play with.
-        </div>
+        </Instruction>
       )}
-    </div>
+    </Wrapper>
   );
 };
 

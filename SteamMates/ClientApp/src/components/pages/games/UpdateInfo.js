@@ -1,16 +1,32 @@
 import React from "react";
+import styled from "styled-components";
 import { getElapsedTimeText } from "../../../utils/updateInfoUtils";
-import "../../../static/css/UpdateInfo.css";
+
+const Wrapper = styled.span`
+  margin: 0 10px;
+  font-size: 14px;
+
+  &:first-of-type {
+    margin-left: 0;
+  }
+
+  &:last-of-type {
+    margin-right: 0;
+  }
+`;
+
+const UpdateInfoValue = styled.span`
+  font-style: italic;
+`;
 
 const UpdateInfo = ({ updateInfo }) => {
   return (
-    <span className="update-info">
-      <span className="update-info-key">{updateInfo.name}:</span>
-      <span className="update-info-value">
-        {" "}
+    <Wrapper>
+      <span>{updateInfo.name}:</span>
+      <UpdateInfoValue>
         {getElapsedTimeText(updateInfo.latestUpdate)}
-      </span>
-    </span>
+      </UpdateInfoValue>
+    </Wrapper>
   );
 };
 

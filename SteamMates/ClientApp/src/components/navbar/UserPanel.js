@@ -1,11 +1,18 @@
 import React, { useContext } from "react";
+import styled from "styled-components";
 import UserContext from "../../contexts/UserContext";
 import FriendContext from "../../contexts/FriendContext";
 import UserAvatar from "./UserAvatar";
 import Tooltip from "./Tooltip";
 import LogoutButton from "./LogoutButton";
 import { API_URL } from "../../constants/api";
-import "../../static/css/UserPanel.css";
+
+const Wrapper = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+`;
 
 const UserPanel = () => {
   const { user } = useContext(UserContext);
@@ -19,7 +26,7 @@ const UserPanel = () => {
   }
 
   return (
-    <div className="user-panel">
+    <Wrapper>
       {emptySlots.map((obj, index) => (
         <Tooltip key={index} text={`Friend slot #${ids[index]}`}>
           {obj}
@@ -27,14 +34,14 @@ const UserPanel = () => {
       ))}
       {orderedFriends.map(friend => (
         <Tooltip key={friend.steamId} text={friend.personaName}>
-          <UserAvatar user={friend} isFriend={true} />
+          <UserAvatar profile={friend} isFriend={true} />
         </Tooltip>
       ))}
       <Tooltip text={`${user.personaName} (you)`}>
-        <UserAvatar user={user} isFriend={false} />
+        <UserAvatar profile={user} isFriend={false} />
       </Tooltip>
       <LogoutButton path={`${API_URL}/user/logout`} />
-    </div>
+    </Wrapper>
   );
 };
 

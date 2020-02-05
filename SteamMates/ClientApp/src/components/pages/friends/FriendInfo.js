@@ -1,26 +1,43 @@
 import React, { useContext } from "react";
+import styled from "styled-components";
 import SearchTermContext from "../../../contexts/SearchTermContext";
 import { getPropertyValue } from "../../../utils/friendSearchUtils";
-import "../../../static/css/FriendInfo.css";
+
+const Wrapper = styled.span`
+  margin: 0 10px;
+
+  &:first-of-type {
+    margin-left: 0;
+  }
+
+  &:last-of-type {
+    margin-right: 0;
+  }
+`;
+
+const Property = styled.span`
+  font-size: 14px;
+  color: #a4a4a4;
+`;
+
+const Match = styled.span`
+  font-weight: bold;
+`;
+
+const NoMatch = styled.span`
+  color: #5b5b5b;
+`;
 
 const FriendInfo = ({ match, user }) => {
   const searchTerm = useContext(SearchTermContext);
   const propertyValue = getPropertyValue(user, match.type);
-  const [container, propertyName, valueMatched, valueNotMatched] = [
-    "friend-info",
-    "property-name",
-    "match",
-    "no-match"
-  ];
 
   if (match.startIndex === -1) {
     return (
-      <span className={container}>
-        <span className={propertyName}>{match.type}: </span>
-        <span className={valueNotMatched}>
-          {propertyValue ? propertyValue : "N/A"}
-        </span>
-      </span>
+      <Wrapper>
+        <Property>{match.type}: </Property>
+        <NoMatch>{propertyValue ? propertyValue : "N/A"}</NoMatch>
+      </Wrapper>
     );
   }
 
@@ -30,18 +47,12 @@ const FriendInfo = ({ match, user }) => {
   const lastChars = propertyValue.substring(endIndex);
 
   return (
-    <span className={container}>
-      <span className={propertyName}>{match.type}: </span>
-      {firstChars.length > 0 && (
-        <span className={valueNotMatched}>{firstChars}</span>
-      )}
-      {matchedChars.length > 0 && (
-        <span className={valueMatched}>{matchedChars}</span>
-      )}
-      {lastChars.length > 0 && (
-        <span className={valueNotMatched}>{lastChars}</span>
-      )}
-    </span>
+    <Wrapper>
+      <Property>{match.type}: </Property>
+      {firstChars.length > 0 && <Property>{firstChars}</Property>}
+      {matchedChars.length > 0 && <Match>{matchedChars}</Match>}
+      {lastChars.length > 0 && <NoMatch>{lastChars}</NoMatch>}
+    </Wrapper>
   );
 };
 

@@ -1,14 +1,18 @@
 import React from "react";
+import styled from "styled-components";
 import SearchResult from "./SearchResult";
-import "../../../static/css/SearchResultContainer.css";
+
+const Wrapper = styled.div`
+  padding-top: 10px;
+`;
 
 const SearchResultContainer = ({ results }) => {
   return (
-    <div className="search-result-container">
+    <Wrapper>
       {results.map(result => (
         <SearchResult key={result.user.steamId} result={result} />
       ))}
-    </div>
+    </Wrapper>
   );
 };
 

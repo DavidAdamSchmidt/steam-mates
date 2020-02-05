@@ -1,33 +1,46 @@
 import React, { useContext } from "react";
+import styled from "styled-components";
 import UserContext from "../../../contexts/UserContext";
 import FriendContext from "../../../contexts/FriendContext";
 import TagContext from "../../../contexts/TagContext";
 import UpdateInfoContainer from "./UpdateInfoContainer";
-import "../../../static/css/GameContainerHeader.css";
+
+const Wrapper = styled.div`
+  margin-bottom: 40px;
+  border-radius: 20px;
+  padding: 20px;
+  background: rgba(17, 200, 163, 0.18);
+  font-size: 17px;
+  line-height: 2;
+  color: #1c3109;
+`;
+
+const ResultName = styled.span`
+  font-weight: bold;
+`;
 
 const GameContainerHeader = ({ gameCount, latestUpdates }) => {
   const { user } = useContext(UserContext);
   const { friends } = useContext(FriendContext);
   const { initialTagsState, tags } = useContext(TagContext);
-  const spanClassName = "game-result-key";
 
   return (
-    <div className="game-container-header">
+    <Wrapper>
       <div>
-        <span className={spanClassName}>Users:</span> {user.personaName},{" "}
+        <ResultName>Users:</ResultName> {user.personaName},{" "}
         {friends.map(friend => friend.personaName).join(", ")}
       </div>
       <div>
-        <span className={spanClassName}>Tags:</span>{" "}
+        <ResultName>Tags:</ResultName>{" "}
         {tags.length > 0
           ? initialTagsState.filter(tag => tags.includes(tag)).join(", ")
           : "N/A"}
       </div>
       <div>
-        <span className={spanClassName}>Games Found:</span> {gameCount}
+        <ResultName>Games Found:</ResultName> {gameCount}
       </div>
       <UpdateInfoContainer latestUpdates={latestUpdates} />
-    </div>
+    </Wrapper>
   );
 };
 

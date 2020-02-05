@@ -1,8 +1,14 @@
 import React, { useContext } from "react";
+import styled from "styled-components";
 import UserContext from "../../../contexts/UserContext";
 import FriendContext from "../../../contexts/FriendContext";
 import UpdateInfo from "./UpdateInfo";
-import "../../../static/css/UpdateInfoContainer.css";
+
+const Notification = styled.div`
+  padding-top: 20px;
+  font-size: 14px;
+  font-weight: 900;
+`;
 
 const UpdateInfoContainer = ({ latestUpdates }) => {
   const { user } = useContext(UserContext);
@@ -27,10 +33,10 @@ const UpdateInfoContainer = ({ latestUpdates }) => {
   ];
 
   return (
-    <div className="update-info-container">
-      <div className="update-info-notification">
+    <div>
+      <Notification>
         Libraries and tags are cached. See when they were updated below:
-      </div>
+      </Notification>
       {updateInfoArray.map((x, index) => (
         <UpdateInfo key={index} updateInfo={x} />
       ))}
