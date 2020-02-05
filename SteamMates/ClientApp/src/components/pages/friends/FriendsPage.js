@@ -29,7 +29,7 @@ const FriendsPage = () => {
     <Wrapper>
       <SearchBox />
       <LatestUpdate>
-        Friends were updated {getElapsedTimeText(new Date(user.latestUpdate))}
+        Friends were updated {getElapsedTimeText(user.latestUpdate)}
       </LatestUpdate>
     </Wrapper>
   );
