@@ -8,6 +8,7 @@ import LoginPanel from "./LoginPanel";
 
 const Wrapper = styled.div`
   position: fixed;
+  z-index: 2;
   top: 0;
   width: 100%;
   height: 70px;
