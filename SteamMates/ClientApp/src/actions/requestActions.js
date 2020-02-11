@@ -2,7 +2,8 @@ import {
   REQUEST_STARTED,
   REQUEST_SUCCESSFUL,
   REQUEST_FAILED,
-  RESET_STATE
+  RESET_STATE,
+  NETWORK_ERROR
 } from "../constants/request";
 
 export const requestStarted = () => ({
@@ -17,8 +18,8 @@ export const requestSuccessful = response => ({
 
 export const requestFailed = error => ({
   type: REQUEST_FAILED,
-  status: error.response.status,
-  error: error.response.data
+  status: (error.response || {}).status,
+  error: error.message === NETWORK_ERROR ? error : error.response.data
 });
 
 export const resetState = () => ({

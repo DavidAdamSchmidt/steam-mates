@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import UserContext from "../../../contexts/UserContext";
 import FriendContext from "../../../contexts/FriendContext";
 import { showError } from "../../../utils/errorUtils";
+import { NETWORK_ERROR } from "../../../constants/request";
 
 const Wrapper = styled.div`
   margin: 0 10px;
@@ -24,6 +25,10 @@ const HomePage = () => {
 
   if (status === 503 && (error || {}).apiName === "Steam") {
     return showError(error.message);
+  }
+
+  if (error.message === NETWORK_ERROR) {
+    return showError("Could not connect to the server.");
   }
 
   return (

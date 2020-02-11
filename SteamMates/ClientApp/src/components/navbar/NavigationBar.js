@@ -5,6 +5,7 @@ import Logo from "./Logo";
 import Menu from "./Menu";
 import UserPanel from "./UserPanel";
 import LoginPanel from "./LoginPanel";
+import { NETWORK_ERROR } from "../../constants/request";
 
 const Wrapper = styled.div`
   position: fixed;
@@ -25,7 +26,7 @@ const Container = styled.div`
 `;
 
 const NavigationBar = () => {
-  const { user } = useContext(UserContext);
+  const { user, error } = useContext(UserContext);
   const menus = ["Home", "Friends", "Games"];
 
   return (
@@ -40,7 +41,7 @@ const NavigationBar = () => {
             <UserPanel />
           </>
         ) : (
-          <LoginPanel />
+          error.message !== NETWORK_ERROR && <LoginPanel />
         )}
       </Container>
     </Wrapper>
