@@ -30,7 +30,7 @@ After logging in to Steam with your account, you can [request](https://steamcomm
 ### Setup
 
 1. Clone the repository.
-2. Open the project in your favorite IDE.
+2. Open the project in Visual Studio 2019 or Rider.
 3. Open your [User Secrets](https://docs.microsoft.com/en-us/aspnet/core/security/app-secrets) file.
     * Visual Studio 2019:
         * In the _Solution Explorer_, right-click on the project and select _Manage User Secrets_.
@@ -43,7 +43,7 @@ After logging in to Steam with your account, you can [request](https://steamcomm
       "SteamApiKey": "YOUR API KEY"
     }
     ```
-5. Run the project.
+5. Run the `IIS Express` profile.
 
 ## Planned Features
 * Rating games.
