@@ -27,7 +27,7 @@ const HomePage = () => {
     return showError(error.message);
   }
 
-  if (error.message === NETWORK_ERROR) {
+  if ((error || {}).message === NETWORK_ERROR) {
     return showError("Could not connect to the server.");
   }
 

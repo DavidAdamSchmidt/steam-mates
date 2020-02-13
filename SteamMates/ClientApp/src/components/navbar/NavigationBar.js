@@ -41,7 +41,7 @@ const NavigationBar = () => {
             <UserPanel />
           </>
         ) : (
-          error.message !== NETWORK_ERROR && <LoginPanel />
+          (error || {}).message !== NETWORK_ERROR && <LoginPanel />
         )}
       </Container>
     </Wrapper>
