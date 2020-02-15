@@ -3,6 +3,7 @@ using SteamMates.Exceptions;
 using SteamMates.Models;
 using SteamMates.Services;
 using SteamMates.Utils;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -78,7 +79,25 @@ namespace SteamMates.Controllers
                 return BadRequest($"Rating value {ratedGame.Rating} is invalid (needs to be between 1 and 5).");
             }
 
-            if (!await _gameService.UserHasGameAsync(ratedGame.UserId, ratedGame.GameId))
+            bool hasGame;
+            try
+            {
+                hasGame = !await _gameService.UserHasGameAsync(ratedGame.UserId, ratedGame.GameId);
+            }
+            catch (Exception e) when (
+                e is LibraryUnavailableException ||
+                e is ApiUnavailableException)
+            {
+                var error = new
+                {
+                    Message = "Could not determine whether the user has the game or not. Please try again later.",
+                    Reason = e.Message
+                };
+
+                return StatusCode(503, error);
+            }
+
+            if (!hasGame)
             {
                 return BadRequest($"User does not have game {ratedGame.GameId} in their library.");
             }
