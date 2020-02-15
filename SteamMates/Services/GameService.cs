@@ -26,23 +26,23 @@ namespace SteamMates.Services
             _context = context;
         }
 
-        public GameCollection GetGamesInCommon(ICollection<string> userIds)
+        public async Task<GameCollection> GetGamesInCommonAsync(ICollection<string> userIds)
         {
-            var libraries = GetGameLibraries(userIds);
+            var libraries = await GetGameLibrariesAsync(userIds);
 
             libraries.Sort();
 
             TagCollection tagCollection;
             try
             {
-                tagCollection = GetGameIdsByTags(false);
+                tagCollection = await GetGameIdsByTagsAsync(false);
             }
             catch (Exception e) when (
                 e is TagUnavailableException ||
                 e is ApiUnavailableException ||
                 e is JsonReaderException)
             {
-                tagCollection = GetGameIdsByTags(true);
+                tagCollection = await GetGameIdsByTagsAsync(true);
             }
 
             return new GameCollection
@@ -68,34 +68,37 @@ namespace SteamMates.Services
             return true;
         }
 
-        public bool UserHasGame(string userId, int gameId)
+        public async Task<bool> UserHasGameAsync(string userId, int gameId)
         {
-            return GetGameLibrary(userId).Games
+            var library = await GetGameLibraryAsync(userId);
+
+            return library.Games
                 .Select(x => x.AppId)
                 .Contains(gameId);
         }
 
-        private List<GameLibrary> GetGameLibraries(IEnumerable<string> userIds)
+        private async Task<List<GameLibrary>> GetGameLibrariesAsync(IEnumerable<string> userIds)
         {
-            return userIds
-                .Select(GetGameLibrary)
-                .ToList();
+            return (
+                await Task.WhenAll(
+                    userIds.Select(async id => await GetGameLibraryAsync(id)))
+                ).ToList();
         }
 
-        private GameLibrary GetGameLibrary(string userId)
+        private async Task<GameLibrary> GetGameLibraryAsync(string userId)
         {
-            return Cache.GetOrCreate(userId, entry =>
+            return await Cache.GetOrCreate(userId, async entry =>
             {
                 entry.SetAbsoluteExpiration(TimeSpan.FromHours(1));
 
-                return FetchGameLibrary(userId);
+                return await FetchGameLibraryAsync(userId);
             });
         }
 
-        private GameLibrary FetchGameLibrary(string userId)
+        private async Task<GameLibrary> FetchGameLibraryAsync(string userId)
         {
             var url = SteamUtils.GetOwnedGamesUrl(Secrets.Value.SteamApiKey, userId);
-            var jsonObj = GetJsonObject(url, SteamUtils.ApiName);
+            var jsonObj = await GetJsonObject(url, SteamUtils.ApiName);
 
             var games = jsonObj["response"]["games"]
                 ?.Children()
@@ -115,28 +118,32 @@ namespace SteamMates.Services
             };
         }
 
-        private TagCollection GetGameIdsByTags(bool useBackup)
+        private async Task<TagCollection> GetGameIdsByTagsAsync(bool useBackup)
         {
             if (useBackup)
             {
-                return CreateTagCollection(GetGameIdsByTagFromBackup, true);
+                return await CreateTagCollectionAsync(GetGameIdsByTagFromBackupAsync, true);
             }
 
-            return Cache.GetOrCreate(SiteUtils.CacheKeys.Tags, entry =>
+            return await Cache.GetOrCreate(SiteUtils.CacheKeys.Tags, async entry =>
             {
                 entry.SetAbsoluteExpiration(TimeSpan.FromHours(6));
 
-                return CreateTagCollection(GetGameIdsByTagFromApi, false);
+                return await CreateTagCollectionAsync(FetchGameIdsByTagAsync, false);
             });
         }
 
-        private TagCollection CreateTagCollection(Func<string, JObject> getJsonObject, bool isBackupUsed)
+        private async Task<TagCollection> CreateTagCollectionAsync(
+            Func<string, Task<JObject>> getJsonObject, bool isBackupUsed)
         {
-            var tagCollection = new TagCollection
-            {
-                GameIdsByTags = SteamSpyUtils.Tags.ToDictionary(tag => tag,
-                    tag => GetGameIdsByTag(tag, getJsonObject, isBackupUsed))
-            };
+            var task = SteamSpyUtils.Tags.Select(
+                async tag => new KeyValuePair<string, List<int>>(
+                    tag, await GetGameIdsByTagAsync(tag, getJsonObject, isBackupUsed)));
+
+            var result = (await Task.WhenAll(task))
+                .ToDictionary(p => p.Key, p => p.Value);
+
+            var tagCollection = new TagCollection { GameIdsByTags = result };
 
             if (!isBackupUsed)
             {
@@ -146,21 +153,21 @@ namespace SteamMates.Services
             return tagCollection;
         }
 
-        private JObject GetGameIdsByTagFromApi(string tag)
+        private async Task<JObject> FetchGameIdsByTagAsync(string tag)
         {
             var url = SteamSpyUtils.GetGamesByTagUrl(tag);
 
-            return GetJsonObject(url, SteamSpyUtils.ApiName);
+            return await GetJsonObject(url, SteamSpyUtils.ApiName);
         }
 
-        private JObject GetGameIdsByTagFromBackup(string tag)
+        private async Task<JObject> GetGameIdsByTagFromBackupAsync(string tag)
         {
             try
             {
                 string jsonStr;
                 using (var r = new StreamReader($"Backups/Tags/{tag}.json"))
                 {
-                    jsonStr = r.ReadToEnd();
+                    jsonStr = await r.ReadToEndAsync();
                 }
 
                 return JObject.Parse(jsonStr);
@@ -175,9 +182,10 @@ namespace SteamMates.Services
             }
         }
 
-        private List<int> GetGameIdsByTag(string tag, Func<string, JObject> getJsonObject, bool isBackupUsed)
+        private async Task<List<int>> GetGameIdsByTagAsync(
+            string tag, Func<string, Task<JObject>> getJsonObject, bool isBackupUsed)
         {
-            var jsonObj = getJsonObject(tag);
+            var jsonObj = await getJsonObject(tag);
 
             var gameIds = jsonObj.ToObject<Dictionary<int, object>>().Keys.ToList();
 

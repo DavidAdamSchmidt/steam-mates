@@ -20,7 +20,7 @@ namespace SteamMates.Controllers
         }
 
         [HttpGet("common")]
-        public IActionResult GetGamesInCommon([FromQuery(Name = "userId")] HashSet<string> userIds)
+        public async Task<IActionResult> GetGamesInCommonAsync([FromQuery(Name = "userId")] HashSet<string> userIds)
         {
             if (!User.Identity.IsAuthenticated)
             {
@@ -42,7 +42,7 @@ namespace SteamMates.Controllers
 
             try
             {
-                var games = _gameService.GetGamesInCommon(userIds);
+                var games = await _gameService.GetGamesInCommonAsync(userIds);
 
                 return Ok(games);
             }
@@ -61,7 +61,7 @@ namespace SteamMates.Controllers
         }
 
         [HttpPut("rate")]
-        public async Task<IActionResult> RateGame(RatedGame ratedGame)
+        public async Task<IActionResult> RateGameAsync(RatedGame ratedGame)
         {
             if (!User.Identity.IsAuthenticated)
             {
@@ -78,7 +78,7 @@ namespace SteamMates.Controllers
                 return BadRequest($"Rating value {ratedGame.Rating} is invalid (needs to be between 1 and 5).");
             }
 
-            if (!_gameService.UserHasGame(ratedGame.UserId, ratedGame.GameId))
+            if (!await _gameService.UserHasGameAsync(ratedGame.UserId, ratedGame.GameId))
             {
                 return BadRequest($"User does not have game {ratedGame.GameId} in their library.");
             }

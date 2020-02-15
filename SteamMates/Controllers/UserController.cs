@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using SteamMates.Exceptions;
 using SteamMates.Services;
 using SteamMates.Utils;
+using System.Threading.Tasks;
 
 namespace SteamMates.Controllers
 {
@@ -32,7 +33,7 @@ namespace SteamMates.Controllers
         }
 
         [HttpGet("info")]
-        public IActionResult GetUserInfo()
+        public async Task<IActionResult> GetUserInfoAsync()
         {
             if (!User.Identity.IsAuthenticated)
             {
@@ -43,7 +44,7 @@ namespace SteamMates.Controllers
 
             try
             {
-                var user = _userService.GetUserInfo(userId);
+                var user = await _userService.GetUserInfoAsync(userId);
 
                 return Ok(user);
             }

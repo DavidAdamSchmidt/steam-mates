@@ -2,7 +2,8 @@
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json.Linq;
 using SteamMates.Exceptions;
-using System.Net;
+using System.Net.Http;
+using System.Threading.Tasks;
 
 namespace SteamMates.Services
 {
@@ -18,15 +19,15 @@ namespace SteamMates.Services
 
         protected IMemoryCache Cache { get; }
 
-        protected static JObject GetJsonObject(string url, string apiName)
+        protected static async Task<JObject> GetJsonObject(string url, string apiName)
         {
             string jsonStr;
 
             try
             {
-                jsonStr = GetJsonString(url);
+                jsonStr = await GetStringAsync(url);
             }
-            catch (WebException e)
+            catch (HttpRequestException e)
             {
                 var message = $"An error occured while trying to communicate with the {apiName} API.";
 
@@ -36,11 +37,11 @@ namespace SteamMates.Services
             return JObject.Parse(jsonStr);
         }
 
-        private static string GetJsonString(string url)
+        private static async Task<string> GetStringAsync(string url)
         {
-            using var client = new WebClient();
+            using var client = new HttpClient();
 
-            return client.DownloadString(url);
+            return await client.GetStringAsync(url);
         }
     }
 }

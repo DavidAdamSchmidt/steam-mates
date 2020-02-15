@@ -5,6 +5,7 @@ using SteamMates.Utils;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace SteamMates.Services
 {
@@ -15,18 +16,18 @@ namespace SteamMates.Services
         {
         }
 
-        public User GetUserInfo(string userId)
+        public async Task<User> GetUserInfoAsync(string userId)
         {
             User user;
             var key = SiteUtils.CacheKeys.UserInfo;
 
             do
             {
-                user = Cache.GetOrCreate(key, entry =>
+                user = await Cache.GetOrCreate(key, async entry =>
                 {
                     entry.SetAbsoluteExpiration(TimeSpan.FromHours(1));
 
-                    return FetchUserInfo(userId);
+                    return await FetchUserInfoAsync(userId);
                 });
 
                 if (userId != user.SteamId)
@@ -38,16 +39,16 @@ namespace SteamMates.Services
             return user;
         }
 
-        private User FetchUserInfo(string userId)
+        private async Task<User> FetchUserInfoAsync(string userId)
         {
             var url = SteamUtils.GetUserInfoUrl(Secrets.Value.SteamApiKey, userId);
-            var jsonObj = GetJsonObject(url, SteamUtils.ApiName);
+            var jsonObj = await GetJsonObject(url, SteamUtils.ApiName);
             var token = jsonObj["response"]["players"].First;
             var user = token.ToObject<User>();
 
             if (user.CommunityVisibilityState == 3)
             {
-                user.Friends = FetchFriends(userId);
+                user.Friends = await FetchFriendsAsync(userId);
             }
 
             user.LatestUpdate = DateTime.Now;
@@ -55,30 +56,30 @@ namespace SteamMates.Services
             return user;
         }
 
-        private IList<User> FetchFriends(string userId)
+        private async Task<IList<User>> FetchFriendsAsync(string userId)
         {
-            var ids = FetchFriendIds(userId);
+            var ids = await FetchFriendIdsAsync(userId);
 
-            var friends = FetchFriendDetails(ids);
+            var friends = await FetchFriendDetailsAsync(ids);
             friends.Sort();
 
             return friends;
         }
 
-        private IEnumerable<string> FetchFriendIds(string userId)
+        private async Task<IEnumerable<string>> FetchFriendIdsAsync(string userId)
         {
             var url = SteamUtils.GetFriendIdsUrl(Secrets.Value.SteamApiKey, userId);
-            var jsonObj = GetJsonObject(url, SteamUtils.ApiName);
+            var jsonObj = await GetJsonObject(url, SteamUtils.ApiName);
 
             return jsonObj["friendslist"]["friends"]
                 .Children()
                 .Select(token => token["steamid"].ToObject<string>());
         }
 
-        private List<User> FetchFriendDetails(IEnumerable<string> ids)
+        private async Task<List<User>> FetchFriendDetailsAsync(IEnumerable<string> ids)
         {
             var url = SteamUtils.GetFriendListUrl(Secrets.Value.SteamApiKey, ids);
-            var jsonObj = GetJsonObject(url, SteamUtils.ApiName);
+            var jsonObj = await GetJsonObject(url, SteamUtils.ApiName);
 
             return jsonObj["response"]["players"]
                 .Children()
