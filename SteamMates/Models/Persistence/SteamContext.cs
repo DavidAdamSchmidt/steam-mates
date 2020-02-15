@@ -13,6 +13,20 @@ namespace SteamMates.Models.Persistence
 
         public DbSet<GameIdentifier> Games { get; set; }
 
-        public DbSet<Vote> Votes { get; set; }
+        public DbSet<Rating> Ratings { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<UserIdentifier>()
+                .HasIndex(x => x.SteamId)
+                .IsUnique();
+
+            modelBuilder.Entity<GameIdentifier>()
+                .HasIndex(x => x.SteamId)
+                .IsUnique();
+
+            modelBuilder.Entity<Rating>()
+                .HasAlternateKey(x => new { x.UserId, x.GameId });
+        }
     }
 }

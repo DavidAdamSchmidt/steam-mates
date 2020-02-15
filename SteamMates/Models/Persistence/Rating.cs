@@ -2,7 +2,7 @@
 
 namespace SteamMates.Models.Persistence
 {
-    public class Vote
+    public class Rating
     {
         public int Id { get; set; }
 

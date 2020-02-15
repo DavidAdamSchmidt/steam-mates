@@ -8,6 +8,6 @@ namespace SteamMates.Models.Persistence
 
         public int SteamId { get; set; }
 
-        public ICollection<Vote> Votes { get; set; }
+        public ICollection<Rating> Ratings { get; set; }
     }
 }

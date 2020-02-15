@@ -11,6 +11,6 @@ namespace SteamMates.Models.Persistence
         [StringLength(17)]
         public string SteamId { get; set; }
 
-        public ICollection<Vote> Votes { get; set; }
+        public ICollection<Rating> Ratings { get; set; }
     }
 }

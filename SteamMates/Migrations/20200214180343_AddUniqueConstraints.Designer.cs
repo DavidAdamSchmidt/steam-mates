@@ -2,15 +2,17 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SteamMates.Models.Persistence;
 
 namespace SteamMates.Migrations
 {
     [DbContext(typeof(SteamContext))]
-    partial class SteamContextModelSnapshot : ModelSnapshot
+    [Migration("20200214180343_AddUniqueConstraints")]
+    partial class AddUniqueConstraints
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -36,7 +38,27 @@ namespace SteamMates.Migrations
                     b.ToTable("Games");
                 });
 
-            modelBuilder.Entity("SteamMates.Models.Persistence.Rating", b =>
+            modelBuilder.Entity("SteamMates.Models.Persistence.UserIdentifier", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("SteamId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(17)")
+                        .HasMaxLength(17);
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("SteamId")
+                        .IsUnique();
+
+                    b.ToTable("Users");
+                });
+
+            modelBuilder.Entity("SteamMates.Models.Persistence.Vote", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -58,30 +80,10 @@ namespace SteamMates.Migrations
 
                     b.HasIndex("GameId");
 
-                    b.ToTable("Ratings");
+                    b.ToTable("Votes");
                 });
 
-            modelBuilder.Entity("SteamMates.Models.Persistence.UserIdentifier", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("SteamId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(17)")
-                        .HasMaxLength(17);
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("SteamId")
-                        .IsUnique();
-
-                    b.ToTable("Users");
-                });
-
-            modelBuilder.Entity("SteamMates.Models.Persistence.Rating", b =>
+            modelBuilder.Entity("SteamMates.Models.Persistence.Vote", b =>
                 {
                     b.HasOne("SteamMates.Models.Persistence.GameIdentifier", "Game")
                         .WithMany("Votes")
