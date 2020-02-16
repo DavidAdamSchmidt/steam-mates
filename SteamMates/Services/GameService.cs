@@ -47,7 +47,7 @@ namespace SteamMates.Services
 
             return new GameCollection
             {
-                Games = FilterLibraries(libraries, tagCollection).ToList(),
+                Games = GetGameStats(userIds, libraries, tagCollection),
                 LatestUpdates = GetLatestUpdates(libraries, tagCollection.LatestUpdate)
             };
         }
@@ -197,6 +197,21 @@ namespace SteamMates.Services
             return gameIds;
         }
 
+        private List<GameStat> GetGameStats(
+            IEnumerable<string> userIds, IList<GameLibrary> libraries, TagCollection tagCollection)
+        {
+            var stats = FilterLibraries(libraries, tagCollection).ToList();
+            var gameIds = stats.Select(x => x.Game.AppId);
+            var ratings = FindRatings(userIds, gameIds).ToArray();
+
+            foreach (var stat in stats)
+            {
+                stat.Ratings = ratings.Where(x => x.GameId == stat.Game.AppId).ToList();
+            }
+
+            return stats;
+        }
+
         private IEnumerable<GameStat> FilterLibraries(IList<GameLibrary> libraries, TagCollection tagCollection)
         {
             return
@@ -243,6 +258,21 @@ namespace SteamMates.Services
             dict.Add("tags", tagUpdate);
 
             return dict;
+        }
+
+        private IEnumerable<RatedGame> FindRatings(IEnumerable<string> userIds, IEnumerable<int> gameIds)
+        {
+            return
+                from rating in _context.Ratings
+                join user in _context.Users on rating.UserId equals user.Id
+                join game in _context.Games on rating.GameId equals game.Id
+                where userIds.Contains(user.SteamId) && gameIds.Contains(game.SteamId)
+                select new RatedGame
+                {
+                    UserId = user.SteamId,
+                    GameId = game.SteamId,
+                    Rating = rating.Value
+                };
         }
 
         private async Task<Rating> FindRatingAsync(string userId, int gameId)
