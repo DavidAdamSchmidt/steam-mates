@@ -1,6 +1,5 @@
 import React from "react";
 import styled from "styled-components";
-import GameContext from "../../../contexts/GameContext";
 import GameCard from "./GameCard";
 
 const Wrapper = styled.div`
@@ -13,9 +12,7 @@ const GameContainerBody = ({ data }) => {
   return (
     <Wrapper>
       {data.map(info => (
-        <GameContext.Provider key={info.game.appId} value={info}>
-          <GameCard />
-        </GameContext.Provider>
+        <GameCard key={info.game.appId} info={info} />
       ))}
     </Wrapper>
   );

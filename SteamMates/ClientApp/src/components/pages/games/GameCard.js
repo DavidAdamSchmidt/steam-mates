@@ -1,6 +1,6 @@
 import React, { useContext } from "react";
 import styled from "styled-components";
-import GameContext from "../../../contexts/GameContext";
+import UserContext from "../../../contexts/UserContext";
 import StarRatings from "./StarRatings";
 import { LOGO_URL } from "../../../constants/steam";
 
@@ -54,8 +54,11 @@ const Tag = styled.span`
   }
 `;
 
-const GameCard = () => {
-  const info = useContext(GameContext);
+const GameCard = ({ info }) => {
+  const { user } = useContext(UserContext);
+
+  const rating =
+    (info.ratings.find(x => x.userId === user.steamId) || {}).rating || 0;
 
   return (
     <Wrapper>
@@ -70,7 +73,7 @@ const GameCard = () => {
         src={`${LOGO_URL}/${info.game.appId}/${info.game.imgLogoUrl}.jpg`}
         alt="GameLogo"
       />
-      <StarRatings amountOfStars={5} />
+      <StarRatings amountOfStars={5} gameId={info.game.appId} rating={rating} />
       {info.tags.map((tag, index) => (
         <Tag key={index}>{tag}</Tag>
       ))}
