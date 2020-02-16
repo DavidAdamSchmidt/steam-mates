@@ -36,6 +36,12 @@ const useRequest = (
       .catch(error => dispatch(requestFailed(error)));
   }, [url, data, withCredentials]);
 
+  const sendPutRequest = useCallback(() => {
+    Axios.put(url, data, { withCredentials: withCredentials })
+      .then(response => dispatch(requestSuccessful(response)))
+      .catch(error => dispatch(requestFailed(error)));
+  }, [url, data, withCredentials]);
+
   useEffect(() => {
     if (!send) {
       return;
@@ -45,8 +51,10 @@ const useRequest = (
       sendGetRequest();
     } else if (method === "POST") {
       sendPostRequest();
+    } else if (method === "PUT") {
+      sendPutRequest();
     }
-  }, [send, method, sendGetRequest, sendPostRequest]);
+  }, [send, method, sendGetRequest, sendPostRequest, sendPutRequest]);
 
   const reset = () => {
     dispatch(resetState());

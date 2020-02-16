@@ -82,7 +82,7 @@ namespace SteamMates.Controllers
             bool hasGame;
             try
             {
-                hasGame = !await _gameService.UserHasGameAsync(ratedGame.UserId, ratedGame.GameId);
+                hasGame = await _gameService.UserHasGameAsync(ratedGame.UserId, ratedGame.GameId);
             }
             catch (Exception e) when (
                 e is LibraryUnavailableException ||

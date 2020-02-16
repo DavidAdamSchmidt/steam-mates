@@ -1,8 +1,11 @@
 import React, { useContext, useState } from "react";
 import styled from "styled-components";
+import useRequest from "../../../hooks/useRequest";
+import UserContext from "../../../contexts/UserContext";
 import GameContext from "../../../contexts/GameContext";
 import full_star from "../../../static/images/full_star.gif";
 import empty_star from "../../../static/images/empty_star.gif";
+import { API_URL } from "../../../constants/api";
 
 const Wrapper = styled.div`
   display: flex;
@@ -25,18 +28,26 @@ const StarRating = styled.div`
 `;
 
 const StarRatings = ({ amountOfStars }) => {
+  const [sendRequest, setSendRequest] = useState(false);
+  const [requestBody, setRequestBody] = useState({});
   const [hoveredValue, setHoveredValue] = useState(0);
   const [selectedValue, setSelectedValue] = useState(0);
   const {
     game: { appId }
   } = useContext(GameContext);
+  const { user } = useContext(UserContext);
   const values = [...Array(amountOfStars).keys()].map(i => i + 1);
+
+  useRequest(`${API_URL}/games/rate`, sendRequest, "PUT", requestBody); // TODO: error handling
 
   const rateGame = () => {
     setSelectedValue(hoveredValue);
-    console.log(`${appId}: ${hoveredValue}`);
-
-    // TODO: send request to server
+    setRequestBody({
+      userId: user.steamId,
+      gameId: appId,
+      rating: hoveredValue
+    });
+    setSendRequest(true);
   };
 
   return (
