@@ -1,5 +1,7 @@
-import React from "react";
+import React, { useContext } from "react";
 import styled from "styled-components";
+import GameContext from "../../../contexts/GameContext";
+import StarRatings from "./StarRatings";
 import { LOGO_URL } from "../../../constants/steam";
 
 const Wrapper = styled.div`
@@ -52,21 +54,24 @@ const Tag = styled.span`
   }
 `;
 
-const GameCard = ({ stat }) => {
+const GameCard = () => {
+  const info = useContext(GameContext);
+
   return (
     <Wrapper>
-      <Title>{stat.game.name}</Title>
-      <a href={`steam://run/${stat.game.appId}`}>
+      <Title>{info.game.name}</Title>
+      <a href={`steam://run/${info.game.appId}`}>
         <Icon
-          src={`${LOGO_URL}/${stat.game.appId}/${stat.game.imgIconUrl}.jpg`}
+          src={`${LOGO_URL}/${info.game.appId}/${info.game.imgIconUrl}.jpg`}
           alt="GameIcon"
         />
       </a>
       <img
-        src={`${LOGO_URL}/${stat.game.appId}/${stat.game.imgLogoUrl}.jpg`}
+        src={`${LOGO_URL}/${info.game.appId}/${info.game.imgLogoUrl}.jpg`}
         alt="GameLogo"
       />
-      {stat.tags.map((tag, index) => (
+      <StarRatings amountOfStars={5} />
+      {info.tags.map((tag, index) => (
         <Tag key={index}>{tag}</Tag>
       ))}
     </Wrapper>
