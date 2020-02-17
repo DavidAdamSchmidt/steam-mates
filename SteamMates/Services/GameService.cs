@@ -26,30 +26,14 @@ namespace SteamMates.Services
             _context = context;
         }
 
-        public async Task<GameCollection> GetGamesInCommonAsync(ICollection<string> userIds)
+        public async Task<GameCollection> GetGamesAsync(string userId)
         {
-            var libraries = await GetGameLibrariesAsync(userIds);
+            return await GetGameCollectionAsync(userId);
+        }
 
-            libraries.Sort();
-
-            TagCollection tagCollection;
-            try
-            {
-                tagCollection = await GetGameIdsByTagsAsync(false);
-            }
-            catch (Exception e) when (
-                e is TagUnavailableException ||
-                e is ApiUnavailableException ||
-                e is JsonReaderException)
-            {
-                tagCollection = await GetGameIdsByTagsAsync(true);
-            }
-
-            return new GameCollection
-            {
-                Games = GetGameStats(userIds, libraries, tagCollection),
-                LatestUpdates = GetLatestUpdates(libraries, tagCollection.LatestUpdate)
-            };
+        public async Task<GameCollection> GetGamesInCommonAsync(ISet<string> userIds)
+        {
+            return await GetGameCollectionAsync(userIds.ToArray());
         }
 
         public async Task<bool> RateGameAsync(RatedGame ratedGame)
@@ -75,6 +59,26 @@ namespace SteamMates.Services
             return library.Games
                 .Select(x => x.AppId)
                 .Contains(gameId);
+        }
+
+        private async Task<GameCollection> GetGameCollectionAsync(params string[] userIds)
+        {
+            if (userIds.Length == 0)
+            {
+                throw new ArgumentException("No user ID was received.");
+            }
+
+            var libraries = await GetGameLibrariesAsync(userIds);
+
+            libraries.Sort();
+
+            var tagCollection = await GetTagCollectionAsync();
+
+            return new GameCollection
+            {
+                Games = GetGameStats(userIds, libraries, tagCollection),
+                LatestUpdates = GetLatestUpdates(libraries, tagCollection.LatestUpdate)
+            };
         }
 
         private async Task<List<GameLibrary>> GetGameLibrariesAsync(IEnumerable<string> userIds)
@@ -116,6 +120,21 @@ namespace SteamMates.Services
                 Games = games,
                 LatestUpdate = DateTime.Now
             };
+        }
+
+        private async Task<TagCollection> GetTagCollectionAsync()
+        {
+            try
+            {
+                return await GetGameIdsByTagsAsync(false);
+            }
+            catch (Exception e) when (
+                e is TagUnavailableException ||
+                e is ApiUnavailableException ||
+                e is JsonReaderException)
+            {
+                return await GetGameIdsByTagsAsync(true);
+            }
         }
 
         private async Task<TagCollection> GetGameIdsByTagsAsync(bool useBackup)

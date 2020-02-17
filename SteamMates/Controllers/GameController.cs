@@ -20,6 +20,20 @@ namespace SteamMates.Controllers
             _gameService = gameService;
         }
 
+        [HttpGet]
+        public async Task<IActionResult> GetGamesAsync()
+        {
+            if (!User.Identity.IsAuthenticated)
+            {
+                return Unauthorized("User needs to be authenticated.");
+            }
+
+            var userId = SteamUtils.GetUserIdFromClaim(User);
+
+            return await ProduceResponseAsync(
+                async () => await _gameService.GetGamesAsync(userId));
+        }
+
         [HttpGet("common")]
         public async Task<IActionResult> GetGamesInCommonAsync([FromQuery(Name = "userId")] HashSet<string> userIds)
         {
@@ -41,24 +55,8 @@ namespace SteamMates.Controllers
                 return BadRequest("Too many user IDs were received.");
             }
 
-            try
-            {
-                var games = await _gameService.GetGamesInCommonAsync(userIds);
-
-                return Ok(games);
-            }
-            catch (ApiUnavailableException e)
-            {
-                return StatusCode(503, new { e.Message, e.ApiName });
-            }
-            catch (LibraryUnavailableException e)
-            {
-                return NotFound(new { e.Message, e.UserId });
-            }
-            catch (TagUnavailableException e)
-            {
-                return NotFound(new { e.Message, e.TagName });
-            }
+            return await ProduceResponseAsync(
+                async () => await _gameService.GetGamesInCommonAsync(userIds));
         }
 
         [HttpPut("rate")]
@@ -110,6 +108,28 @@ namespace SteamMates.Controllers
             }
 
             return NoContent();
+        }
+
+        private async Task<IActionResult> ProduceResponseAsync(Func<Task<GameCollection>> dataRetrieval)
+        {
+            try
+            {
+                var games = await dataRetrieval();
+
+                return Ok(games);
+            }
+            catch (ApiUnavailableException e)
+            {
+                return StatusCode(503, new { e.Message, e.ApiName });
+            }
+            catch (LibraryUnavailableException e)
+            {
+                return NotFound(new { e.Message, e.UserId });
+            }
+            catch (TagUnavailableException e)
+            {
+                return NotFound(new { e.Message, e.TagName });
+            }
         }
     }
 }
