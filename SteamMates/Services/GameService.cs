@@ -240,6 +240,8 @@ namespace SteamMates.Services
                     .FirstOrDefault();
             }
 
+            stats.Sort();
+
             return stats;
         }
 
