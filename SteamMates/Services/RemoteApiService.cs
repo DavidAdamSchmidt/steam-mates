@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 
 namespace SteamMates.Services
 {
-    public class ServiceBase
+    public class RemoteApiService
     {
-        public ServiceBase(IOptions<AppSecrets> secrets, IMemoryCache cache)
+        public RemoteApiService(IOptions<AppSecrets> secrets, IMemoryCache cache)
         {
             Secrets = secrets;
             Cache = cache;
@@ -19,7 +19,7 @@ namespace SteamMates.Services
 
         protected IMemoryCache Cache { get; }
 
-        protected static async Task<JObject> GetJsonObject(string url, string apiName)
+        public async Task<JObject> GetJsonObject(string url, string apiName)
         {
             string jsonStr;
 
@@ -37,7 +37,7 @@ namespace SteamMates.Services
             return JObject.Parse(jsonStr);
         }
 
-        private static async Task<string> GetStringAsync(string url)
+        private async Task<string> GetStringAsync(string url)
         {
             using var client = new HttpClient();
 

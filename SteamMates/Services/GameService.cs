@@ -16,7 +16,7 @@ using System.Threading.Tasks;
 
 namespace SteamMates.Services
 {
-    public class GameService : ServiceBase
+    public class GameService : RemoteApiService
     {
         private readonly SteamContext _context;
 

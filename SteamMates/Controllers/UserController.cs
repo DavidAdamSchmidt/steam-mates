@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using SteamMates.Exceptions;
 using SteamMates.Services;
 using SteamMates.Utils;
+using SteamMates.Validation;
 using System.Threading.Tasks;
 
 namespace SteamMates.Controllers
@@ -23,7 +24,7 @@ namespace SteamMates.Controllers
         {
             if (User.Identity.IsAuthenticated)
             {
-                return BadRequest("User has already been authenticated.");
+                return BadRequest(ValidationError.AlreadyAuthenticated);
             }
 
             var referer = Request.Headers["Referer"].ToString();
@@ -37,7 +38,7 @@ namespace SteamMates.Controllers
         {
             if (!User.Identity.IsAuthenticated)
             {
-                return Unauthorized("User has not yet been authenticated.");
+                return Unauthorized(ValidationError.Unauthorized);
             }
 
             var userId = SteamUtils.GetUserIdFromClaim(User);

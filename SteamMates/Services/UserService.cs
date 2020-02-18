@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace SteamMates.Services
 {
-    public class UserService : ServiceBase
+    public class UserService : RemoteApiService
     {
         public UserService(IOptions<AppSecrets> secrets, IMemoryCache cache)
             : base(secrets, cache)

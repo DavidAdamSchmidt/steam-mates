@@ -3,6 +3,7 @@ using SteamMates.Exceptions;
 using SteamMates.Models;
 using SteamMates.Services;
 using SteamMates.Utils;
+using SteamMates.Validation;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -14,92 +15,72 @@ namespace SteamMates.Controllers
     public class GameController : ControllerBase
     {
         private readonly GameService _gameService;
+        private readonly ValidationService _validationService;
 
-        public GameController(GameService gameService)
+        public GameController(GameService gameService, ValidationService validationService)
         {
             _gameService = gameService;
+            _validationService = validationService;
         }
 
         [HttpGet]
         public async Task<IActionResult> GetGamesAsync()
         {
-            if (!User.Identity.IsAuthenticated)
-            {
-                return Unauthorized("User needs to be authenticated.");
-            }
+            var result = _validationService.ValidateGetGames(User);
 
-            var userId = SteamUtils.GetUserIdFromClaim(User);
-
-            return await ProduceResponseAsync(
-                async () => await _gameService.GetGamesAsync(userId));
+            return await SendResponseAsync(result,
+                async () => await TryRetrieveDataAsync(RetrieveGamesAsync));
         }
 
         [HttpGet("common")]
         public async Task<IActionResult> GetGamesInCommonAsync([FromQuery(Name = "userId")] HashSet<string> userIds)
         {
-            if (!User.Identity.IsAuthenticated)
-            {
-                return Unauthorized("User needs to be authenticated.");
-            }
+            var result = _validationService.ValidateGetGamesInCommon(User, userIds);
 
-            if (userIds.Count == 0)
-            {
-                return BadRequest("No user ID was received.");
-            }
-
-            var userId = SteamUtils.GetUserIdFromClaim(User);
-            userIds.Add(userId);
-
-            if (userIds.Count > 4)
-            {
-                return BadRequest("Too many user IDs were received.");
-            }
-
-            return await ProduceResponseAsync(
-                async () => await _gameService.GetGamesInCommonAsync(userIds));
+            return await SendResponseAsync(result,
+                async () => await TryRetrieveDataAsync(
+                    async () => await RetrieveGamesInCommonAsync(userIds)));
         }
 
         [HttpPut("rate")]
         public async Task<IActionResult> RateGameAsync(RatedGame ratedGame)
         {
-            if (!User.Identity.IsAuthenticated)
-            {
-                return Unauthorized("User needs to be authenticated.");
-            }
+            var result = await _validationService.ValidateRateGameAsync(User, ratedGame);
 
-            if (ratedGame.UserId != SteamUtils.GetUserIdFromClaim(User))
-            {
-                return BadRequest("Wrong user ID was received.");
-            }
+            return await SendResponseAsync(result,
+                async () => await CreateOrUpdateRatingAsync(ratedGame));
+        }
 
-            if (ratedGame.Rating < 1 || ratedGame.Rating > 5)
+        private async Task<IActionResult> SendResponseAsync(
+            ValidationResult validationResult, Func<Task<IActionResult>> onSuccess)
+        {
+            return validationResult.Status switch
             {
-                return BadRequest($"Rating value {ratedGame.Rating} is invalid (needs to be between 1 and 5).");
-            }
+                ValidationStatus.Ok => await onSuccess(),
+                ValidationStatus.Unauthorized => Unauthorized(validationResult.Message),
+                ValidationStatus.Failed => BadRequest(validationResult.Message),
+                ValidationStatus.Aborted => StatusCode(503, validationResult.Message),
+                _ => throw new ArgumentException("Invalid validation status."),
+            };
+        }
 
-            bool hasGame;
-            try
-            {
-                hasGame = await _gameService.UserHasGameAsync(ratedGame.UserId, ratedGame.GameId);
-            }
-            catch (Exception e) when (
-                e is LibraryUnavailableException ||
-                e is ApiUnavailableException)
-            {
-                var error = new
-                {
-                    Message = "Could not determine whether the user has the game or not. Please try again later.",
-                    Reason = e.Message
-                };
+        private async Task<GameCollection> RetrieveGamesAsync()
+        {
+            var userId = SteamUtils.GetUserIdFromClaim(User);
 
-                return StatusCode(503, error);
-            }
+            return await _gameService.GetGamesAsync(userId);
+        }
 
-            if (!hasGame)
-            {
-                return BadRequest($"User does not have game {ratedGame.GameId} in their library.");
-            }
+        private async Task<GameCollection> RetrieveGamesInCommonAsync(ISet<string> userIds)
+        {
+            var userId = SteamUtils.GetUserIdFromClaim(User);
+            userIds.Add(userId);
 
+            return await _gameService.GetGamesInCommonAsync(userIds);
+        }
+
+        private async Task<IActionResult> CreateOrUpdateRatingAsync(RatedGame ratedGame)
+        {
             var created = await _gameService.RateGameAsync(ratedGame);
 
             if (created)
@@ -110,11 +91,11 @@ namespace SteamMates.Controllers
             return NoContent();
         }
 
-        private async Task<IActionResult> ProduceResponseAsync(Func<Task<GameCollection>> dataRetrieval)
+        private async Task<IActionResult> TryRetrieveDataAsync(Func<Task<GameCollection>> retrieveData)
         {
             try
             {
-                var games = await dataRetrieval();
+                var games = await retrieveData();
 
                 return Ok(games);
             }

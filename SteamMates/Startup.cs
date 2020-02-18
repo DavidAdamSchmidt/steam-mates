@@ -32,6 +32,7 @@ namespace SteamMates
 
             services.AddSingleton<UserService, UserService>();
             services.AddTransient<GameService, GameService>();
+            services.AddTransient<ValidationService, ValidationService>();
             services.AddSingleton<IMemoryCache, MemoryCache>();
 
             services.AddDbContext<SteamContext>(options => options
