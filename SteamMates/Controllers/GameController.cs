@@ -64,14 +64,14 @@ namespace SteamMates.Controllers
             };
         }
 
-        private async Task<object> RetrieveGamesAsync()
+        private async Task<GameCollectionForSingleUser> RetrieveGamesAsync()
         {
             var userId = SteamUtils.GetUserIdFromClaim(User);
 
             return await _gameService.GetGamesAsync(userId);
         }
 
-        private async Task<object> RetrieveGamesInCommonAsync(ISet<string> userIds)
+        private async Task<GameCollectionForMultipleUsers> RetrieveGamesInCommonAsync(ISet<string> userIds)
         {
             var userId = SteamUtils.GetUserIdFromClaim(User);
             userIds.Add(userId);
@@ -91,7 +91,7 @@ namespace SteamMates.Controllers
             return NoContent();
         }
 
-        private async Task<IActionResult> TryRetrieveDataAsync(Func<Task<object>> retrieveData)
+        private async Task<IActionResult> TryRetrieveDataAsync<T>(Func<Task<T>> retrieveData)
         {
             try
             {

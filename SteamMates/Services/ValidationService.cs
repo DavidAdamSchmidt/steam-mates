@@ -23,7 +23,7 @@ namespace SteamMates.Services
             if (!user.Identity.IsAuthenticated)
             {
                 return new ValidationResult(ValidationStatus.Unauthorized, ValidationError.Unauthorized);
-            };
+            }
 
             return new ValidationResult(ValidationStatus.Ok);
         }
