@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
 using SteamMates.Exceptions;
-using SteamMates.Services;
+using SteamMates.Services.Interfaces;
 using SteamMates.Utils;
 using SteamMates.Validation;
 using System.Threading.Tasks;
@@ -12,9 +12,9 @@ namespace SteamMates.Controllers
     [ApiController]
     public class UserController : ControllerBase
     {
-        private readonly UserService _userService;
+        private readonly IUserService _userService;
 
-        public UserController(UserService userService)
+        public UserController(IUserService userService)
         {
             _userService = userService;
         }

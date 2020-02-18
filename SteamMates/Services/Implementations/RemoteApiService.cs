@@ -1,25 +1,14 @@
-﻿using Microsoft.Extensions.Caching.Memory;
-using Microsoft.Extensions.Options;
-using Newtonsoft.Json.Linq;
+﻿using Newtonsoft.Json.Linq;
 using SteamMates.Exceptions;
+using SteamMates.Services.Interfaces;
 using System.Net.Http;
 using System.Threading.Tasks;
 
-namespace SteamMates.Services
+namespace SteamMates.Services.Implementations
 {
-    public class RemoteApiService
+    public class RemoteApiService : IRemoteApiService
     {
-        public RemoteApiService(IOptions<AppSecrets> secrets, IMemoryCache cache)
-        {
-            Secrets = secrets;
-            Cache = cache;
-        }
-
-        protected IOptions<AppSecrets> Secrets { get; }
-
-        protected IMemoryCache Cache { get; }
-
-        public async Task<JObject> GetJsonObject(string url, string apiName)
+        public async Task<JObject> GetJsonObjectAsync(string url, string apiName)
         {
             string jsonStr;
 

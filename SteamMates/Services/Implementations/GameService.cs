@@ -1,11 +1,10 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Caching.Memory;
+﻿using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using SteamMates.Exceptions;
 using SteamMates.Models;
-using SteamMates.Models.Persistence;
+using SteamMates.Services.Interfaces;
 using SteamMates.Utils;
 using System;
 using System.Collections.Generic;
@@ -14,40 +13,63 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace SteamMates.Services
+namespace SteamMates.Services.Implementations
 {
-    public class GameService : RemoteApiService
+    public class GameService : IGameService
     {
-        private readonly SteamContext _context;
+        private readonly IRemoteApiService _remoteApiService;
+        private readonly IDatabaseService _databaseService;
+        private readonly IOptions<AppSecrets> _secrets;
+        private readonly IMemoryCache _cache;
 
-        public GameService(IOptions<AppSecrets> secrets, IMemoryCache cache, SteamContext context)
-            : base(secrets, cache)
+        public GameService(
+            IRemoteApiService remoteApiService, IDatabaseService databaseService,
+            IOptions<AppSecrets> secrets, IMemoryCache cache)
         {
-            _context = context;
+            _databaseService = databaseService;
+            _remoteApiService = remoteApiService;
+            _secrets = secrets;
+            _cache = cache;
         }
 
         public async Task<GameCollectionForSingleUser> GetGamesAsync(string userId)
         {
-            return await GetGameCollectionForSingleUserAsync(userId);
+            var library = await GetGameLibraryAsync(userId);
+
+            var tagCollection = await GetTagCollectionAsync();
+
+            return new GameCollectionForSingleUser
+            {
+                Games = await GetGameStatsForSingleUserAsync(userId, library, tagCollection),
+                LatestUpdates = GetLatestUpdates(new[] { library }, tagCollection.LatestUpdate)
+            };
         }
 
         public async Task<GameCollectionForMultipleUsers> GetGamesInCommonAsync(ISet<string> userIds)
         {
-            return await GetGameCollectionForMultipleUsersAsync(userIds);
+            var libraries = await GetGameLibrariesAsync(userIds);
+
+            var tagCollection = await GetTagCollectionAsync();
+
+            return new GameCollectionForMultipleUsers
+            {
+                Games = await GetGameStatsForMultipleUsersAsync(userIds, libraries, tagCollection),
+                LatestUpdates = GetLatestUpdates(libraries, tagCollection.LatestUpdate)
+            };
         }
 
         public async Task<bool> RateGameAsync(RatedGame ratedGame)
         {
-            var rating = await FindRatingAsync(ratedGame.UserId, ratedGame.GameId);
+            var rating = await _databaseService.FindRatingAsync(ratedGame.UserId, ratedGame.GameId);
 
             if (rating != null)
             {
-                await UpdateRatingAsync(rating, ratedGame.Rating);
+                await _databaseService.UpdateRatingAsync(rating, ratedGame.Rating);
 
                 return false;
             }
 
-            await AddRatingAsync(ratedGame);
+            await _databaseService.AddRatingAsync(ratedGame);
 
             return true;
         }
@@ -61,35 +83,6 @@ namespace SteamMates.Services
                 .Contains(gameId);
         }
 
-        private async Task<GameCollectionForSingleUser> GetGameCollectionForSingleUserAsync(string userId)
-        {
-            var library = await GetGameLibraryAsync(userId);
-
-            var tagCollection = await GetTagCollectionAsync();
-
-            return new GameCollectionForSingleUser
-            {
-                Games = GetGameStatsForSingleUser(userId, library, tagCollection),
-                LatestUpdates = GetLatestUpdates(new[] { library }, tagCollection.LatestUpdate)
-            };
-        }
-
-        private async Task<GameCollectionForMultipleUsers> GetGameCollectionForMultipleUsersAsync(
-            ICollection<string> userIds)
-        {
-            var libraries = await GetGameLibrariesAsync(userIds);
-
-            libraries.Sort();
-
-            var tagCollection = await GetTagCollectionAsync();
-
-            return new GameCollectionForMultipleUsers
-            {
-                Games = GetGameStatsForMultipleUsers(userIds, libraries, tagCollection),
-                LatestUpdates = GetLatestUpdates(libraries, tagCollection.LatestUpdate)
-            };
-        }
-
         private async Task<List<GameLibrary>> GetGameLibrariesAsync(IEnumerable<string> userIds)
         {
             return (
@@ -100,7 +93,7 @@ namespace SteamMates.Services
 
         private async Task<GameLibrary> GetGameLibraryAsync(string userId)
         {
-            return await Cache.GetOrCreate(userId, async entry =>
+            return await _cache.GetOrCreate(userId, async entry =>
             {
                 entry.SetAbsoluteExpiration(TimeSpan.FromHours(1));
 
@@ -110,8 +103,8 @@ namespace SteamMates.Services
 
         private async Task<GameLibrary> FetchGameLibraryAsync(string userId)
         {
-            var url = SteamUtils.GetOwnedGamesUrl(Secrets.Value.SteamApiKey, userId);
-            var jsonObj = await GetJsonObject(url, SteamUtils.ApiName);
+            var url = SteamUtils.GetOwnedGamesUrl(_secrets.Value.SteamApiKey, userId);
+            var jsonObj = await _remoteApiService.GetJsonObjectAsync(url, SteamUtils.ApiName);
 
             var games = jsonObj["response"]["games"]
                 ?.Children()
@@ -153,7 +146,7 @@ namespace SteamMates.Services
                 return await CreateTagCollectionAsync(GetGameIdsByTagFromBackupAsync, true);
             }
 
-            return await Cache.GetOrCreate(SiteUtils.CacheKeys.Tags, async entry =>
+            return await _cache.GetOrCreate(SiteUtils.CacheKeys.Tags, async entry =>
             {
                 entry.SetAbsoluteExpiration(TimeSpan.FromHours(6));
 
@@ -185,7 +178,7 @@ namespace SteamMates.Services
         {
             var url = SteamSpyUtils.GetGamesByTagUrl(tag);
 
-            return await GetJsonObject(url, SteamSpyUtils.ApiName);
+            return await _remoteApiService.GetJsonObjectAsync(url, SteamSpyUtils.ApiName);
         }
 
         private async Task<JObject> GetGameIdsByTagFromBackupAsync(string tag)
@@ -225,12 +218,12 @@ namespace SteamMates.Services
             return gameIds;
         }
 
-        private List<GameStatForSingleUser> GetGameStatsForSingleUser(
+        private async Task<List<GameStatForSingleUser>> GetGameStatsForSingleUserAsync(
             string userId, GameLibrary library, TagCollection tagCollection)
         {
             var stats = FilterLibrary(library, tagCollection).ToList();
             var gameIds = stats.Select(x => x.Game.AppId);
-            var ratings = FindRatings(new[] { userId }, gameIds).ToArray();
+            var ratings = await _databaseService.FindRatedGamesAsync(new[] { userId }, gameIds);
 
             foreach (var stat in stats)
             {
@@ -245,12 +238,12 @@ namespace SteamMates.Services
             return stats;
         }
 
-        private List<GameStatForMultipleUsers> GetGameStatsForMultipleUsers(
-            IEnumerable<string> userIds, IList<GameLibrary> libraries, TagCollection tagCollection)
+        private async Task<List<GameStatForMultipleUsers>> GetGameStatsForMultipleUsersAsync(
+            IEnumerable<string> userIds, List<GameLibrary> libraries, TagCollection tagCollection)
         {
             var stats = FilterLibraries(libraries, tagCollection).ToList();
             var gameIds = stats.Select(x => x.Game.AppId);
-            var ratings = FindRatings(userIds, gameIds).ToArray();
+            var ratings = await _databaseService.FindRatedGamesAsync(userIds, gameIds);
 
             foreach (var stat in stats)
             {
@@ -275,8 +268,12 @@ namespace SteamMates.Services
         }
 
         private IEnumerable<GameStatForMultipleUsers> FilterLibraries(
-            IList<GameLibrary> libraries, TagCollection tagCollection)
+            List<GameLibrary> libraries, TagCollection tagCollection)
         {
+            // checking games of the smallest library
+
+            libraries.Sort();
+
             return
                 from game in libraries[0].Games
                 let playTimes = GetPlayTimes(game.AppId, libraries)
@@ -321,81 +318,6 @@ namespace SteamMates.Services
             dict.Add("tags", tagUpdate);
 
             return dict;
-        }
-
-        private IEnumerable<RatedGame> FindRatings(IEnumerable<string> userIds, IEnumerable<int> gameIds)
-        {
-            return
-                from rating in _context.Ratings
-                join user in _context.Users on rating.UserId equals user.Id
-                join game in _context.Games on rating.GameId equals game.Id
-                where userIds.Contains(user.SteamId) && gameIds.Contains(game.SteamId)
-                select new RatedGame
-                {
-                    UserId = user.SteamId,
-                    GameId = game.SteamId,
-                    Rating = rating.Value
-                };
-        }
-
-        private async Task<Rating> FindRatingAsync(string userId, int gameId)
-        {
-            return await (
-                from rating in _context.Ratings
-                join user in _context.Users on rating.UserId equals user.Id
-                join game in _context.Games on rating.GameId equals game.Id
-                where user.SteamId == userId && game.SteamId == gameId
-                select rating
-            ).FirstOrDefaultAsync();
-        }
-
-        private async Task AddRatingAsync(RatedGame ratedGame)
-        {
-            var user = await FindUserIdentifierAsync(ratedGame.UserId);
-            var game = await FindGameIdentifierAsync(ratedGame.GameId);
-            var createIdentifier = user == null || game == null;
-
-            if (user == null)
-            {
-                user = new UserIdentifier { SteamId = ratedGame.UserId };
-
-                await _context.Users.AddAsync(user);
-            }
-
-            if (game == null)
-            {
-                game = new GameIdentifier { SteamId = ratedGame.GameId };
-
-                await _context.Games.AddAsync(game);
-            }
-
-            if (createIdentifier)
-            {
-                await _context.SaveChangesAsync();
-            }
-
-            var rating = new Rating { Game = game, User = user, Value = ratedGame.Rating };
-
-            await _context.Ratings.AddAsync(rating);
-            await _context.SaveChangesAsync();
-        }
-
-        private async Task UpdateRatingAsync(Rating rating, int newValue)
-        {
-            rating.Value = newValue;
-
-            _context.Ratings.Update(rating);
-            await _context.SaveChangesAsync();
-        }
-
-        private async Task<UserIdentifier> FindUserIdentifierAsync(string userId)
-        {
-            return await _context.Users.FirstOrDefaultAsync(x => x.SteamId == userId);
-        }
-
-        private async Task<GameIdentifier> FindGameIdentifierAsync(int gameId)
-        {
-            return await _context.Games.FirstOrDefaultAsync(x => x.SteamId == gameId);
         }
     }
 }

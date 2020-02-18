@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using SteamMates.Exceptions;
 using SteamMates.Models;
-using SteamMates.Services;
+using SteamMates.Services.Interfaces;
 using SteamMates.Utils;
 using SteamMates.Validation;
 using System;
@@ -14,10 +14,10 @@ namespace SteamMates.Controllers
     [ApiController]
     public class GameController : ControllerBase
     {
-        private readonly GameService _gameService;
-        private readonly ValidationService _validationService;
+        private readonly IGameService _gameService;
+        private readonly IValidationService _validationService;
 
-        public GameController(GameService gameService, ValidationService validationService)
+        public GameController(IGameService gameService, IValidationService validationService)
         {
             _gameService = gameService;
             _validationService = validationService;

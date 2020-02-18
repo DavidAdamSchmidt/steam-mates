@@ -1,5 +1,6 @@
 ﻿using SteamMates.Exceptions;
 using SteamMates.Models;
+using SteamMates.Services.Interfaces;
 using SteamMates.Utils;
 using SteamMates.Validation;
 using System;
@@ -7,13 +8,13 @@ using System.Collections.Generic;
 using System.Security.Claims;
 using System.Threading.Tasks;
 
-namespace SteamMates.Services
+namespace SteamMates.Services.Implementations
 {
-    public class ValidationService
+    public class ValidationService : IValidationService
     {
-        private readonly GameService _gameService;
+        private readonly IGameService _gameService;
 
-        public ValidationService(GameService gameService)
+        public ValidationService(IGameService gameService)
         {
             _gameService = gameService;
         }

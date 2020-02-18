@@ -1,19 +1,26 @@
 ﻿using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Options;
 using SteamMates.Models;
+using SteamMates.Services.Interfaces;
 using SteamMates.Utils;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace SteamMates.Services
+namespace SteamMates.Services.Implementations
 {
-    public class UserService : RemoteApiService
+    public class UserService : IUserService
     {
-        public UserService(IOptions<AppSecrets> secrets, IMemoryCache cache)
-            : base(secrets, cache)
+        private readonly IRemoteApiService _remoteApiService;
+        private readonly IOptions<AppSecrets> _secrets;
+        private readonly IMemoryCache _cache;
+
+        public UserService(IRemoteApiService remoteApiService, IOptions<AppSecrets> secrets, IMemoryCache cache)
         {
+            _remoteApiService = remoteApiService;
+            _secrets = secrets;
+            _cache = cache;
         }
 
         public async Task<User> GetUserInfoAsync(string userId)
@@ -23,7 +30,7 @@ namespace SteamMates.Services
 
             do
             {
-                user = await Cache.GetOrCreate(key, async entry =>
+                user = await _cache.GetOrCreate(key, async entry =>
                 {
                     entry.SetAbsoluteExpiration(TimeSpan.FromHours(1));
 
@@ -32,7 +39,7 @@ namespace SteamMates.Services
 
                 if (userId != user.SteamId)
                 {
-                    Cache.Remove(key);
+                    _cache.Remove(key);
                 }
             } while (userId != user.SteamId);
 
@@ -41,8 +48,8 @@ namespace SteamMates.Services
 
         private async Task<User> FetchUserInfoAsync(string userId)
         {
-            var url = SteamUtils.GetUserInfoUrl(Secrets.Value.SteamApiKey, userId);
-            var jsonObj = await GetJsonObject(url, SteamUtils.ApiName);
+            var url = SteamUtils.GetUserInfoUrl(_secrets.Value.SteamApiKey, userId);
+            var jsonObj = await _remoteApiService.GetJsonObjectAsync(url, SteamUtils.ApiName);
             var token = jsonObj["response"]["players"].First;
             var user = token.ToObject<User>();
 
@@ -68,8 +75,8 @@ namespace SteamMates.Services
 
         private async Task<IEnumerable<string>> FetchFriendIdsAsync(string userId)
         {
-            var url = SteamUtils.GetFriendIdsUrl(Secrets.Value.SteamApiKey, userId);
-            var jsonObj = await GetJsonObject(url, SteamUtils.ApiName);
+            var url = SteamUtils.GetFriendIdsUrl(_secrets.Value.SteamApiKey, userId);
+            var jsonObj = await _remoteApiService.GetJsonObjectAsync(url, SteamUtils.ApiName);
 
             return jsonObj["friendslist"]["friends"]
                 .Children()
@@ -78,8 +85,8 @@ namespace SteamMates.Services
 
         private async Task<List<User>> FetchFriendDetailsAsync(IEnumerable<string> ids)
         {
-            var url = SteamUtils.GetFriendListUrl(Secrets.Value.SteamApiKey, ids);
-            var jsonObj = await GetJsonObject(url, SteamUtils.ApiName);
+            var url = SteamUtils.GetFriendListUrl(_secrets.Value.SteamApiKey, ids);
+            var jsonObj = await _remoteApiService.GetJsonObjectAsync(url, SteamUtils.ApiName);
 
             return jsonObj["response"]["players"]
                 .Children()

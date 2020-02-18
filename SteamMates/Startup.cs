@@ -8,7 +8,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using SteamMates.Models.Persistence;
-using SteamMates.Services;
+using SteamMates.Services.Implementations;
+using SteamMates.Services.Interfaces;
 using SteamMates.Utils;
 
 namespace SteamMates
@@ -30,10 +31,13 @@ namespace SteamMates
             // In production, the React files will be served from this directory
             services.AddSpaStaticFiles(configuration => configuration.RootPath = "ClientApp/build");
 
-            services.AddSingleton<UserService, UserService>();
-            services.AddTransient<GameService, GameService>();
-            services.AddTransient<ValidationService, ValidationService>();
+            services.AddSingleton<IUserService, UserService>();
+            services.AddSingleton<IRemoteApiService, RemoteApiService>();
             services.AddSingleton<IMemoryCache, MemoryCache>();
+
+            services.AddTransient<IGameService, GameService>();
+            services.AddTransient<IDatabaseService, DatabaseService>();
+            services.AddTransient<IValidationService, ValidationService>();
 
             services.AddDbContext<SteamContext>(options => options
                 .UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
