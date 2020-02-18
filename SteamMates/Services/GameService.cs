@@ -26,14 +26,14 @@ namespace SteamMates.Services
             _context = context;
         }
 
-        public async Task<GameCollection> GetGamesAsync(string userId)
+        public async Task<GameCollectionForSingleUser> GetGamesAsync(string userId)
         {
-            return await GetGameCollectionAsync(userId);
+            return await GetGameCollectionForSingleUserAsync(userId);
         }
 
-        public async Task<GameCollection> GetGamesInCommonAsync(ISet<string> userIds)
+        public async Task<GameCollectionForMultipleUsers> GetGamesInCommonAsync(ISet<string> userIds)
         {
-            return await GetGameCollectionAsync(userIds.ToArray());
+            return await GetGameCollectionForMultipleUsersAsync(userIds);
         }
 
         public async Task<bool> RateGameAsync(RatedGame ratedGame)
@@ -61,22 +61,31 @@ namespace SteamMates.Services
                 .Contains(gameId);
         }
 
-        private async Task<GameCollection> GetGameCollectionAsync(params string[] userIds)
+        private async Task<GameCollectionForSingleUser> GetGameCollectionForSingleUserAsync(string userId)
         {
-            if (userIds.Length == 0)
-            {
-                throw new ArgumentException("No user ID was received.");
-            }
+            var library = await GetGameLibraryAsync(userId);
 
+            var tagCollection = await GetTagCollectionAsync();
+
+            return new GameCollectionForSingleUser
+            {
+                Games = GetGameStatsForSingleUser(userId, library, tagCollection),
+                LatestUpdates = GetLatestUpdates(new[] { library }, tagCollection.LatestUpdate)
+            };
+        }
+
+        private async Task<GameCollectionForMultipleUsers> GetGameCollectionForMultipleUsersAsync(
+            ICollection<string> userIds)
+        {
             var libraries = await GetGameLibrariesAsync(userIds);
 
             libraries.Sort();
 
             var tagCollection = await GetTagCollectionAsync();
 
-            return new GameCollection
+            return new GameCollectionForMultipleUsers
             {
-                Games = GetGameStats(userIds, libraries, tagCollection),
+                Games = GetGameStatsForMultipleUsers(userIds, libraries, tagCollection),
                 LatestUpdates = GetLatestUpdates(libraries, tagCollection.LatestUpdate)
             };
         }
@@ -216,7 +225,25 @@ namespace SteamMates.Services
             return gameIds;
         }
 
-        private List<GameStat> GetGameStats(
+        private List<GameStatForSingleUser> GetGameStatsForSingleUser(
+            string userId, GameLibrary library, TagCollection tagCollection)
+        {
+            var stats = FilterLibrary(library, tagCollection).ToList();
+            var gameIds = stats.Select(x => x.Game.AppId);
+            var ratings = FindRatings(new[] { userId }, gameIds).ToArray();
+
+            foreach (var stat in stats)
+            {
+                stat.Rating = ratings
+                    .Where(x => x.GameId == stat.Game.AppId)
+                    .Select(x => x.Rating)
+                    .FirstOrDefault();
+            }
+
+            return stats;
+        }
+
+        private List<GameStatForMultipleUsers> GetGameStatsForMultipleUsers(
             IEnumerable<string> userIds, IList<GameLibrary> libraries, TagCollection tagCollection)
         {
             var stats = FilterLibraries(libraries, tagCollection).ToList();
@@ -231,14 +258,29 @@ namespace SteamMates.Services
             return stats;
         }
 
-        private IEnumerable<GameStat> FilterLibraries(IList<GameLibrary> libraries, TagCollection tagCollection)
+        private IEnumerable<GameStatForSingleUser> FilterLibrary(GameLibrary library, TagCollection tagCollection)
+        {
+            return
+                from game in library.Games
+                let tags = GetTags(game.AppId, tagCollection)
+                where tags.Count > 0
+                select new GameStatForSingleUser
+                {
+                    Game = game,
+                    PlayTime = game.PlayTime,
+                    Tags = tags
+                };
+        }
+
+        private IEnumerable<GameStatForMultipleUsers> FilterLibraries(
+            IList<GameLibrary> libraries, TagCollection tagCollection)
         {
             return
                 from game in libraries[0].Games
                 let playTimes = GetPlayTimes(game.AppId, libraries)
                 let tags = GetTags(game.AppId, tagCollection)
                 where !playTimes.ContainsValue(null) && tags.Count > 0
-                select new GameStat
+                select new GameStatForMultipleUsers
                 {
                     Game = game,
                     PlayTimes = ConvertToPlayTimeList(playTimes),
