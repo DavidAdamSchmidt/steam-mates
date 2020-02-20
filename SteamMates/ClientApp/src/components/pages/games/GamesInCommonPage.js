@@ -8,8 +8,9 @@ import TagContainer from "./TagContainer";
 import GameContainer from "./GameContainer";
 import { showError, getLibraryError } from "../../../utils/errorUtils";
 import { API_URL } from "../../../constants/api";
+import { GAMES_OF_USER, HOME } from "../../../constants/routes";
 
-const GamesPage = () => {
+const GamesInCommonPage = () => {
   const [sendRequest, setSendRequest] = useState(false);
   const [queryString, setQueryString] = useState("");
   const { user } = useContext(UserContext);
@@ -44,8 +45,12 @@ const GamesPage = () => {
     }
   }, [friends, privateProfiles]);
 
-  if (user == null || friends.length === 0 || friends.length > 3) {
-    return <Redirect to="/" />;
+  if (user == null) {
+    return <Redirect to={HOME} />;
+  }
+
+  if (friends.length === 0 || friends.length > 3) {
+    return <Redirect to={GAMES_OF_USER} />;
   }
 
   if (privateProfiles.length > 0) {
@@ -69,4 +74,4 @@ const GamesPage = () => {
   );
 };
 
-export default GamesPage;
+export default GamesInCommonPage;

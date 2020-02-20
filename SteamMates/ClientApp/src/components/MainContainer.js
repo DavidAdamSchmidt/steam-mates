@@ -1,10 +1,18 @@
 import React from "react";
-import { Switch, Route } from "react-router-dom";
 import styled from "styled-components";
+import { Switch, Route } from "react-router-dom";
 import FriendsPage from "./pages/friends/FriendsPage";
-import GamesPage from "./pages/games/GamesPage";
+import GamesOfUserPage from "./pages/games/GamesOfUserPage";
+import GamesInCommonPage from "./pages/games/GamesInCommonPage";
 import ErrorPage from "./pages/error/ErrorPage";
 import HomePage from "./pages/home/HomePage";
+import {
+  FRIENDS,
+  GAMES_IN_COMMON,
+  ERROR,
+  HOME,
+  GAMES_OF_USER
+} from "./../constants/routes";
 
 const Container = styled.div`
   margin: 125px auto 0 auto;
@@ -16,10 +24,11 @@ const MainContainer = () => {
   return (
     <Container>
       <Switch>
-        <Route path="/friends" component={FriendsPage} />
-        <Route path="/games" component={GamesPage} />
-        <Route path="/error" component={ErrorPage} />
-        <Route path="/" component={HomePage} />
+        <Route path={FRIENDS} component={FriendsPage} />
+        <Route path={GAMES_IN_COMMON} component={GamesInCommonPage} />
+        <Route path={GAMES_OF_USER} component={GamesOfUserPage} />
+        <Route path={ERROR} component={ErrorPage} />
+        <Route path={HOME} component={HomePage} />
       </Switch>
     </Container>
   );

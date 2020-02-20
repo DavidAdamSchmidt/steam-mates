@@ -1,12 +1,13 @@
 import React from "react";
 import { Redirect } from "react-router-dom";
+import { ERROR } from "../constants/routes";
 
 export const showError = message => {
   return (
     <Redirect
       push
       to={{
-        pathname: "/error",
+        pathname: { ERROR },
         state: { message }
       }}
     />

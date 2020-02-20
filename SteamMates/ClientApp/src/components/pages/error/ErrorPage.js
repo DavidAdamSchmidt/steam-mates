@@ -3,6 +3,7 @@ import styled from "styled-components";
 import { useHistory, Redirect } from "react-router-dom";
 import UserContext from "../../../contexts/UserContext";
 import FriendContext from "../../../contexts/FriendContext";
+import { HOME } from "../../../constants/routes";
 
 const Message = styled.span`
   border-radius: 10px;
@@ -27,7 +28,7 @@ const ErrorPage = props => {
   }, [friends, history]);
 
   if (user && friends.length === 0) {
-    return <Redirect to="/" />;
+    return <Redirect to={HOME} />;
   }
 
   const message = (((props || {}).location || {}).state || {}).message;
@@ -40,7 +41,7 @@ const ErrorPage = props => {
     );
   }
 
-  return <Redirect to="/" />;
+  return <Redirect to={HOME} />;
 };
 
 export default ErrorPage;

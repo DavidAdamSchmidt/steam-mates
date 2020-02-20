@@ -5,6 +5,7 @@ import UserContext from "../../../contexts/UserContext";
 import FriendContext from "../../../contexts/FriendContext";
 import { showError } from "../../../utils/errorUtils";
 import { NETWORK_ERROR } from "../../../constants/request";
+import { FRIENDS, GAMES_IN_COMMON } from "../../../constants/routes";
 
 const Wrapper = styled.div`
   margin: 0 10px;
@@ -44,12 +45,12 @@ const HomePage = () => {
         </Instruction>
       ) : friends.length > 0 ? (
         <Instruction>
-          Find out which <Link to="/games">games</Link> you and your selected
-          friends can play together.
+          Find out which <Link to={GAMES_IN_COMMON}>games</Link> you and your
+          selected friends can play together.
         </Instruction>
       ) : (
         <Instruction>
-          Select some <Link to="/friends">friends</Link> first who you want to
+          Select some <Link to={FRIENDS}>friends</Link> first who you want to
           play with.
         </Instruction>
       )}

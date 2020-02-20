@@ -22,10 +22,10 @@ const Text = styled.div`
   }
 `;
 
-const Menu = ({ name }) => {
+const Menu = ({ name, path }) => {
   return (
-    <MenuLink to={`/${name.toLowerCase()}`}>
-        <Text>{name ? name : "Home"}</Text>
+    <MenuLink to={path}>
+      <Text>{name}</Text>
     </MenuLink>
   );
 };

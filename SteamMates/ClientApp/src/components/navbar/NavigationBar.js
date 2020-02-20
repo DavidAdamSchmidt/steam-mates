@@ -6,6 +6,13 @@ import Menu from "./Menu";
 import UserPanel from "./UserPanel";
 import LoginPanel from "./LoginPanel";
 import { NETWORK_ERROR } from "../../constants/request";
+import {
+  HOME,
+  FRIENDS,
+  GAMES_IN_COMMON,
+  GAMES_OF_USER
+} from "../../constants/routes";
+import FriendContext from "../../contexts/FriendContext";
 
 const Wrapper = styled.div`
   position: fixed;
@@ -27,7 +34,15 @@ const Container = styled.div`
 
 const NavigationBar = () => {
   const { user, error } = useContext(UserContext);
-  const menus = ["Home", "Friends", "Games"];
+  const { friends } = useContext(FriendContext);
+  const menus = [
+    { name: "Home", path: HOME },
+    { name: "Friends", path: FRIENDS },
+    {
+      name: "Games",
+      path: friends.length > 0 ? GAMES_IN_COMMON : GAMES_OF_USER
+    }
+  ];
 
   return (
     <Wrapper>
@@ -36,7 +51,7 @@ const NavigationBar = () => {
         {user ? (
           <>
             {menus.map((menu, index) => (
-              <Menu key={index} name={menu} />
+              <Menu key={index} name={menu.name} path={menu.path} />
             ))}
             <UserPanel />
           </>

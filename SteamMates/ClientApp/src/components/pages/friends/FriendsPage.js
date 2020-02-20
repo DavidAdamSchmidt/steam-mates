@@ -4,6 +4,7 @@ import { Redirect } from "react-router-dom";
 import UserContext from "../../../contexts/UserContext";
 import SearchBox from "./SearchBox";
 import { getElapsedTimeText } from "../../../utils/updateInfoUtils";
+import { HOME } from "../../../constants/routes";
 
 const Wrapper = styled.div`
   display: inline-block;
@@ -22,7 +23,7 @@ const FriendsPage = () => {
   const { user } = useContext(UserContext);
 
   if (user == null) {
-    return <Redirect to="/" />;
+    return <Redirect to={HOME} />;
   }
 
   return (

@@ -1,9 +1,11 @@
 import React, { useContext } from "react";
 import styled from "styled-components";
+import { withRouter } from "react-router-dom";
 import UserContext from "../../../contexts/UserContext";
 import FriendContext from "../../../contexts/FriendContext";
 import TagContext from "../../../contexts/TagContext";
 import UpdateInfoContainer from "./UpdateInfoContainer";
+import { GAMES_IN_COMMON } from "../../../constants/routes";
 
 const Wrapper = styled.div`
   margin-bottom: 40px;
@@ -19,16 +21,20 @@ const ResultName = styled.span`
   font-weight: bold;
 `;
 
-const GameContainerHeader = ({ gameCount, latestUpdates }) => {
+const GameContainerHeader = ({ gameCount, latestUpdates, location }) => {
   const { user } = useContext(UserContext);
   const { friends } = useContext(FriendContext);
   const { initialTagsState, tags } = useContext(TagContext);
+  const gamesInCommonPage = location.pathname === GAMES_IN_COMMON;
 
   return (
     <Wrapper>
       <div>
-        <ResultName>Users:</ResultName> {user.personaName},{" "}
-        {friends.map(friend => friend.personaName).join(", ")}
+        <ResultName>{gamesInCommonPage ? "Users:" : "User:"}</ResultName>{" "}
+        {user.personaName}
+        {gamesInCommonPage && ", "}
+        {gamesInCommonPage &&
+          friends.map(friend => friend.personaName).join(", ")}
       </div>
       <div>
         <ResultName>Tags:</ResultName>{" "}
@@ -44,4 +50,4 @@ const GameContainerHeader = ({ gameCount, latestUpdates }) => {
   );
 };
 
-export default GameContainerHeader;
+export default withRouter(GameContainerHeader);
