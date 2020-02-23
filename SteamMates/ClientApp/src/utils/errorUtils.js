@@ -7,7 +7,7 @@ export const showError = message => {
     <Redirect
       push
       to={{
-        pathname: { ERROR },
+        pathname: ERROR,
         state: { message }
       }}
     />
