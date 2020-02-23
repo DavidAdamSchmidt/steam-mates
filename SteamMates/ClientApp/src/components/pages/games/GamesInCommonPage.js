@@ -7,6 +7,10 @@ import { TagProvider } from "../../../contexts/TagContext";
 import TagContainer from "./TagContainer";
 import GameContainer from "./GameContainer";
 import { showError, getLibraryError } from "../../../utils/errorUtils";
+import {
+  addAverageOfRatings,
+  ratingComparer
+} from "../../../utils/gamesInCommonUtils";
 import { API_URL } from "../../../constants/api";
 import { GAMES_OF_USER, HOME } from "../../../constants/routes";
 
@@ -61,17 +65,21 @@ const GamesInCommonPage = () => {
     return showError(error.message);
   }
 
-  return (
-    <div className="games-page">
-      {loading && <span>Loading...</span>}
-      {!loading && data && (
+  if (!loading && data) {
+    addAverageOfRatings(data.games);
+    data.games.sort(ratingComparer);
+
+    return (
+      <div>
         <TagProvider>
           <TagContainer />
           <GameContainer data={data} />
         </TagProvider>
-      )}
-    </div>
-  );
+      </div>
+    );
+  }
+
+  return <div>{loading && <span>Loading...</span>}</div>;
 };
 
 export default GamesInCommonPage;

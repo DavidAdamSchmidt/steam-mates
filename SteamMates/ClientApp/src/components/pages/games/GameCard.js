@@ -75,7 +75,7 @@ const GameCard = ({ info }) => {
           rating={info.rating}
         />
       )}
-      {info.ratings && <AverageOfRatings ratings={info.ratings} />}
+      {info.ratings && <AverageOfRatings avg={info.averageOfRatings} />}
       {info.tags.map((tag, index) => (
         <Tag key={index}>{tag}</Tag>
       ))}

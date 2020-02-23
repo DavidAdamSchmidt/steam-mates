@@ -9,11 +9,8 @@ const Wrapper = styled.div`
   color: white;
 `;
 
-const AverageOfRatings = ({ ratings }) => {
-  const avg =
-    ratings.map(x => x.rating).reduce((a, b) => a + b, 0) / ratings.length;
-
-  return <Wrapper>Average: {avg ? avg.toFixed(1) : "N/A"}</Wrapper>;
+const AverageOfRatings = ({ avg }) => {
+  return <Wrapper>Average: {isNaN(avg) ? "N/A" : avg.toFixed(1)}</Wrapper>;
 };
 
 export default AverageOfRatings;
