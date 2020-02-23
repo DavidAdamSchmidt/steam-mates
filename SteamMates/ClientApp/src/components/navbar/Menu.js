@@ -1,10 +1,5 @@
 import React from "react";
 import styled from "styled-components";
-import { Link } from "react-router-dom";
-
-const MenuLink = styled(Link)`
-  text-decoration: none;
-`;
 
 const Text = styled.div`
   display: flex;
@@ -22,12 +17,8 @@ const Text = styled.div`
   }
 `;
 
-const Menu = ({ name, path }) => {
-  return (
-    <MenuLink to={path}>
-      <Text>{name}</Text>
-    </MenuLink>
-  );
+const Menu = ({ text }) => {
+  return <Text>{text}</Text>;
 };
 
 export default Menu;

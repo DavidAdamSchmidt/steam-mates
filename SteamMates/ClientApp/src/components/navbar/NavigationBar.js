@@ -1,8 +1,11 @@
 import React, { useContext } from "react";
 import styled from "styled-components";
+import { useHistory, withRouter } from "react-router-dom";
 import UserContext from "../../contexts/UserContext";
+import FriendContext from "../../contexts/FriendContext";
 import Logo from "./Logo";
-import Menu from "./Menu";
+import SimpleMenu from "./SimpleMenu";
+import DropdownMenu from "./DropdownMenu";
 import UserPanel from "./UserPanel";
 import LoginPanel from "./LoginPanel";
 import { NETWORK_ERROR } from "../../constants/request";
@@ -12,7 +15,6 @@ import {
   GAMES_IN_COMMON,
   GAMES_OF_USER
 } from "../../constants/routes";
-import FriendContext from "../../contexts/FriendContext";
 
 const Wrapper = styled.div`
   position: fixed;
@@ -35,12 +37,18 @@ const Container = styled.div`
 const NavigationBar = () => {
   const { user, error } = useContext(UserContext);
   const { friends } = useContext(FriendContext);
-  const menus = [
-    { name: "Home", path: HOME },
-    { name: "Friends", path: FRIENDS },
+  const history = useHistory();
+  const dropdown = [
     {
-      name: "Games",
-      path: friends.length > 0 ? GAMES_IN_COMMON : GAMES_OF_USER
+      name: "My Games",
+      path: GAMES_OF_USER,
+      disabled: history.location.pathname === GAMES_OF_USER
+    },
+    {
+      name: "Common",
+      path: GAMES_IN_COMMON,
+      disabled:
+        friends.length === 0 || history.location.pathname === GAMES_IN_COMMON
     }
   ];
 
@@ -50,9 +58,9 @@ const NavigationBar = () => {
         <Logo />
         {user ? (
           <>
-            {menus.map((menu, index) => (
-              <Menu key={index} name={menu.name} path={menu.path} />
-            ))}
+            <SimpleMenu name="Home" path={HOME} />
+            <SimpleMenu name="Friends" path={FRIENDS} />
+            <DropdownMenu name="Games" entries={dropdown} />
             <UserPanel />
           </>
         ) : (
@@ -63,4 +71,4 @@ const NavigationBar = () => {
   );
 };
 
-export default NavigationBar;
+export default withRouter(NavigationBar);

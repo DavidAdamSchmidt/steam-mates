@@ -12,7 +12,7 @@ import {
   ratingComparer
 } from "../../../utils/gamesInCommonUtils";
 import { API_URL } from "../../../constants/api";
-import { GAMES_OF_USER, HOME } from "../../../constants/routes";
+import { HOME } from "../../../constants/routes";
 
 const GamesInCommonPage = () => {
   const [sendRequest, setSendRequest] = useState(false);
@@ -49,12 +49,8 @@ const GamesInCommonPage = () => {
     }
   }, [friends, privateProfiles]);
 
-  if (user == null) {
+  if (user == null || friends.length === 0 || friends.length > 3) {
     return <Redirect to={HOME} />;
-  }
-
-  if (friends.length === 0 || friends.length > 3) {
-    return <Redirect to={GAMES_OF_USER} />;
   }
 
   if (privateProfiles.length > 0) {
