@@ -1,6 +1,6 @@
 import React, { useContext } from "react";
-import TagContext from "../../../contexts/TagContext";
 import { useHistory } from "react-router-dom";
+import TagContext from "../../../contexts/TagContext";
 import GameContainerHeader from "./GameContainerHeader";
 import GameContainerBody from "./GameContainerBody";
 import { getGameGroups } from "../../../utils/gamesInCommonUtils";
@@ -26,8 +26,12 @@ const GameContainer = ({ data }) => {
         latestUpdates={data.latestUpdates}
       />
       {gameGroups &&
-        gameGroups.map(x => (
-          <GameContainerBody data={x.games} title={x.title} />
+        gameGroups.map(group => (
+          <GameContainerBody
+            key={group.title}
+            data={group.games}
+            title={group.title}
+          />
         ))}
       {!gameGroups && <GameContainerBody data={filteredGames} />}
     </div>

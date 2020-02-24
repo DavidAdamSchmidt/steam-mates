@@ -49,7 +49,7 @@ const FriendInfo = ({ match, user }) => {
   return (
     <Wrapper>
       <Property>{match.type}: </Property>
-      {firstChars.length > 0 && <Property>{firstChars}</Property>}
+      {firstChars.length > 0 && <NoMatch>{firstChars}</NoMatch>}
       {matchedChars.length > 0 && <Match>{matchedChars}</Match>}
       {lastChars.length > 0 && <NoMatch>{lastChars}</NoMatch>}
     </Wrapper>

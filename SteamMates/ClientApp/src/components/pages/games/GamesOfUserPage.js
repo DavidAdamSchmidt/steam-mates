@@ -22,7 +22,7 @@ const GamesOfUserPage = () => {
   }
 
   return (
-    <div className="games-page">
+    <div>
       {loading && <span>Loading...</span>}
       {!loading && data && (
         <TagProvider>

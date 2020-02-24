@@ -1,25 +1,9 @@
 import React from "react";
-import styled, { css } from "styled-components";
+import styled from "styled-components";
 import StarRatings from "./StarRatings";
 import AverageOfRatings from "./AverageOfRatings";
+import { getGameCardBackgroundColor } from "../../../utils/gamesInCommonUtils";
 import { LOGO_URL } from "../../../constants/steam";
-
-const getBackgroundColor = avg => {
-  switch (true) {
-    case avg === undefined:
-      return css`rgba(0, 0, 39, 0.69)`;
-    case avg >= 4.5:
-      return css`rgba(31, 93, 43, 0.9)`;
-    case avg >= 3.5:
-      return css`rgba(27, 78, 128, 0.9)`;
-    case avg >= 2.5:
-      return css`rgba(200, 149, 69, 0.9)`;
-    case avg >= 0.0:
-      return css`rgba(186, 65, 41, 0.9)`;
-    default:
-      return css`rgba(61, 61, 61, 0.9)`;
-  }
-};
 
 const Wrapper = styled.div`
   position: relative;
@@ -29,7 +13,7 @@ const Wrapper = styled.div`
   border-radius: 10px;
   width: 184px;
   padding: 24px;
-  background: ${props => getBackgroundColor(props.avg)};
+  background: ${props => getGameCardBackgroundColor(props.avg)};
 `;
 
 const Title = styled.div`

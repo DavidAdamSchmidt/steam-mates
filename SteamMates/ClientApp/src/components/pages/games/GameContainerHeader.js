@@ -1,6 +1,6 @@
 import React, { useContext } from "react";
 import styled from "styled-components";
-import { withRouter } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import UserContext from "../../../contexts/UserContext";
 import FriendContext from "../../../contexts/FriendContext";
 import TagContext from "../../../contexts/TagContext";
@@ -20,11 +20,12 @@ const ResultName = styled.span`
   font-weight: bold;
 `;
 
-const GameContainerHeader = ({ gameCount, latestUpdates, location }) => {
+const GameContainerHeader = ({ gameCount, latestUpdates }) => {
   const { user } = useContext(UserContext);
   const { friends } = useContext(FriendContext);
   const { initialTagsState, tags } = useContext(TagContext);
-  const gamesInCommonPage = location.pathname === GAMES_IN_COMMON;
+  const history = useHistory();
+  const gamesInCommonPage = history.location.pathname === GAMES_IN_COMMON;
 
   return (
     <Wrapper>
@@ -49,4 +50,4 @@ const GameContainerHeader = ({ gameCount, latestUpdates, location }) => {
   );
 };
 
-export default withRouter(GameContainerHeader);
+export default GameContainerHeader;

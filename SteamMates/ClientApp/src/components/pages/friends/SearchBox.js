@@ -51,7 +51,6 @@ const SearchBox = () => {
   return (
     <div>
       <InputField
-        className="search-field"
         type="text"
         placeholder={`Search friends by ${PERSONA_NAME}, ${REAL_NAME}, ${VANITY_ID} or ${STEAM_ID_64}...`}
         value={input}

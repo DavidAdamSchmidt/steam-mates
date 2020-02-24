@@ -1,6 +1,6 @@
 import React, { useContext } from "react";
 import styled from "styled-components";
-import { useHistory, withRouter } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import UserContext from "../../contexts/UserContext";
 import FriendContext from "../../contexts/FriendContext";
 import Logo from "./Logo";
@@ -71,4 +71,4 @@ const NavigationBar = () => {
   );
 };
 
-export default withRouter(NavigationBar);
+export default NavigationBar;

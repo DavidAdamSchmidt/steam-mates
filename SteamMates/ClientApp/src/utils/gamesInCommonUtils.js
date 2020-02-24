@@ -1,3 +1,5 @@
+import { css } from "styled-components";
+
 export const addAverageOfRatings = games => {
   games.forEach(x => (x.averageOfRatings = getAverageOfRatings(x.ratings)));
 };
@@ -28,6 +30,23 @@ export const getGameGroups = games => {
   }
 
   return gameGroups;
+};
+
+export const getGameCardBackgroundColor = avg => {
+  switch (true) {
+    case avg === undefined:
+      return css`rgba(0, 0, 39, 0.69)`;
+    case avg >= 4.5:
+      return css`rgba(31, 93, 43, 0.9)`;
+    case avg >= 3.5:
+      return css`rgba(27, 78, 128, 0.9)`;
+    case avg >= 2.5:
+      return css`rgba(200, 149, 69, 0.9)`;
+    case avg >= 0.0:
+      return css`rgba(186, 65, 41, 0.9)`;
+    default:
+      return css`rgba(61, 61, 61, 0.9)`;
+  }
 };
 
 const getAverageOfRatings = ratings => {
