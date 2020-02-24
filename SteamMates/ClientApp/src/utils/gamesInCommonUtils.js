@@ -14,6 +14,22 @@ export const ratingComparer = (a, b) => {
   return a.game.name.localeCompare(b.game.name);
 };
 
+export const getGameGroups = games => {
+  const gameGroups = [];
+
+  for (let i = 4; i >= 0; i--) {
+    let result = games.filter(x => x.ratings.length === i);
+    if (result.length > 0) {
+      gameGroups.push({
+        title: i ? `Rated by ${i} user${i > 1 ? "s" : ""}` : "Unrated",
+        games: result
+      });
+    }
+  }
+
+  return gameGroups;
+};
+
 const getAverageOfRatings = ratings => {
   return ratings.map(x => x.rating).reduce((a, b) => a + b, 0) / ratings.length;
 };

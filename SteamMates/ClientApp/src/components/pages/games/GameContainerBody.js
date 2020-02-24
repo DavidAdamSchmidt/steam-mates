@@ -1,19 +1,28 @@
 import React from "react";
 import styled from "styled-components";
 import GameCard from "./GameCard";
+import AmountOfRatings from "./AmountOfRatings";
 
 const Wrapper = styled.div`
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-evenly;
+  margin: 50px 0 50px;
 `;
 
-const GameContainerBody = ({ data }) => {
+const GameCardContainer = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  align-items: stretch;
+  justify-content: center;
+`;
+
+const GameContainerBody = ({ data, title }) => {
   return (
     <Wrapper>
-      {data.map(info => (
-        <GameCard key={info.game.appId} info={info} />
-      ))}
+      {title && <AmountOfRatings text={title} />}
+      <GameCardContainer>
+        {data.map(info => (
+          <GameCard key={info.game.appId} info={info} />
+        ))}
+      </GameCardContainer>
     </Wrapper>
   );
 };

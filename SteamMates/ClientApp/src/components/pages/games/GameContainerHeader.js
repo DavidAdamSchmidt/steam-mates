@@ -8,7 +8,6 @@ import UpdateInfoContainer from "./UpdateInfoContainer";
 import { GAMES_IN_COMMON } from "../../../constants/routes";
 
 const Wrapper = styled.div`
-  margin-bottom: 40px;
   border-radius: 20px;
   padding: 20px;
   background: rgba(17, 200, 163, 0.18);

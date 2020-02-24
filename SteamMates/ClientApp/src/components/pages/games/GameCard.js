@@ -24,7 +24,7 @@ const getBackgroundColor = avg => {
 const Wrapper = styled.div`
   position: relative;
   z-index: 1;
-  margin-bottom: 25px;
+  margin: 14px;
   box-shadow: 4px 4px 4px rgba(0, 0, 0, 0.45);
   border-radius: 10px;
   width: 184px;
