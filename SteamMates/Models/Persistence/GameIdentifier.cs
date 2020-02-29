@@ -4,7 +4,7 @@ namespace SteamMates.Models.Persistence
 {
     public class GameIdentifier
     {
-        public int Id { get; set; }
+        public long Id { get; set; }
 
         public int SteamId { get; set; }
 

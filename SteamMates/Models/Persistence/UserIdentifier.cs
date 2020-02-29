@@ -5,7 +5,7 @@ namespace SteamMates.Models.Persistence
 {
     public class UserIdentifier
     {
-        public int Id { get; set; }
+        public long Id { get; set; }
 
         [Required]
         [StringLength(17)]
