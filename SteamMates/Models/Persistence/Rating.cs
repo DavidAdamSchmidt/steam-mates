@@ -16,6 +16,6 @@ namespace SteamMates.Models.Persistence
         [ForeignKey(nameof(Game))]
         public long GameId { get; set; }
 
-        public int Value { get; set; }
+        public byte Value { get; set; }
     }
 }

@@ -2,15 +2,17 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SteamMates.Models.Persistence;
 
 namespace SteamMates.Migrations
 {
     [DbContext(typeof(SteamContext))]
-    partial class SteamContextModelSnapshot : ModelSnapshot
+    [Migration("20200229140337_AddCheckConstraintToColumnValueOfTableRatings")]
+    partial class AddCheckConstraintToColumnValueOfTableRatings
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

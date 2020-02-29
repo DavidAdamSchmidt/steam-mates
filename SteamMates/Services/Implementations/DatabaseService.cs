@@ -48,7 +48,7 @@ namespace SteamMates.Services.Implementations
             await _context.SaveChangesAsync();
         }
 
-        public async Task UpdateRatingAsync(Rating rating, int newValue)
+        public async Task UpdateRatingAsync(Rating rating, byte newValue)
         {
             rating.Value = newValue;
 

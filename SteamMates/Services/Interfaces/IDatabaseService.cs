@@ -9,7 +9,7 @@ namespace SteamMates.Services.Interfaces
     {
         Task AddRatingAsync(RatedGame ratedGame);
 
-        Task UpdateRatingAsync(Rating rating, int newValue);
+        Task UpdateRatingAsync(Rating rating, byte newValue);
 
         Task<Rating> FindRatingAsync(string userId, int gameId);
 

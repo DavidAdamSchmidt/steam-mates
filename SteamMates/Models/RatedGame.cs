@@ -7,6 +7,6 @@
         // internal get = deserialize only
         public int GameId { internal get; set; }
 
-        public int Rating { get; set; }
+        public byte Rating { get; set; }
     }
 }

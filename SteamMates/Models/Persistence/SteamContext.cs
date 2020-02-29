@@ -27,6 +27,9 @@ namespace SteamMates.Models.Persistence
 
             modelBuilder.Entity<Rating>()
                 .HasAlternateKey(x => new { x.UserId, x.GameId });
+
+            modelBuilder.Entity<Rating>()
+                .HasCheckConstraint("CK_Ratings_Value", "[Value] BETWEEN 1 AND 5");
         }
     }
 }
