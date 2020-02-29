@@ -6,7 +6,11 @@ import FriendContext from "../../../contexts/FriendContext";
 import { TagProvider } from "../../../contexts/TagContext";
 import TagContainer from "./TagContainer";
 import GameContainer from "./GameContainer";
-import { showError, getLibraryError } from "../../../utils/errorUtils";
+import {
+  showError,
+  getLibraryError,
+  checkGamesPageError
+} from "../../../utils/errorUtils";
 import {
   addAverageOfRatings,
   ratingComparer
@@ -57,8 +61,9 @@ const GamesInCommonPage = () => {
     return showError(getLibraryError(privateProfiles));
   }
 
-  if ((status === 503 && error.apiName) || (status === 404 && error.tagName)) {
-    return showError(error.message);
+  const hasError = checkGamesPageError(status, error);
+  if (hasError) {
+    return hasError;
   }
 
   if (!loading && data) {

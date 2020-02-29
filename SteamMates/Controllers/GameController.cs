@@ -81,7 +81,16 @@ namespace SteamMates.Controllers
 
         private async Task<IActionResult> CreateOrUpdateRatingAsync(RatedGame ratedGame)
         {
-            var created = await _gameService.RateGameAsync(ratedGame);
+            bool created;
+
+            try
+            {
+                created = await _gameService.RateGameAsync(ratedGame);
+            }
+            catch (DatabaseException e)
+            {
+                return StatusCode(500, new { e.Message });
+            }
 
             if (created)
             {
@@ -110,6 +119,10 @@ namespace SteamMates.Controllers
             catch (TagUnavailableException e)
             {
                 return NotFound(new { e.Message, e.TagName });
+            }
+            catch (DatabaseException e)
+            {
+                return StatusCode(500, new { e.Message });
             }
         }
     }

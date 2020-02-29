@@ -7,7 +7,6 @@ import { LOGO_URL } from "../../../constants/steam";
 
 const Wrapper = styled.div`
   position: relative;
-  z-index: 1;
   margin: 14px;
   box-shadow: 4px 4px 4px rgba(0, 0, 0, 0.45);
   border-radius: 10px;

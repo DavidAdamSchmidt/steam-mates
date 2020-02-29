@@ -1,4 +1,6 @@
-﻿using Microsoft.Extensions.Caching.Memory;
+﻿using Microsoft.Data.SqlClient;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -60,18 +62,21 @@ namespace SteamMates.Services.Implementations
 
         public async Task<bool> RateGameAsync(RatedGame ratedGame)
         {
-            var rating = await _databaseService.FindRatingAsync(ratedGame.UserId, ratedGame.GameId);
-
-            if (rating != null)
+            return await TryAccessDatabase(async () =>
             {
-                await _databaseService.UpdateRatingAsync(rating, ratedGame.Rating);
+                var rating = await _databaseService.FindRatingAsync(ratedGame.UserId, ratedGame.GameId);
 
-                return false;
-            }
+                if (rating != null)
+                {
+                    await _databaseService.UpdateRatingAsync(rating, ratedGame.Rating);
 
-            await _databaseService.AddRatingAsync(ratedGame);
+                    return false;
+                }
 
-            return true;
+                await _databaseService.AddRatingAsync(ratedGame);
+
+                return true;
+            });
         }
 
         public async Task<bool> UserHasGameAsync(string userId, int gameId)
@@ -223,7 +228,8 @@ namespace SteamMates.Services.Implementations
         {
             var stats = FilterLibrary(library, tagCollection).ToList();
             var gameIds = stats.Select(x => x.Game.AppId);
-            var ratings = await _databaseService.FindRatedGamesAsync(new[] { userId }, gameIds);
+            var ratings = await TryAccessDatabase(async () =>
+                await _databaseService.FindRatedGamesAsync(new[] { userId }, gameIds));
 
             foreach (var stat in stats)
             {
@@ -243,7 +249,8 @@ namespace SteamMates.Services.Implementations
         {
             var stats = FilterLibraries(libraries, tagCollection).ToList();
             var gameIds = stats.Select(x => x.Game.AppId);
-            var ratings = await _databaseService.FindRatedGamesAsync(userIds, gameIds);
+            var ratings = await TryAccessDatabase(async () =>
+                await _databaseService.FindRatedGamesAsync(userIds, gameIds));
 
             foreach (var stat in stats)
             {
@@ -318,6 +325,20 @@ namespace SteamMates.Services.Implementations
             dict.Add("tags", tagUpdate);
 
             return dict;
+        }
+
+        private async Task<T> TryAccessDatabase<T>(Func<Task<T>> accessDatabase)
+        {
+            try
+            {
+                return await accessDatabase();
+            }
+            catch (Exception e) when (
+                e is DbUpdateException ||
+                e is SqlException)
+            {
+                throw new DatabaseException("There was an error while interacting with the database.", e);
+            }
         }
     }
 }

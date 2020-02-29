@@ -1,6 +1,7 @@
 import React from "react";
 import { Redirect } from "react-router-dom";
 import { ERROR } from "../constants/routes";
+import { DATABASE_ERROR } from "../constants/request";
 
 export const showError = message => {
   return (
@@ -12,6 +13,20 @@ export const showError = message => {
       }}
     />
   );
+};
+
+export const checkGamesPageError = (status, error) => {
+  if (!error) {
+    return;
+  }
+
+  if (
+    (status === 503 && error.apiName) ||
+    (status === 500 && error.message === DATABASE_ERROR) ||
+    (status === 404 && error.tagName)
+  ) {
+    return showError(error.message);
+  }
 };
 
 export const getLibraryError = privateProfiles => {

@@ -7,7 +7,7 @@ import TagContainer from "./TagContainer";
 import GameContainer from "./GameContainer";
 import { API_URL } from "../../../constants/api";
 import { HOME } from "../../../constants/routes";
-import {showError} from "../../../utils/errorUtils";
+import { checkGamesPageError } from "../../../utils/errorUtils";
 
 const GamesOfUserPage = () => {
   const { user } = useContext(UserContext);
@@ -22,8 +22,9 @@ const GamesOfUserPage = () => {
     return <Redirect to={HOME} />;
   }
 
-  if ((status === 503 && error.apiName) || (status === 404 && error.tagName)) {
-    return showError(error.message);
+  const hasError = checkGamesPageError(status, error);
+  if (hasError) {
+    return hasError;
   }
 
   return (
