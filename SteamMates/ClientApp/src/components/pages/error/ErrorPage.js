@@ -1,7 +1,6 @@
 import React, { useRef, useContext, useEffect } from "react";
 import styled from "styled-components";
 import { useHistory, Redirect } from "react-router-dom";
-import UserContext from "../../../contexts/UserContext";
 import FriendContext from "../../../contexts/FriendContext";
 import { HOME } from "../../../constants/routes";
 
@@ -15,7 +14,6 @@ const Message = styled.span`
 
 const ErrorPage = props => {
   const isFirstRun = useRef(true);
-  const { user } = useContext(UserContext);
   const { friends } = useContext(FriendContext);
   const history = useHistory();
 
@@ -26,10 +24,6 @@ const ErrorPage = props => {
       history.goBack();
     }
   }, [friends, history]);
-
-  if (user && friends.length === 0) {
-    return <Redirect to={HOME} />;
-  }
 
   const message = (((props || {}).location || {}).state || {}).message;
 
