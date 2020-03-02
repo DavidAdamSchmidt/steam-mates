@@ -1,2 +1,2 @@
 export const LOGO_URL =
-  "http://media.steampowered.com/steamcommunity/public/images/apps";
+  "https://steamcdn-a.akamaihd.net/steamcommunity/public/images/apps";
