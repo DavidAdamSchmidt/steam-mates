@@ -52,6 +52,10 @@ const StarRatings = ({ amountOfStars, gameId, rating }) => {
   }, [status, error]);
 
   const rateGame = () => {
+    if (selectedValue === currentValue) {
+      return;
+    }
+    
     setPreviousValue(selectedValue);
     setSelectedValue(currentValue);
     setRequestBody({
