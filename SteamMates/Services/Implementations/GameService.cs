@@ -6,6 +6,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using SteamMates.Exceptions;
 using SteamMates.Models;
+using SteamMates.Models.GameDetails;
 using SteamMates.Services.Interfaces;
 using SteamMates.Utils;
 using System;
@@ -32,6 +33,15 @@ namespace SteamMates.Services.Implementations
             _remoteApiService = remoteApiService;
             _secrets = secrets;
             _cache = cache;
+        }
+
+        public async Task<GameInfo> GetGameAsync(int gameId)
+        {
+            var url = SteamUtils.GetGameUrl(gameId);
+            var jsonObj = await _remoteApiService.GetJsonObjectAsync(url, SteamUtils.ApiName);
+
+            return jsonObj[gameId.ToString()]["data"]?.ToObject<GameInfo>()
+                   ?? throw new GameNotFoundException($"Game {gameId} could not be found.", gameId);
         }
 
         public async Task<GameCollectionForSingleUser> GetGamesAsync(string userId)

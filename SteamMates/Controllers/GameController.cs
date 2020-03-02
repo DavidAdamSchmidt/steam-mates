@@ -42,6 +42,14 @@ namespace SteamMates.Controllers
                     async () => await RetrieveGamesInCommonAsync(userIds)));
         }
 
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetGameAsync(int id)
+        {
+            var result = await _gameService.GetGameAsync(id);
+
+            return Ok(result);
+        }
+
         [HttpPut("rate")]
         public async Task<IActionResult> RateGameAsync(RatedGame ratedGame)
         {

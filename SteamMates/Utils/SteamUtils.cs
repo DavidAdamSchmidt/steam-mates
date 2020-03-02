@@ -7,6 +7,8 @@ namespace SteamMates.Utils
 {
     public static class SteamUtils
     {
+        private const string GamePattern = @"https://store.steampowered.com/api/appdetails/?appids={0}";
+
         private const string PlayerSummariesPattern =
             @"http://api.steampowered.com/ISteamUser/GetPlayerSummaries/v0002/?key={0}&steamids={1}";
 
@@ -17,6 +19,11 @@ namespace SteamMates.Utils
             @"http://api.steampowered.com/IPlayerService/GetOwnedGames/v0001/?key={0}&steamid={1}&include_appinfo=true&include_played_free_games=true";
 
         public static string ApiName { get; } = "Steam";
+
+        public static string GetGameUrl(int gameId)
+        {
+            return string.Format(GamePattern, gameId);
+        }
 
         public static string GetUserInfoUrl(string apiKey, string userId)
         {
