@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using SteamMates.Converters;
 using System.Collections.Generic;
 
 namespace SteamMates.Models.GameDetails
@@ -28,12 +29,15 @@ namespace SteamMates.Models.GameDetails
         public string ControllerSupport { get; set; }
 
         [JsonProperty("pc_requirements")]
+        [JsonConverter(typeof(SystemRequirementsConverter))]
         public SystemRequirements PcRequirements { get; set; }
 
         [JsonProperty("mac_requirements")]
+        [JsonConverter(typeof(SystemRequirementsConverter))]
         public SystemRequirements MacRequirements { get; set; }
 
         [JsonProperty("linux_requirements")]
+        [JsonConverter(typeof(SystemRequirementsConverter))]
         public SystemRequirements LinuxRequirements { get; set; }
 
         public ICollection<string> Developers { get; set; }
