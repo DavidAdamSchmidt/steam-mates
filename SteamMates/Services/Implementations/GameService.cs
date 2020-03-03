@@ -35,13 +35,18 @@ namespace SteamMates.Services.Implementations
             _cache = cache;
         }
 
-        public async Task<GameInfo> GetGameAsync(int gameId)
+        public async Task<GameInfo> GetGameAsync(ISet<string> userIds, int gameId)
         {
             var url = SteamUtils.GetGameUrl(gameId);
             var jsonObj = await _remoteApiService.GetJsonObjectAsync(url, SteamUtils.ApiName);
 
-            return jsonObj[gameId.ToString()]["data"]?.ToObject<GameInfo>()
-                   ?? throw new GameNotFoundException($"Game {gameId} could not be found.", gameId);
+            var game = jsonObj[gameId.ToString()]["data"]?.ToObject<GameInfo>()
+                       ?? throw new GameNotFoundException($"Game {gameId} could not be found.", gameId);
+
+            game.Ratings = await TryAccessDatabase(async () =>
+                await _databaseService.FindRatedGamesAsync(userIds, new[] { gameId }));
+
+            return game;
         }
 
         public async Task<GameCollectionForSingleUser> GetGamesAsync(string userId)

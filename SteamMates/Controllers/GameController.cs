@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using SteamMates.Exceptions;
 using SteamMates.Models;
+using SteamMates.Models.GameDetails;
 using SteamMates.Services.Interfaces;
 using SteamMates.Utils;
 using SteamMates.Validation;
@@ -42,12 +43,14 @@ namespace SteamMates.Controllers
                     async () => await RetrieveGamesInCommonAsync(userIds)));
         }
 
-        [HttpGet("{id}")]
-        public async Task<IActionResult> GetGameAsync(int id)
+        [HttpGet("{gameId}")]
+        public async Task<IActionResult> GetGameAsync([FromQuery(Name = "userId")] HashSet<string> userIds, int gameId)
         {
-            var result = await _gameService.GetGameAsync(id);
+            var result = new ValidationResult(ValidationStatus.Ok);
 
-            return Ok(result);
+            return await SendResponseAsync(result,
+                async () => await TryRetrieveDataAsync(
+                    async () => await RetrieveGameAsync(userIds, gameId)));
         }
 
         [HttpPut("rate")]
@@ -70,6 +73,14 @@ namespace SteamMates.Controllers
                 ValidationStatus.Aborted => StatusCode(503, validationResult.Message),
                 _ => throw new ArgumentException("Invalid validation status."),
             };
+        }
+
+        private async Task<GameInfo> RetrieveGameAsync(ISet<string> userIds, int gameId)
+        {
+            var userId = SteamUtils.GetUserIdFromClaim(User);
+            userIds.Add(userId);
+
+            return await _gameService.GetGameAsync(userIds, gameId);
         }
 
         private async Task<GameCollectionForSingleUser> RetrieveGamesAsync()
@@ -127,6 +138,10 @@ namespace SteamMates.Controllers
             catch (TagUnavailableException e)
             {
                 return NotFound(new { e.Message, e.TagName });
+            }
+            catch (GameNotFoundException e)
+            {
+                return NotFound(new { e.Message, e.GameId });
             }
             catch (DatabaseException e)
             {

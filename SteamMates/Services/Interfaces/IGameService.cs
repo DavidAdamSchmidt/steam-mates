@@ -7,7 +7,7 @@ namespace SteamMates.Services.Interfaces
 {
     public interface IGameService
     {
-        Task<GameInfo> GetGameAsync(int gameId);
+        Task<GameInfo> GetGameAsync(ISet<string> userIds, int gameId);
 
         Task<GameCollectionForSingleUser> GetGamesAsync(string userId);
 
