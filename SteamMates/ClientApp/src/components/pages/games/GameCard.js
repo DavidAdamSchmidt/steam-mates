@@ -1,5 +1,6 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
+import GameCardMenu from "./GameCardMenu";
 import StarRatings from "./StarRatings";
 import AverageOfRatings from "./AverageOfRatings";
 import { getGameCardBackgroundColor } from "../../../utils/gamesInCommonUtils";
@@ -55,15 +56,22 @@ const Tag = styled.span`
 `;
 
 const GameCard = ({ info }) => {
+  const [showMenu, setShowMenu] = useState(false);
+
   return (
     <Wrapper avg={info.averageOfRatings}>
       <Title>{info.game.name}</Title>
-      <a href={`steam://run/${info.game.appId}`}>
-        <Icon
-          src={`${LOGO_URL}/${info.game.appId}/${info.game.imgIconUrl}.jpg`}
-          alt="GameIcon"
+      <Icon
+        onClick={() => setShowMenu(true)}
+        src={`${LOGO_URL}/${info.game.appId}/${info.game.imgIconUrl}.jpg`}
+        alt="GameIcon"
+      />
+      {showMenu && (
+        <GameCardMenu
+          id={info.game.appId}
+          closeMenu={() => setShowMenu(false)}
         />
-      </a>
+      )}
       <img
         src={`${LOGO_URL}/${info.game.appId}/${info.game.imgLogoUrl}.jpg`}
         alt="GameLogo"
