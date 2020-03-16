@@ -19,6 +19,11 @@ namespace SteamMates.Services.Implementations
             _gameService = gameService;
         }
 
+        public ValidationResult ValidateGetGame(ClaimsPrincipal user, ISet<string> userIds)
+        {
+            return ValidateIds(user, userIds, false);
+        }
+
         public ValidationResult ValidateGetGames(ClaimsPrincipal user)
         {
             if (!user.Identity.IsAuthenticated)
@@ -31,27 +36,7 @@ namespace SteamMates.Services.Implementations
 
         public ValidationResult ValidateGetGamesInCommon(ClaimsPrincipal user, ISet<string> userIds)
         {
-            if (!user.Identity.IsAuthenticated)
-            {
-                return new ValidationResult(ValidationStatus.Unauthorized, ValidationError.Unauthorized);
-            }
-
-            if (userIds.Count == 0)
-            {
-                return new ValidationResult(ValidationStatus.Failed, ValidationError.NoUserId);
-            }
-
-            var clone = new HashSet<string>(userIds);
-            var userId = SteamUtils.GetUserIdFromClaim(user);
-
-            clone.Add(userId);
-
-            if (clone.Count > 4)
-            {
-                return new ValidationResult(ValidationStatus.Failed, ValidationError.TooManyUserIds);
-            }
-
-            return new ValidationResult(ValidationStatus.Ok);
+            return ValidateIds(user, userIds, true);
         }
 
         public async Task<ValidationResult> ValidateRateGameAsync(ClaimsPrincipal user, RatedGame ratedGame)
@@ -92,6 +77,31 @@ namespace SteamMates.Services.Implementations
                 return new ValidationResult(
                     ValidationStatus.Failed,
                     string.Format(ValidationError.UserDoesNotHaveGamePattern, ratedGame.GameId));
+            }
+
+            return new ValidationResult(ValidationStatus.Ok);
+        }
+
+        private ValidationResult ValidateIds(ClaimsPrincipal user, ICollection<string> userIds, bool required)
+        {
+            if (!user.Identity.IsAuthenticated)
+            {
+                return new ValidationResult(ValidationStatus.Unauthorized, ValidationError.Unauthorized);
+            }
+
+            if (required && userIds.Count == 0)
+            {
+                return new ValidationResult(ValidationStatus.Failed, ValidationError.NoUserId);
+            }
+
+            var clone = new HashSet<string>(userIds);
+            var userId = SteamUtils.GetUserIdFromClaim(user);
+
+            clone.Add(userId);
+
+            if (clone.Count > 4)
+            {
+                return new ValidationResult(ValidationStatus.Failed, ValidationError.TooManyUserIds);
             }
 
             return new ValidationResult(ValidationStatus.Ok);

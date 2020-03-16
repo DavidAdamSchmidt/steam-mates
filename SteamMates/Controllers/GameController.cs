@@ -46,7 +46,7 @@ namespace SteamMates.Controllers
         [HttpGet("{gameId}")]
         public async Task<IActionResult> GetGameAsync([FromQuery(Name = "userId")] HashSet<string> userIds, int gameId)
         {
-            var result = new ValidationResult(ValidationStatus.Ok);
+            var result = _validationService.ValidateGetGame(User, userIds);
 
             return await SendResponseAsync(result,
                 async () => await TryRetrieveDataAsync(
