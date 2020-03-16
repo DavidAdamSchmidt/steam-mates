@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "styled-components";
+import library_hero_default from "../../../static/images/library_hero_default.png";
 import { IMAGE_ROOT, STORE_PAGE } from "../../../constants/steam";
 
 const Header = styled.div`
@@ -62,6 +63,7 @@ const GamePageHeader = ({ data }) => {
   return (
     <Header>
       <Image
+        onError={e => (e.target.src = library_hero_default)}
         src={`${IMAGE_ROOT}/${data.steamId}/library_hero.jpg`}
         alt="LibraryHero"
       />
