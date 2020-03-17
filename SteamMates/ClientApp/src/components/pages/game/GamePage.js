@@ -4,6 +4,7 @@ import { useHistory } from "react-router-dom";
 import useRequest from "../../../hooks/useRequest";
 import GamePageHeader from "./GamePageHeader";
 import Description from "./Description";
+import Media from "./Media";
 import { API_URL } from "../../../constants/api";
 
 const Container = styled.div`
@@ -39,6 +40,7 @@ const GamePage = () => {
     <Container>
       <GamePageHeader data={data} />
       <Description data={data} />
+      <Media data={data} />
     </Container>
   );
 };
