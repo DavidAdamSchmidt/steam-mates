@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import Thumbnails from "./Thumbnails";
 
@@ -26,17 +26,12 @@ const SelectorMenu = styled.div`
 
 const Media = ({ data }) => {
   const [selected, setSelected] = useState(
-    ((data.movies || [{}])[0].webm || {}).max
+    ((data.movies || [{}])[0].webm || {}).max ||
+      (data.screenshots || [])[0].full
   );
   const [selectedIsVideo, setSelectedIsVideo] = useState(
-    selected !== undefined
+    ((data.movies || [{}])[0].webm || {}).max !== undefined
   );
-
-  useEffect(() => {
-    if (!selectedIsVideo) {
-      setSelected((data.screenshots || [])[0].full);
-    }
-  }, [selectedIsVideo, data.screenshots]);
 
   return (
     <Container>
