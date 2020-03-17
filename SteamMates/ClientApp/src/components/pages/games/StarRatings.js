@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 import useRequest from "../../../hooks/useRequest";
 import UserContext from "../../../contexts/UserContext";
 import Error from "./Error";
@@ -24,11 +24,14 @@ const StarRating = styled.div`
     props.initialValue <= props.currentValue ? full_star : empty_star});
 
   &:hover {
-    cursor: pointer;
-  }
+  ${({ changeable }) =>
+    changeable &&
+    css`
+      cursor: pointer;
+    `}
 `;
 
-const StarRatings = ({ amountOfStars, gameId, rating }) => {
+const StarRatings = ({ amountOfStars, gameId, rating, frozen }) => {
   const [requestBody, setRequestBody] = useState({});
   const [sendRequest, setSendRequest] = useState(false);
   const [databaseError, setDatabaseError] = useState(false);
@@ -55,7 +58,7 @@ const StarRatings = ({ amountOfStars, gameId, rating }) => {
     if (selectedValue === currentValue) {
       return;
     }
-    
+
     setPreviousValue(selectedValue);
     setSelectedValue(currentValue);
     setRequestBody({
@@ -74,16 +77,25 @@ const StarRatings = ({ amountOfStars, gameId, rating }) => {
   return (
     <Wrapper>
       {databaseError && <Error message="Database Error" />}
-      {values.map(value => (
-        <StarRating
-          key={value}
-          initialValue={value}
-          currentValue={currentValue}
-          onMouseEnter={() => setCurrentValue(value)}
-          onMouseLeave={() => setCurrentValue(selectedValue)}
-          onClick={rateGame}
-        />
-      ))}
+      {values.map(value =>
+        frozen ? (
+          <StarRating
+            key={value}
+            initialValue={value}
+            currentValue={currentValue}
+          />
+        ) : (
+          <StarRating
+            key={value}
+            initialValue={value}
+            currentValue={currentValue}
+            changeable={true}
+            onMouseEnter={() => setCurrentValue(value)}
+            onMouseLeave={() => setCurrentValue(selectedValue)}
+            onClick={rateGame}
+          />
+        )
+      )}
     </Wrapper>
   );
 };
