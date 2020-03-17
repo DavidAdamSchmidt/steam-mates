@@ -3,6 +3,7 @@ import styled from "styled-components";
 import { useHistory } from "react-router-dom";
 import useRequest from "../../../hooks/useRequest";
 import GamePageHeader from "./GamePageHeader";
+import Description from "./Description";
 import { API_URL } from "../../../constants/api";
 
 const Container = styled.div`
@@ -36,7 +37,8 @@ const GamePage = () => {
 
   return (
     <Container>
-      <GamePageHeader id={id} data={data} />
+      <GamePageHeader data={data} />
+      <Description data={data} />
     </Container>
   );
 };
