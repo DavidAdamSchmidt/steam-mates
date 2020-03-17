@@ -8,6 +8,7 @@ import GamePageHeader from "./GamePageHeader";
 import Description from "./Description";
 import Media from "./Media";
 import Ratings from "./Ratings";
+import SystemRequirements from "./SystemRequirements";
 import { API_URL } from "../../../constants/api";
 import { HOME } from "../../../constants/routes";
 
@@ -62,6 +63,7 @@ const GamePage = () => {
         <Media data={data} />
         <Ratings data={data} />
       </Wrapper>
+      <SystemRequirements data={data} />
     </Container>
   );
 };
