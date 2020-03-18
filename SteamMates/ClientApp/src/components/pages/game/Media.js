@@ -24,13 +24,12 @@ const SelectorMenu = styled.div`
   overflow-x: auto;
 `;
 
-const Media = ({ data }) => {
+const Media = ({ movies, screenshots }) => {
   const [selected, setSelected] = useState(
-    ((data.movies || [{}])[0].webm || {}).max ||
-      (data.screenshots || [])[0].full
+    ((movies || [{}])[0].webm || {}).max || (screenshots || [])[0].full
   );
   const [selectedIsVideo, setSelectedIsVideo] = useState(
-    ((data.movies || [{}])[0].webm || {}).max !== undefined
+    ((movies || [{}])[0].webm || {}).max !== undefined
   );
 
   return (
@@ -49,14 +48,14 @@ const Media = ({ data }) => {
       </div>
       <SelectorMenu>
         <Thumbnails
-          thumbnails={data.movies || []}
+          thumbnails={movies || []}
           areVideos={true}
           selected={selected}
           setSelected={setSelected}
           setSelectedIsVideo={setSelectedIsVideo}
         />
         <Thumbnails
-          thumbnails={data.screenshots || []}
+          thumbnails={screenshots || []}
           areVideos={false}
           selected={selected}
           setSelected={setSelected}

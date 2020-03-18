@@ -9,7 +9,6 @@ import Description from "./Description";
 import Media from "./Media";
 import ExtraInfo from "./ExtraInfo";
 import Ratings from "./Ratings";
-import DetailedDescription from "./DetailedDescription";
 import SystemRequirements from "./SystemRequirements";
 import FlexWrapper from "../../common/FlexWrapper";
 import { API_URL } from "../../../constants/api";
@@ -58,17 +57,34 @@ const GamePage = () => {
 
   return (
     <Container>
-      <GamePageHeader data={data} />
-      <Description data={data} />
+      <GamePageHeader
+        id={id}
+        name={data.name}
+        developers={data.developers}
+        publishers={data.publishers}
+      />
+      <Description title="Short description" text={data.shortDescription} />
       <FlexWrapper>
         <Wrapper>
-          <Media data={data} />
-          <ExtraInfo data={data} />
+          <Media movies={data.movies} screenshots={data.screenshots} />
+          <ExtraInfo
+            releaseDate={data.releaseDate}
+            supportedLanguages={data.supportedLanguages}
+            controllerSupport={data.controllerSupport}
+            website={data.website}
+          />
         </Wrapper>
-        <Ratings data={data} />
+        <Ratings id={id} ratings={data.ratings} />
       </FlexWrapper>
-      <DetailedDescription data={data} />
-      <SystemRequirements data={data} />
+      <Description
+        title="Detailed description"
+        text={data.detailedDescription}
+      />
+      <SystemRequirements
+        pcRequirements={data.pcRequirements}
+        macRequirements={data.macRequirements}
+        linuxRequirements={data.linuxRequirements}
+      />
     </Container>
   );
 };

@@ -32,7 +32,7 @@ const Row = styled.div`
   display: grid;
   grid-template-columns: 100px 170px;
   grid-column-gap: 10px;
-  margin: 10px 0;
+  margin: 18px 0;
 `;
 
 const StarWrapper = styled.div`
@@ -46,7 +46,7 @@ const Tip = styled.div`
   font-weight: bold;
 `;
 
-const Ratings = ({ data }) => {
+const Ratings = ({ id, ratings }) => {
   const { user } = useContext(UserContext);
   const { friends } = useContext(FriendContext);
   const profiles = [user, ...friends];
@@ -69,10 +69,9 @@ const Ratings = ({ data }) => {
             <StarRatings
               amountOfStars={5}
               rating={
-                (data.ratings.find(x => x.userId === profile.steamId) || {})
-                  .rating
+                (ratings.find(x => x.userId === profile.steamId) || {}).rating
               }
-              gameId={data.steamId}
+              gameId={id}
               frozen={index}
             />
           </StarWrapper>

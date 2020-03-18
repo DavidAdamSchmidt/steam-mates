@@ -13,12 +13,11 @@ const Row = styled.div`
 const Name = styled.span`
   padding-right: 4px;
   font-weight: bold;
-  color: #4b4b4b;
 `;
 
 const Value = styled.span`
   font-style: italic;
-  color: #787878;
+  color: #4b4b4b;
 `;
 
 const OfficialSite = styled.a`
@@ -29,36 +28,45 @@ const OfficialSite = styled.a`
   &:focus,
   &:active,
   &:visited {
-    color: #4b4b4b;
+    color: black;
   }
 `;
 
-const ExtraInfo = ({ data }) => {
+const ExtraInfo = ({
+  releaseDate,
+  supportedLanguages,
+  controllerSupport,
+  website
+}) => {
   return (
     <Container>
-      {(data.releaseDate || {}).date && (
+      {(releaseDate || {}).date && (
         <Row>
           <Name>Release Date:</Name>
-          <Value>{data.releaseDate.date.substring(0, 10)}</Value>
+          <Value>{releaseDate.date.substring(0, 10)}</Value>
         </Row>
       )}
-      {data.supportedLanguages && (
+      {supportedLanguages && (
         <Row>
           <Name>Languages:</Name>
-          <Value
-            dangerouslySetInnerHTML={{ __html: data.supportedLanguages }}
-          />
+          <Value dangerouslySetInnerHTML={{ __html: supportedLanguages }} />
         </Row>
       )}
-      {data.controllerSupport && (
+      {controllerSupport && (
         <Row>
           <Name>Controller Support:</Name>
-          <Value>{data.controllerSupport}</Value>
+          <Value>{controllerSupport}</Value>
         </Row>
       )}
-      {data.website && (
+      {website && (
         <Row>
-          <OfficialSite href={data.website}>Official Site</OfficialSite>
+          <OfficialSite
+            href={website}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Official Site
+          </OfficialSite>
         </Row>
       )}
     </Container>

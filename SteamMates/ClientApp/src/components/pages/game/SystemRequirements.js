@@ -5,7 +5,7 @@ import FlexWrapper from "../../common/FlexWrapper";
 
 const Container = styled.div`
   min-height: 300px;
-  padding: 30px 0;
+  margin-bottom: 30px;
 `;
 
 const SelectionMenu = styled.div`
@@ -44,22 +44,26 @@ const Requirements = styled.span`
   padding: 0 20px;
 `;
 
-const SystemRequirements = ({ data }) => {
+const SystemRequirements = ({
+  pcRequirements,
+  macRequirements,
+  linuxRequirements
+}) => {
   const requirements = [
     {
       name: "Windows",
-      minimum: data.pcRequirements.minimum,
-      recommended: data.pcRequirements.recommended
+      minimum: pcRequirements.minimum,
+      recommended: pcRequirements.recommended
     },
     {
       name: "Mac OS X",
-      minimum: data.macRequirements.minimum,
-      recommended: data.macRequirements.recommended
+      minimum: macRequirements.minimum,
+      recommended: macRequirements.recommended
     },
     {
       name: "SteamOS + Linux",
-      minimum: data.linuxRequirements.minimum,
-      recommended: data.linuxRequirements.recommended
+      minimum: linuxRequirements.minimum,
+      recommended: linuxRequirements.recommended
     }
   ].filter(x => x.minimum || x.recommended);
 

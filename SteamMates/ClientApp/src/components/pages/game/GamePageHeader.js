@@ -59,32 +59,34 @@ const Button = styled.div`
   }
 `;
 
-const GamePageHeader = ({ data }) => {
+const GamePageHeader = ({ id, name, developers, publishers }) => {
   return (
     <Header>
       <Image
         onError={e => (e.target.src = library_hero_default)}
-        src={`${IMAGE_ROOT}/${data.steamId}/library_hero.jpg`}
+        src={`${IMAGE_ROOT}/${id}/library_hero.jpg`}
         alt="LibraryHero"
       />
-      <Anchor href={`${STORE_PAGE}/${data.steamId}`} target="_blank">
-        <Title>{data.name}</Title>
+      <Anchor
+        href={`${STORE_PAGE}/${id}`}
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        <Title>{name}</Title>
       </Anchor>
       <Creators>
-        {data.developers && (
+        {developers && (
           <div>
-            Developer{data.developers.length > 1 && "s"}:{" "}
-            {data.developers.join(", ")}
+            Developer{developers.length > 1 && "s"}: {developers.join(", ")}
           </div>
         )}
-        {data.publishers && (
+        {publishers && (
           <div>
-            Publisher{data.publishers.length > 1 && "s"}:{" "}
-            {data.publishers.join(", ")}
+            Publisher{publishers.length > 1 && "s"}: {publishers.join(", ")}
           </div>
         )}
       </Creators>
-      <Anchor href={`steam://run/${data.steamId}`}>
+      <Anchor href={`steam://run/${id}`}>
         <Button>▷ Play</Button>
       </Anchor>
     </Header>

@@ -1,16 +1,23 @@
 import React from "react";
-import styled from "styled-components";
+import styled, { createGlobalStyle } from "styled-components";
 import SectionTitle from "./SectionTitle";
 
-const Container = styled.div`
-  padding: 30px 0;
+const GlobalStyle = createGlobalStyle`
+  p + br, h1 + br, h2 + br {
+    display: none;
+  }
 `;
 
-const Description = ({ data }) => {
+const Container = styled.div`
+  margin: 30px 0;
+`;
+
+const Description = ({ title, text }) => {
   return (
     <Container>
-      <SectionTitle>About the game</SectionTitle>
-      <div>{data.shortDescription}</div>
+      <GlobalStyle />
+      <SectionTitle>{title}</SectionTitle>
+      <div dangerouslySetInnerHTML={{ __html: text }} />
     </Container>
   );
 };
