@@ -8,7 +8,7 @@ import { PROFILE_URL } from "../../../constants/steam";
 
 const Container = styled.div`
   height: 430px;
-  width: 410px;
+  width: 354px;
 `;
 
 const AvatarContainer = styled.div`
@@ -30,7 +30,7 @@ const Row = styled.div`
   display: grid;
   grid-template-columns: 100px 170px;
   grid-column-gap: 10px;
-  margin: 18px 0;
+  margin: 20px 0;
 `;
 
 const Wrapper = styled.div`
@@ -46,7 +46,6 @@ const NotOwned = styled.div`
 `;
 
 const Tip = styled.div`
-  margin-top: 30px;
   font-size: 17px;
   font-weight: bold;
 `;

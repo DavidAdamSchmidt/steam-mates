@@ -3,7 +3,8 @@ import styled from "styled-components";
 
 const Container = styled.div`
   margin: 20px 0 8px 0;
-  letter-spacing: 1.2px;
+  font-size: 13px;
+  font-family: "Helvetica Neue", "Helvetica", "Arial", sans-serif;
 `;
 
 const Row = styled.div`

@@ -8,13 +8,13 @@ const Container = styled.div`
 
 const Video = styled.video`
   width: 100%;
-  height: 338px;
+  height: 360px;
   outline: 0;
 `;
 
 const Screenshot = styled.img`
   width: 100%;
-  height: 338px;
+  height: 360px;
   cursor: pointer;
 `;
 

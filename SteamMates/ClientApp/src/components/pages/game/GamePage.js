@@ -20,7 +20,7 @@ const Container = styled.div`
 `;
 
 const Wrapper = styled.span`
-  width: 600px;
+  width: 640px;
 `;
 
 const GamePage = ({ match }) => {
@@ -59,7 +59,7 @@ const GamePage = ({ match }) => {
         publishers={data.publishers}
         owned={info[0].rating || info[0].hasGame}
       />
-      <Description title="Short description" text={data.shortDescription} />
+      <Description title="About the game" text={data.shortDescription} />
       <FlexWrapper>
         <Wrapper>
           <Media movies={data.movies} screenshots={data.screenshots} />

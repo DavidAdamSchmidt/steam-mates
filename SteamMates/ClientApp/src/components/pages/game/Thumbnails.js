@@ -5,8 +5,8 @@ import styled, { css } from "styled-components";
 
 const ThumbnailContainer = styled.div`
   position: relative;
-  width: 116px;
-  height: 66px;
+  width: 124px;
+  height: 69px;
 
   ${({ selected }) =>
     selected
@@ -20,8 +20,8 @@ const ThumbnailContainer = styled.div`
 `;
 
 const Thumbnail = styled.img`
-  width: 116px;
-  height: 66px;
+  width: 124px;
+  height: 69px;
   cursor: pointer;
 `;
 
