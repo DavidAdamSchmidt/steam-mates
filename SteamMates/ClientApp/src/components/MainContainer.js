@@ -10,11 +10,13 @@ import HomePage from "./pages/home/HomePage";
 import {
   FRIENDS,
   GAME,
+  RANDOM_GAME,
   GAMES_IN_COMMON,
   GAMES_OF_USER,
   ERROR,
   HOME
 } from "./../constants/routes";
+import RandomGamePage from "./pages/games/RandomGamePage";
 
 const Container = styled.div`
   margin: 125px auto 0 auto;
@@ -28,6 +30,7 @@ const MainContainer = () => {
       <Switch>
         <Route path={FRIENDS} component={FriendsPage} />
         <Route path={GAME} component={GamePage} />
+        <Route path={RANDOM_GAME} component={RandomGamePage} />
         <Route path={GAMES_IN_COMMON} component={GamesInCommonPage} />
         <Route path={GAMES_OF_USER} component={GamesOfUserPage} />
         <Route path={ERROR} component={ErrorPage} />

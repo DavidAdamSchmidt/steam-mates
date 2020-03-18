@@ -12,8 +12,9 @@ import { NETWORK_ERROR } from "../../constants/request";
 import {
   HOME,
   FRIENDS,
+  GAMES_OF_USER,
   GAMES_IN_COMMON,
-  GAMES_OF_USER
+  RANDOM_GAME
 } from "../../constants/routes";
 
 const Wrapper = styled.div`
@@ -49,7 +50,8 @@ const NavigationBar = () => {
       path: GAMES_IN_COMMON,
       disabled:
         friends.length === 0 || history.location.pathname === GAMES_IN_COMMON
-    }
+    },
+    { name: "Random", path: RANDOM_GAME, disabled: false }
   ];
 
   return (
