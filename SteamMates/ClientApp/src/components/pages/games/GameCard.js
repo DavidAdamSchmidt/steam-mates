@@ -40,6 +40,10 @@ const Icon = styled.img`
   }
 `;
 
+const RatingWrapper = styled.div`
+  margin: 14px 0;
+`;
+
 const Tag = styled.span`
   display: inline-block;
   margin-top: 10px;
@@ -77,11 +81,13 @@ const GameCard = ({ info }) => {
         alt="GameLogo"
       />
       {info.rating !== undefined && (
-        <StarRatings
-          amountOfStars={5}
-          gameId={info.game.appId}
-          rating={info.rating}
-        />
+        <RatingWrapper>
+          <StarRatings
+            amountOfStars={5}
+            gameId={info.game.appId}
+            rating={info.rating}
+          />
+        </RatingWrapper>
       )}
       {info.ratings && <AverageOfRatings avg={info.averageOfRatings} />}
       {info.tags.map((tag, index) => (

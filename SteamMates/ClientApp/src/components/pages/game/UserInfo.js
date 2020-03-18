@@ -3,6 +3,7 @@ import styled from "styled-components";
 import { Link } from "react-router-dom";
 import SectionTitle from "./SectionTitle";
 import StarRatings from "../../common/StarRatings";
+import { calculatePlayTime } from "../../../utils/userInfoUtils";
 import { FRIENDS } from "../../../constants/routes";
 import { PROFILE_URL } from "../../../constants/steam";
 
@@ -38,6 +39,13 @@ const Wrapper = styled.div`
   padding-top: 6px;
 `;
 
+const PlayTime = styled.div`
+  margin: 10px 0 0 6px;
+  font-weight: bold;
+  letter-spacing: 0.8px;
+  color: #414141;
+`;
+
 const NotOwned = styled.div`
   margin: 22px 0 0 7px;
   font-size: 18px;
@@ -67,14 +75,19 @@ const UserInfo = ({ id, info }) => {
           </AvatarContainer>
           <Wrapper>
             {(x.rating || x.hasGame) && (
-              <StarRatings
-                amountOfStars={5}
-                rating={x.rating}
-                gameId={id}
-                frozen={index}
-              />
+              <>
+                <StarRatings
+                  amountOfStars={5}
+                  rating={x.rating}
+                  gameId={id}
+                  frozen={index}
+                />
+                <PlayTime>
+                  Played {calculatePlayTime(x.playTime)} hours
+                </PlayTime>
+              </>
             )}
-            {x.hasGame === false && <NotOwned>Not Owned</NotOwned>}
+            {!x.hasGame && <NotOwned>Not Owned</NotOwned>}
           </Wrapper>
         </Row>
       ))}

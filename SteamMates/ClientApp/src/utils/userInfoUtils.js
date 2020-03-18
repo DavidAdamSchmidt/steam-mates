@@ -1,24 +1,38 @@
 export const constructUserInfo = (user, friends, info) => {
-  const userClone = getCloneWithInfo(user, info);
+  const userDetails = mergeInfoWithUserData(user, info);
 
-  const friendClones = [];
+  const friendDetails = [];
   for (const friend of friends) {
-    friendClones.push(getCloneWithInfo(friend, info));
+    friendDetails.push(mergeInfoWithUserData(friend, info));
   }
-  friendClones.sort(comparer);
+  friendDetails.sort(comparer);
 
-  return [userClone, ...friendClones];
+  return [userDetails, ...friendDetails];
 };
 
-const getCloneWithInfo = (user, info) => {
-  const userClone = JSON.parse(JSON.stringify(user));
-  const userInfo = info.find(x => x.id === userClone.steamId);
-  if (userInfo) {
-    userClone.rating = userInfo.rating;
-    userClone.hasGame = userInfo.hasGame;
+export const calculatePlayTime = minutes => {
+  switch (true) {
+    case minutes === 0:
+      return 0;
+    case minutes < 3:
+      return 0.1;
+    case minutes < 20 * 60:
+      return (minutes / 60).toFixed(1);
+    default:
+      return Math.round(minutes / 60);
   }
+};
 
-  return userClone;
+const mergeInfoWithUserData = (user, info) => {
+  const userInfo = info.find(x => x.id === user.steamId);
+
+  return {
+    steamId: user.steamId,
+    avatarFull: user.avatarFull,
+    rating: userInfo.rating,
+    playTime: userInfo.playTime,
+    hasGame: userInfo.hasGame
+  };
 };
 
 const comparer = (a, b) => {
@@ -30,7 +44,7 @@ const comparer = (a, b) => {
     return -1;
   }
 
-  if (!a.hasGame && b.hasGame) {
+  if ((!a.hasGame && b.hasGame) || b.playTime > a.playTime) {
     return 1;
   }
 
