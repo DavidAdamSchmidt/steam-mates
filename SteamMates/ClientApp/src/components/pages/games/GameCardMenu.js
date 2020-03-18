@@ -1,7 +1,7 @@
 import React, { useRef, useCallback, useEffect } from "react";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
-import { GAME } from "../../../constants/routes";
+import { GAMES } from "../../../constants/routes";
 
 const Container = styled.div`
   position: absolute;
@@ -54,7 +54,7 @@ const GameCardMenu = ({ id, closeMenu }) => {
       <PlayGameLink href={`steam://run/${id}`}>
         <Option>Play</Option>
       </PlayGameLink>
-      <GameDetailsLink to={`${GAME}?id=${id}`}>
+      <GameDetailsLink to={`${GAMES}/${id}`}>
         <Option>Details</Option>
       </GameDetailsLink>
     </Container>

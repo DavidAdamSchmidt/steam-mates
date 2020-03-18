@@ -1,6 +1,6 @@
 import React, { useState, useContext, useEffect } from "react";
 import styled from "styled-components";
-import { Redirect, useHistory } from "react-router-dom";
+import { Redirect } from "react-router-dom";
 import useRequest from "../../../hooks/useRequest";
 import UserContext from "../../../contexts/UserContext";
 import FriendContext from "../../../contexts/FriendContext";
@@ -22,9 +22,8 @@ const Wrapper = styled.span`
   width: 600px;
 `;
 
-const GamePage = () => {
+const GamePage = ({ match }) => {
   const [id, setId] = useState(0);
-  const history = useHistory();
   const { user } = useContext(UserContext);
   const { friends } = useContext(FriendContext);
 
@@ -37,17 +36,10 @@ const GamePage = () => {
   );
 
   useEffect(() => {
-    const query = new URLSearchParams(history.location.search);
-    const param = parseInt(query.get("id"));
+    setId(match.params.id);
+  }, [match.params.id]);
 
-    if (isNaN(param)) {
-      history.goBack();
-    }
-
-    setId(param);
-  }, [history]);
-
-  if (user == null) {
+  if (user == null || isNaN(id)) {
     return <Redirect to={HOME} />;
   }
 

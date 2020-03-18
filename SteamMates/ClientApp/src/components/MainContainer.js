@@ -9,10 +9,10 @@ import ErrorPage from "./pages/error/ErrorPage";
 import HomePage from "./pages/home/HomePage";
 import {
   FRIENDS,
-  GAME,
   RANDOM_GAME,
   GAMES_IN_COMMON,
   GAMES_OF_USER,
+  GAMES,
   ERROR,
   HOME
 } from "./../constants/routes";
@@ -29,10 +29,10 @@ const MainContainer = () => {
     <Container>
       <Switch>
         <Route path={FRIENDS} component={FriendsPage} />
-        <Route path={GAME} component={GamePage} />
         <Route path={RANDOM_GAME} component={RandomGamePage} />
         <Route path={GAMES_IN_COMMON} component={GamesInCommonPage} />
         <Route path={GAMES_OF_USER} component={GamesOfUserPage} />
+        <Route path={`${GAMES}/:id`} component={GamePage} />
         <Route path={ERROR} component={ErrorPage} />
         <Route path={HOME} component={HomePage} />
       </Switch>

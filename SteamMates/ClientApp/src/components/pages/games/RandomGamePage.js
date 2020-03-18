@@ -3,7 +3,7 @@ import { Redirect } from "react-router-dom";
 import useRequest from "../../../hooks/useRequest";
 import UserContext from "../../../contexts/UserContext";
 import { API_URL } from "../../../constants/api";
-import { GAME, HOME } from "../../../constants/routes";
+import { HOME, GAMES } from "../../../constants/routes";
 
 const RandomGamePage = () => {
   const { user } = useContext(UserContext);
@@ -21,7 +21,7 @@ const RandomGamePage = () => {
   if (data) {
     const game = data.games[Math.floor(Math.random() * data.games.length)];
 
-    return <Redirect to={`${GAME}?id=${game.game.appId}`} />;
+    return <Redirect to={`${GAMES}/${game.game.appId}`} />;
   }
 
   return <div>Loading...</div>;
