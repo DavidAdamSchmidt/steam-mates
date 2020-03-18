@@ -9,6 +9,7 @@ import Description from "./Description";
 import Media from "./Media";
 import Ratings from "./Ratings";
 import SystemRequirements from "./SystemRequirements";
+import DetailedDescription from "./DetailedDescription";
 import FlexWrapper from "../../common/FlexWrapper";
 import { API_URL } from "../../../constants/api";
 import { HOME } from "../../../constants/routes";
@@ -58,6 +59,7 @@ const GamePage = () => {
         <Media data={data} />
         <Ratings data={data} />
       </FlexWrapper>
+      <DetailedDescription data={data} />
       <SystemRequirements data={data} />
     </Container>
   );
