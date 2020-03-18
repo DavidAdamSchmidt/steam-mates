@@ -66,7 +66,7 @@ const GamePage = ({ match }) => {
             website={data.website}
           />
         </Wrapper>
-        <Ratings id={id} ratings={data.ratings} />
+        <Ratings id={id} info={data.userInfo} />
       </FlexWrapper>
       <Description
         title="Detailed description"

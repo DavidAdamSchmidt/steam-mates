@@ -46,7 +46,7 @@ const Tip = styled.div`
   font-weight: bold;
 `;
 
-const Ratings = ({ id, ratings }) => {
+const Ratings = ({ id, info }) => {
   const { user } = useContext(UserContext);
   const { friends } = useContext(FriendContext);
   const profiles = [user, ...friends];
@@ -69,7 +69,7 @@ const Ratings = ({ id, ratings }) => {
             <StarRatings
               amountOfStars={5}
               rating={
-                (ratings.find(x => x.userId === profile.steamId) || {}).rating
+                (info.find(x => x.id === profile.steamId) || {}).rating
               }
               gameId={id}
               frozen={index}

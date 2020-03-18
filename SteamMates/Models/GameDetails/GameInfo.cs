@@ -61,6 +61,6 @@ namespace SteamMates.Models.GameDetails
         [JsonProperty("release_date")]
         public ReleaseDate ReleaseDate { get; set; }
 
-        public List<RatedGame> Ratings { get; set; }
+        public List<UserInfo> UserInfo { get; set; }
     }
 }

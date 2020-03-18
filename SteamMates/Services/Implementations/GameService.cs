@@ -43,8 +43,7 @@ namespace SteamMates.Services.Implementations
             var game = jsonObj[gameId.ToString()]["data"]?.ToObject<GameInfo>()
                        ?? throw new GameNotFoundException($"Game {gameId} could not be found.", gameId);
 
-            game.Ratings = await TryAccessDatabase(async () =>
-                await _databaseService.FindRatedGamesAsync(userIds, new[] { gameId }));
+            game.UserInfo = await GetUserInfoAsync(userIds, gameId);
 
             return game;
         }
@@ -101,6 +100,33 @@ namespace SteamMates.Services.Implementations
             return library.Games
                 .Select(x => x.AppId)
                 .Contains(gameId);
+        }
+
+        private async Task<List<UserInfo>> GetUserInfoAsync(IEnumerable<string> userIds, int gameId)
+        {
+            var ratings = await TryAccessDatabase(async () =>
+                await _databaseService.FindRatedGamesAsync(userIds, new[] { gameId }));
+
+            return (
+                await Task.WhenAll(
+                    userIds.Select(async userId => await CreateUserInfoAsync(ratings, userId, gameId)))
+            ).ToList();
+        }
+
+        private async Task<UserInfo> CreateUserInfoAsync(IEnumerable<RatedGame> ratings, string userId, int gameId)
+        {
+            var userInfo = new UserInfo
+            {
+                Id = userId,
+                Rating = ratings.FirstOrDefault(x => x.UserId == userId)?.Rating
+            };
+
+            if (userInfo.Rating == null)
+            {
+                userInfo.HasGame = await UserHasGameAsync(userId, gameId);
+            }
+
+            return userInfo;
         }
 
         private async Task<List<GameLibrary>> GetGameLibrariesAsync(IEnumerable<string> userIds)
