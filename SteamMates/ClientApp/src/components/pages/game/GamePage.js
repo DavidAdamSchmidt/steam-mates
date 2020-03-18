@@ -36,7 +36,7 @@ const GamePage = ({ match }) => {
   );
 
   useEffect(() => {
-    setId(match.params.id);
+    setId(parseInt(match.params.id));
   }, [match.params.id]);
 
   if (user == null || isNaN(id)) {
