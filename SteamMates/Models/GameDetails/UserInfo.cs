@@ -6,6 +6,8 @@
 
         public int? Rating { get; set; }
 
-        public bool? HasGame { get; set; }
+        public int? PlayTime { get; set; }
+
+        public bool HasGame { get; set; }
     }
 }

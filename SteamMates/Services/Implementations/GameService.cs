@@ -115,18 +115,22 @@ namespace SteamMates.Services.Implementations
 
         private async Task<UserInfo> CreateUserInfoAsync(IEnumerable<RatedGame> ratings, string userId, int gameId)
         {
-            var userInfo = new UserInfo
+            var game = await GetGameFromLibraryAsync(userId, gameId);
+
+            return new UserInfo
             {
                 Id = userId,
-                Rating = ratings.FirstOrDefault(x => x.UserId == userId)?.Rating
+                Rating = ratings.FirstOrDefault(x => x.UserId == userId)?.Rating,
+                PlayTime = game?.PlayTime,
+                HasGame = game != null
             };
+        }
 
-            if (userInfo.Rating == null)
-            {
-                userInfo.HasGame = await UserHasGameAsync(userId, gameId);
-            }
+        private async Task<PlayedGame> GetGameFromLibraryAsync(string userId, int gameId)
+        {
+            var library = await GetGameLibraryAsync(userId);
 
-            return userInfo;
+            return library.Games.FirstOrDefault(game => game.AppId == gameId);
         }
 
         private async Task<List<GameLibrary>> GetGameLibrariesAsync(IEnumerable<string> userIds)
