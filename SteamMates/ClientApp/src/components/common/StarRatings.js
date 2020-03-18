@@ -1,12 +1,12 @@
 import React, { useContext, useEffect, useState } from "react";
 import styled, { css } from "styled-components";
-import useRequest from "../../../hooks/useRequest";
-import UserContext from "../../../contexts/UserContext";
-import Error from "./Error";
-import full_star from "../../../static/images/full_star.gif";
-import empty_star from "../../../static/images/empty_star.gif";
-import { API_URL } from "../../../constants/api";
-import { DATABASE_ERROR } from "../../../constants/request";
+import useRequest from "../../hooks/useRequest";
+import UserContext from "../../contexts/UserContext";
+import Error from "../pages/games/Error";
+import full_star from "../../static/images/full_star.gif";
+import empty_star from "../../static/images/empty_star.gif";
+import { API_URL } from "../../constants/api";
+import { DATABASE_ERROR } from "../../constants/request";
 
 const Wrapper = styled.div`
   display: flex;

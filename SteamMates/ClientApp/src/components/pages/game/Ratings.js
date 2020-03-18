@@ -1,24 +1,16 @@
 import React, { useContext } from "react";
 import styled from "styled-components";
-import UserContext from "../../../contexts/UserContext";
-import StarRatings from "../games/StarRatings";
-import FriendContext from "../../../contexts/FriendContext";
 import { Link } from "react-router-dom";
+import UserContext from "../../../contexts/UserContext";
+import FriendContext from "../../../contexts/FriendContext";
+import SectionTitle from "./SectionTitle";
+import StarRatings from "../../common/StarRatings";
 import { FRIENDS } from "../../../constants/routes";
 import { PROFILE_URL } from "../../../constants/steam";
 
 const Container = styled.div`
   height: 430px;
   width: 410px;
-`;
-
-const Header = styled.div`
-  margin-bottom: 15px;
-  border-bottom: 1px solid black;
-  padding-bottom: 5px;
-  font-size: 18px;
-  font-weight: bold;
-  text-transform: uppercase;
 `;
 
 const AvatarContainer = styled.div`
@@ -61,7 +53,7 @@ const Ratings = ({ data }) => {
 
   return (
     <Container>
-      <Header>Ratings</Header>
+      <SectionTitle>Ratings</SectionTitle>
       {profiles.map((profile, index) => (
         <Row key={profile.steamId}>
           <AvatarContainer>

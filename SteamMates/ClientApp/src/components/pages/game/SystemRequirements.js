@@ -1,18 +1,11 @@
 import React, { useState } from "react";
 import styled, { css } from "styled-components";
+import SectionTitle from "./SectionTitle";
+import FlexWrapper from "../../common/FlexWrapper";
 
 const Container = styled.div`
   min-height: 300px;
   padding: 30px 0;
-`;
-
-const Header = styled.div`
-  margin-bottom: 15px;
-  border-bottom: 1px solid black;
-  padding-bottom: 5px;
-  font-size: 18px;
-  font-weight: bold;
-  text-transform: uppercase;
 `;
 
 const SelectionMenu = styled.div`
@@ -44,12 +37,6 @@ const Option = styled.span`
         color: #b4b4b4;
       `}
   }
-`;
-
-const Wrapper = styled.div`
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
 `;
 
 const Requirements = styled.span`
@@ -86,7 +73,7 @@ const SystemRequirements = ({ data }) => {
 
   return (
     <Container>
-      <Header>System requirements</Header>
+      <SectionTitle>System requirements</SectionTitle>
       {requirements.length > 1 && (
         <SelectionMenu>
           {requirements.map(requirement => (
@@ -100,7 +87,7 @@ const SystemRequirements = ({ data }) => {
           ))}
         </SelectionMenu>
       )}
-      <Wrapper>
+      <FlexWrapper>
         {selected.minimum && (
           <Requirements
             dangerouslySetInnerHTML={{ __html: selected.minimum }}
@@ -111,7 +98,7 @@ const SystemRequirements = ({ data }) => {
             dangerouslySetInnerHTML={{ __html: selected.recommended }}
           />
         )}
-      </Wrapper>
+      </FlexWrapper>
     </Container>
   );
 };

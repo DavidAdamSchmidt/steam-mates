@@ -9,17 +9,12 @@ import Description from "./Description";
 import Media from "./Media";
 import Ratings from "./Ratings";
 import SystemRequirements from "./SystemRequirements";
+import FlexWrapper from "../../common/FlexWrapper";
 import { API_URL } from "../../../constants/api";
 import { HOME } from "../../../constants/routes";
 
 const Container = styled.div`
   margin-top: -70px;
-`;
-
-const Wrapper = styled.div`
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
 `;
 
 const GamePage = () => {
@@ -59,10 +54,10 @@ const GamePage = () => {
     <Container>
       <GamePageHeader data={data} />
       <Description data={data} />
-      <Wrapper>
+      <FlexWrapper>
         <Media data={data} />
         <Ratings data={data} />
-      </Wrapper>
+      </FlexWrapper>
       <SystemRequirements data={data} />
     </Container>
   );

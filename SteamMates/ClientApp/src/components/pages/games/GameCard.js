@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import GameCardMenu from "./GameCardMenu";
-import StarRatings from "./StarRatings";
+import StarRatings from "../../common/StarRatings";
 import AverageOfRatings from "./AverageOfRatings";
 import { getGameCardBackgroundColor } from "../../../utils/gamesInCommonUtils";
 import { LOGO_URL } from "../../../constants/steam";
