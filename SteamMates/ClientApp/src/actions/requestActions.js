@@ -19,7 +19,7 @@ export const requestSuccessful = response => ({
 export const requestFailed = error => ({
   type: REQUEST_FAILED,
   status: (error.response || {}).status,
-  error: error.message === NETWORK_ERROR ? error : error.response.data
+  error: error.message === NETWORK_ERROR ? error : (error.response || {}).data
 });
 
 export const resetState = () => ({
