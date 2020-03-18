@@ -7,15 +7,20 @@ import FriendContext from "../../../contexts/FriendContext";
 import GamePageHeader from "./GamePageHeader";
 import Description from "./Description";
 import Media from "./Media";
+import ExtraInfo from "./ExtraInfo";
 import Ratings from "./Ratings";
-import SystemRequirements from "./SystemRequirements";
 import DetailedDescription from "./DetailedDescription";
+import SystemRequirements from "./SystemRequirements";
 import FlexWrapper from "../../common/FlexWrapper";
 import { API_URL } from "../../../constants/api";
 import { HOME } from "../../../constants/routes";
 
 const Container = styled.div`
   margin-top: -70px;
+`;
+
+const Wrapper = styled.span`
+  width: 600px;
 `;
 
 const GamePage = () => {
@@ -56,7 +61,10 @@ const GamePage = () => {
       <GamePageHeader data={data} />
       <Description data={data} />
       <FlexWrapper>
-        <Media data={data} />
+        <Wrapper>
+          <Media data={data} />
+          <ExtraInfo data={data} />
+        </Wrapper>
         <Ratings data={data} />
       </FlexWrapper>
       <DetailedDescription data={data} />

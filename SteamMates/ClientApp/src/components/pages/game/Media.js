@@ -3,7 +3,7 @@ import styled from "styled-components";
 import Thumbnails from "./Thumbnails";
 
 const Container = styled.div`
-  width: 600px;
+  width: 100%;
 `;
 
 const Video = styled.video`
