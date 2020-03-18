@@ -8,11 +8,12 @@ import GamePageHeader from "./GamePageHeader";
 import Description from "./Description";
 import Media from "./Media";
 import ExtraInfo from "./ExtraInfo";
-import Ratings from "./Ratings";
+import UserInfo from "./UserInfo";
 import SystemRequirements from "./SystemRequirements";
 import FlexWrapper from "../../common/FlexWrapper";
 import { API_URL } from "../../../constants/api";
 import { HOME } from "../../../constants/routes";
+import { constructUserInfo } from "../../../utils/userInfoUtils";
 
 const Container = styled.div`
   margin-top: -70px;
@@ -47,6 +48,8 @@ const GamePage = ({ match }) => {
     return <div>{loading && <span>Loading...</span>}</div>;
   }
 
+  const info = constructUserInfo(user, friends, data.userInfo);
+
   return (
     <Container>
       <GamePageHeader
@@ -54,6 +57,7 @@ const GamePage = ({ match }) => {
         name={data.name}
         developers={data.developers}
         publishers={data.publishers}
+        owned={info[0].rating || info[0].hasGame}
       />
       <Description title="Short description" text={data.shortDescription} />
       <FlexWrapper>
@@ -66,7 +70,7 @@ const GamePage = ({ match }) => {
             website={data.website}
           />
         </Wrapper>
-        <Ratings id={id} info={data.userInfo} />
+        <UserInfo id={id} info={info} />
       </FlexWrapper>
       <Description
         title="Detailed description"

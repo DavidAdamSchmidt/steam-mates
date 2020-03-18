@@ -59,7 +59,7 @@ const Button = styled.div`
   }
 `;
 
-const GamePageHeader = ({ id, name, developers, publishers }) => {
+const GamePageHeader = ({ id, name, developers, publishers, owned }) => {
   return (
     <Header>
       <Image
@@ -86,9 +86,11 @@ const GamePageHeader = ({ id, name, developers, publishers }) => {
           </div>
         )}
       </Creators>
-      <Anchor href={`steam://run/${id}`}>
-        <Button>▷ Play</Button>
-      </Anchor>
+      {owned && (
+        <Anchor href={`steam://run/${id}`}>
+          <Button>▷ Play</Button>
+        </Anchor>
+      )}
     </Header>
   );
 };

@@ -1,8 +1,6 @@
-import React, { useContext } from "react";
+import React from "react";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
-import UserContext from "../../../contexts/UserContext";
-import FriendContext from "../../../contexts/FriendContext";
 import SectionTitle from "./SectionTitle";
 import StarRatings from "../../common/StarRatings";
 import { FRIENDS } from "../../../constants/routes";
@@ -35,9 +33,16 @@ const Row = styled.div`
   margin: 18px 0;
 `;
 
-const StarWrapper = styled.div`
+const Wrapper = styled.div`
   width: 170px;
   padding-top: 6px;
+`;
+
+const NotOwned = styled.div`
+  margin: 22px 0 0 7px;
+  font-size: 18px;
+  font-weight: bold;
+  color: #da0000;
 `;
 
 const Tip = styled.div`
@@ -46,38 +51,35 @@ const Tip = styled.div`
   font-weight: bold;
 `;
 
-const Ratings = ({ id, info }) => {
-  const { user } = useContext(UserContext);
-  const { friends } = useContext(FriendContext);
-  const profiles = [user, ...friends];
-
+const UserInfo = ({ id, info }) => {
   return (
     <Container>
-      <SectionTitle>Ratings</SectionTitle>
-      {profiles.map((profile, index) => (
-        <Row key={profile.steamId}>
+      <SectionTitle>User info</SectionTitle>
+      {info.map((x, index) => (
+        <Row key={x.steamId}>
           <AvatarContainer>
             <a
-              href={`${PROFILE_URL}/${profile.steamId}`}
+              href={`${PROFILE_URL}/${x.steamId}`}
               target="_blank"
               rel="noopener noreferrer"
             >
-              <Avatar src={profile.avatarFull} />
+              <Avatar src={x.avatarFull} />
             </a>
           </AvatarContainer>
-          <StarWrapper>
-            <StarRatings
-              amountOfStars={5}
-              rating={
-                (info.find(x => x.id === profile.steamId) || {}).rating
-              }
-              gameId={id}
-              frozen={index}
-            />
-          </StarWrapper>
+          <Wrapper>
+            {(x.rating || x.hasGame) && (
+              <StarRatings
+                amountOfStars={5}
+                rating={x.rating}
+                gameId={id}
+                frozen={index}
+              />
+            )}
+            {x.hasGame === false && <NotOwned>Not Owned</NotOwned>}
+          </Wrapper>
         </Row>
       ))}
-      {friends.length === 0 && (
+      {info.length === 1 && (
         <Tip>
           <Link to={FRIENDS}>Select</Link> up to 3 friends to compare your
           rating with
@@ -87,4 +89,4 @@ const Ratings = ({ id, info }) => {
   );
 };
 
-export default Ratings;
+export default UserInfo;
