@@ -31,11 +31,16 @@ const mergeInfoWithUserData = (user, info) => {
     avatarFull: user.avatarFull,
     rating: userInfo.rating,
     playTime: userInfo.playTime,
-    hasGame: userInfo.hasGame
+    hasGame: userInfo.hasGame,
+    privateLibrary: userInfo.privateLibrary
   };
 };
 
 const comparer = (a, b) => {
+  if (a.privateLibrary && !b.privateLibrary) {
+    return 1;
+  }
+
   if (a.rating == null && b.rating != null) {
     return 1;
   }

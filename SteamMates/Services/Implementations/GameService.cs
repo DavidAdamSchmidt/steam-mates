@@ -115,7 +115,20 @@ namespace SteamMates.Services.Implementations
 
         private async Task<UserInfo> CreateUserInfoAsync(IEnumerable<RatedGame> ratings, string userId, int gameId)
         {
-            var game = await GetGameFromLibraryAsync(userId, gameId);
+            PlayedGame game;
+
+            try
+            {
+                game = await GetGameFromLibraryAsync(userId, gameId);
+            }
+            catch (LibraryUnavailableException)
+            {
+                return new UserInfo
+                {
+                    Id = userId,
+                    PrivateLibrary = true
+                };
+            }
 
             return new UserInfo
             {

@@ -87,7 +87,11 @@ const UserInfo = ({ id, info }) => {
                 </PlayTime>
               </>
             )}
-            {!x.hasGame && <NotOwned>Not Owned</NotOwned>}
+            {!x.hasGame && (
+              <NotOwned>
+                {x.privateLibrary ? "Private Library" : "Not Owned"}
+              </NotOwned>
+            )}
           </Wrapper>
         </Row>
       ))}

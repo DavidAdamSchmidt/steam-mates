@@ -9,5 +9,7 @@
         public int? PlayTime { get; set; }
 
         public bool HasGame { get; set; }
+
+        public bool PrivateLibrary { get; set; }
     }
 }
