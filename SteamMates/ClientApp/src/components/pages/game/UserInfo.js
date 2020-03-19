@@ -8,22 +8,33 @@ import { FRIENDS } from "../../../constants/routes";
 import { PROFILE_URL } from "../../../constants/steam";
 
 const Container = styled.div`
-  height: 430px;
   width: 354px;
+  height: 430px;
 `;
 
 const AvatarContainer = styled.div`
+  border-radius: 50%;
   width: 80px;
   height: 80px;
-  border-radius: 50%;
-  background: #444e91;
+  background: #48599b;
+
+  &:hover {
+    background: #2da258;
+  }
+`;
+
+const Anchor = styled.a`
+  display: inline-block;
+  width: 80px;
+  height: 80px;
+  border-radius: 50px;
 `;
 
 const Avatar = styled.img`
-  height: 70px;
-  width: 70px;
+  margin: 5px;
   border-radius: 50%;
-  padding: 5px;
+  width: 70px;
+  height: 70px;
   cursor: pointer;
 `;
 
@@ -35,8 +46,8 @@ const Row = styled.div`
 `;
 
 const Wrapper = styled.div`
-  width: 170px;
   padding-top: 6px;
+  width: 170px;
 `;
 
 const PlayTime = styled.div`
@@ -65,13 +76,13 @@ const UserInfo = ({ id, info }) => {
       {info.map((x, index) => (
         <Row key={x.steamId}>
           <AvatarContainer>
-            <a
+            <Anchor
               href={`${PROFILE_URL}/${x.steamId}`}
               target="_blank"
               rel="noopener noreferrer"
             >
               <Avatar src={x.avatarFull} />
-            </a>
+            </Anchor>
           </AvatarContainer>
           <Wrapper>
             {(x.rating || x.hasGame) && (
