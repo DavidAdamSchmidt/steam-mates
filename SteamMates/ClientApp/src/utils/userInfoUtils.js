@@ -2,8 +2,8 @@ export const constructUserInfo = (user, friends, info) => {
   const userDetails = mergeInfoWithUserData(user, info);
 
   const friendDetails = [];
-  for (const friend of friends) {
-    friendDetails.push(mergeInfoWithUserData(friend, info));
+  for (let i = friends.length - 1; i >= 0; i--) {
+    friendDetails.push(mergeInfoWithUserData(friends[i], info));
   }
   friendDetails.sort(comparer);
 
