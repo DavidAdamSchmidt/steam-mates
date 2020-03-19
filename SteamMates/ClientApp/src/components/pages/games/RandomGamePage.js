@@ -2,6 +2,7 @@ import React, { useContext } from "react";
 import { Redirect } from "react-router-dom";
 import useRequest from "../../../hooks/useRequest";
 import UserContext from "../../../contexts/UserContext";
+import { checkPageError } from "../../../utils/errorUtils";
 import { API_URL } from "../../../constants/api";
 import { HOME, GAMES } from "../../../constants/routes";
 
@@ -18,13 +19,18 @@ const RandomGamePage = () => {
     return <Redirect to={HOME} />;
   }
 
-  if (data) {
-    const game = data.games[Math.floor(Math.random() * data.games.length)];
-
-    return <Redirect to={`${GAMES}/${game.game.appId}`} />;
+  const hasError = checkPageError(status, error);
+  if (hasError) {
+    return hasError;
   }
 
-  return <div>Loading...</div>;
+  if (data) {
+    const picked = data.games[Math.floor(Math.random() * data.games.length)];
+
+    return <Redirect to={`${GAMES}/${picked.game.appId}`} />;
+  }
+
+  return <div>{loading && <span>Loading...</span>}</div>;
 };
 
 export default RandomGamePage;
