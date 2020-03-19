@@ -5,10 +5,11 @@ import useRequest from "../../../hooks/useRequest";
 import UserContext from "../../../contexts/UserContext";
 import FriendContext from "../../../contexts/FriendContext";
 import GamePageHeader from "./GamePageHeader";
-import Description from "./Description";
+import ShortDescription from "./ShortDescription";
 import Media from "./Media";
 import ExtraInfo from "./ExtraInfo";
 import UserInfo from "./UserInfo";
+import DetailedDescription from "./DetailedDescription";
 import SystemRequirements from "./SystemRequirements";
 import FlexWrapper from "../../common/FlexWrapper";
 import { API_URL } from "../../../constants/api";
@@ -59,7 +60,7 @@ const GamePage = ({ match }) => {
         publishers={data.publishers}
         owned={info[0].rating || info[0].hasGame}
       />
-      <Description title="About the game" text={data.shortDescription} />
+      <ShortDescription description={data.shortDescription} />
       <FlexWrapper>
         <Wrapper>
           <Media movies={data.movies} screenshots={data.screenshots} />
@@ -72,10 +73,7 @@ const GamePage = ({ match }) => {
         </Wrapper>
         <UserInfo id={id} info={info} />
       </FlexWrapper>
-      <Description
-        title="Detailed description"
-        text={data.detailedDescription}
-      />
+      <DetailedDescription description={data.detailedDescription} />
       <SystemRequirements
         pcRequirements={data.pcRequirements}
         macRequirements={data.macRequirements}
