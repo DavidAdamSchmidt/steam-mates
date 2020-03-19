@@ -8,7 +8,7 @@ namespace SteamMates.Services.Interfaces
 {
     public interface IValidationService
     {
-        ValidationResult ValidateGetGame(ClaimsPrincipal user, ISet<string> userIds);
+        ValidationResult ValidateGetGame(ClaimsPrincipal user, ISet<string> userIds, string gameId);
 
         ValidationResult ValidateGetGames(ClaimsPrincipal user);
 

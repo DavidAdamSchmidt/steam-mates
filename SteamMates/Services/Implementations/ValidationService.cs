@@ -19,9 +19,21 @@ namespace SteamMates.Services.Implementations
             _gameService = gameService;
         }
 
-        public ValidationResult ValidateGetGame(ClaimsPrincipal user, ISet<string> userIds)
+        public ValidationResult ValidateGetGame(ClaimsPrincipal user, ISet<string> userIds, string gameId)
         {
-            return ValidateIds(user, userIds, false);
+            if (!user.Identity.IsAuthenticated)
+            {
+                return new ValidationResult(ValidationStatus.Unauthorized, ValidationError.Unauthorized);
+            }
+
+            var success = int.TryParse(gameId, out var parsedId);
+
+            if (!success || parsedId < 1)
+            {
+                return new ValidationResult(ValidationStatus.Failed, ValidationError.InvalidGameId);
+            }
+
+            return ValidateUserIds(user, userIds, false);
         }
 
         public ValidationResult ValidateGetGames(ClaimsPrincipal user)
@@ -36,7 +48,12 @@ namespace SteamMates.Services.Implementations
 
         public ValidationResult ValidateGetGamesInCommon(ClaimsPrincipal user, ISet<string> userIds)
         {
-            return ValidateIds(user, userIds, true);
+            if (!user.Identity.IsAuthenticated)
+            {
+                return new ValidationResult(ValidationStatus.Unauthorized, ValidationError.Unauthorized);
+            }
+
+            return ValidateUserIds(user, userIds, true);
         }
 
         public async Task<ValidationResult> ValidateRateGameAsync(ClaimsPrincipal user, RatedGame ratedGame)
@@ -82,13 +99,8 @@ namespace SteamMates.Services.Implementations
             return new ValidationResult(ValidationStatus.Ok);
         }
 
-        private ValidationResult ValidateIds(ClaimsPrincipal user, ICollection<string> userIds, bool required)
+        private ValidationResult ValidateUserIds(ClaimsPrincipal user, ICollection<string> userIds, bool required)
         {
-            if (!user.Identity.IsAuthenticated)
-            {
-                return new ValidationResult(ValidationStatus.Unauthorized, ValidationError.Unauthorized);
-            }
-
             if (required && userIds.Count == 0)
             {
                 return new ValidationResult(ValidationStatus.Failed, ValidationError.NoUserId);

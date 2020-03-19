@@ -13,6 +13,7 @@ import DetailedDescription from "./DetailedDescription";
 import SystemRequirements from "./SystemRequirements";
 import FlexWrapper from "../../common/FlexWrapper";
 import { constructGamePageUrl } from "../../../utils/urlUtils";
+import { checkPageError } from "../../../utils/errorUtils";
 import { constructUserInfo } from "../../../utils/userInfoUtils";
 import { HOME } from "../../../constants/routes";
 
@@ -25,21 +26,34 @@ const Wrapper = styled.span`
 `;
 
 const GamePage = ({ match }) => {
-  const [id, setId] = useState(0);
+  const [id, setId] = useState(null);
+  const [isInvalidId, setIsInvalidId] = useState(false);
   const { user } = useContext(UserContext);
   const { friends } = useContext(FriendContext);
 
   const [loading, status, data, error] = useRequest(
     constructGamePageUrl(id, friends),
-    user !== null && id > 0,
+    user != null && id != null,
     "GET"
   );
 
   useEffect(() => {
-    setId(parseInt(match.params.id));
+    const convertedId = parseInt(match.params.id);
+    const int32MaxValue = 2147483647;
+
+    if (isNaN(convertedId) || convertedId > int32MaxValue) {
+      setIsInvalidId(true);
+    } else {
+      setId(convertedId);
+    }
   }, [match.params.id]);
 
-  if (user == null || isNaN(id)) {
+  const hasError = checkPageError(status, error);
+  if (hasError) {
+    return hasError;
+  }
+
+  if (user == null || isInvalidId) {
     return <Redirect to={HOME} />;
   }
 

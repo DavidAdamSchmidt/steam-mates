@@ -9,7 +9,7 @@ import GameContainer from "./GameContainer";
 import {
   showError,
   getLibraryError,
-  checkGamesPageError
+  checkPageError
 } from "../../../utils/errorUtils";
 import {
   addAverageOfRatings,
@@ -61,7 +61,7 @@ const GamesInCommonPage = () => {
     return showError(getLibraryError(privateProfiles));
   }
 
-  const hasError = checkGamesPageError(status, error);
+  const hasError = checkPageError(status, error);
   if (hasError) {
     return hasError;
   }

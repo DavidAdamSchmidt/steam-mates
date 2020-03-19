@@ -7,6 +7,7 @@
         public static readonly string NoUserId = "No user ID was received.";
         public static readonly string TooManyUserIds = "Too many user IDs were received.";
         public static readonly string WrongUserId = "Wrong user ID was received.";
+        public static readonly string InvalidGameId = "Invalid game ID was received.";
 
         public static readonly string InvalidRatingPattern =
             "Rating value {0} is invalid (needs to be between 1 and 5).";
