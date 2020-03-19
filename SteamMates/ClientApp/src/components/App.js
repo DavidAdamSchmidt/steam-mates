@@ -5,12 +5,12 @@ import NavigationBar from "./navbar/NavigationBar";
 import MainContainer from "./MainContainer";
 
 const App = () => {
-  const { loading } = useContext(UserContext);
+  const { loading, clearFriends } = useContext(UserContext);
 
   return loading ? (
     "Loading..."
   ) : (
-    <FriendProvider>
+    <FriendProvider clearFriends={clearFriends}>
       <NavigationBar />
       <MainContainer />
     </FriendProvider>

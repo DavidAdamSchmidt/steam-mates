@@ -1,9 +1,23 @@
-import React, { createContext, useState } from "react";
+import React, { createContext, useState, useEffect } from "react";
+import { FRIENDS } from "../constants/localStorage";
 
 const FriendContext = createContext(null);
 
 export const FriendProvider = props => {
-  const [friends, setFriends] = useState([]);
+  const [friends, setFriends] = useState(
+    JSON.parse(localStorage.getItem(FRIENDS)) || []
+  );
+
+  useEffect(() => {
+    localStorage.setItem(FRIENDS, JSON.stringify(friends));
+  }, [friends]);
+
+  useEffect(() => {
+    if (props.clearFriends) {
+      localStorage.removeItem(FRIENDS);
+      setFriends([]);
+    }
+  }, [props.clearFriends]);
 
   const tryToAddFriend = friend => {
     if (friends.length < 3) {
