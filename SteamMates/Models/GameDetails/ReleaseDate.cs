@@ -1,5 +1,4 @@
 ﻿using Newtonsoft.Json;
-using System;
 
 namespace SteamMates.Models.GameDetails
 {
@@ -8,6 +7,6 @@ namespace SteamMates.Models.GameDetails
         [JsonProperty("coming_soon")]
         public bool ComingSoon { get; set; }
 
-        public DateTime? Date { get; set; }
+        public string Date { get; set; }
     }
 }

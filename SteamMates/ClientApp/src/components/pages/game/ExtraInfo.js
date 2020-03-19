@@ -44,7 +44,7 @@ const ExtraInfo = ({
       {(releaseDate || {}).date && (
         <Row>
           <Name>Release Date:</Name>
-          <Value>{releaseDate.date.substring(0, 10)}</Value>
+          <Value>{releaseDate.date}</Value>
         </Row>
       )}
       {supportedLanguages && (
