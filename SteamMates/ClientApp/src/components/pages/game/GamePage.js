@@ -12,9 +12,9 @@ import UserInfo from "./UserInfo";
 import DetailedDescription from "./DetailedDescription";
 import SystemRequirements from "./SystemRequirements";
 import FlexWrapper from "../../common/FlexWrapper";
-import { API_URL } from "../../../constants/api";
-import { HOME } from "../../../constants/routes";
+import { constructGamePageUrl } from "../../../utils/urlUtils";
 import { constructUserInfo } from "../../../utils/userInfoUtils";
+import { HOME } from "../../../constants/routes";
 
 const Container = styled.div`
   margin-top: -70px;
@@ -30,9 +30,7 @@ const GamePage = ({ match }) => {
   const { friends } = useContext(FriendContext);
 
   const [loading, status, data, error] = useRequest(
-    `${API_URL}/games/${id}?${friends
-      .map((friend, index) => `${index ? "&" : ""}userId=${friend.steamId}`)
-      .join("")}`,
+    constructGamePageUrl(id, friends),
     user !== null && id > 0,
     "GET"
   );
