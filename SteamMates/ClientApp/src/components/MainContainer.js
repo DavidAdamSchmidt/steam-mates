@@ -21,7 +21,6 @@ import RandomGamePage from "./pages/games/RandomGamePage";
 const Container = styled.div`
   margin: 125px auto 0 auto;
   max-width: 1050px;
-  padding: 15px;
 `;
 
 const MainContainer = () => {

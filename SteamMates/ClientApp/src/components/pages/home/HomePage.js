@@ -1,28 +1,29 @@
 import React, { useContext } from "react";
 import styled from "styled-components";
-import { Link } from "react-router-dom";
 import UserContext from "../../../contexts/UserContext";
-import FriendContext from "../../../contexts/FriendContext";
 import { showError } from "../../../utils/errorUtils";
+import hero from "../../../static/images/home_page_hero.jpg";
 import { NETWORK_ERROR } from "../../../constants/request";
-import { FRIENDS, GAMES_IN_COMMON } from "../../../constants/routes";
 
 const Wrapper = styled.div`
-  margin: 0 10px;
+  margin-top: -55px;
+  height: calc(100vh - 70px);
+  max-width: 100%;
+  background: #131919;
+  color: white;
 `;
 
-const Welcome = styled.div`
-  font-size: 24px;
-  font-weight: bold;
-`;
-
-const Instruction = styled.div`
-  padding-top: 20px;
+const Header = styled.div`
+  width: 100%;
+  max-width: 1050px;
+  height: 100%;
+  max-height: 61vh;
+  background: url(${hero}) no-repeat center;
+  background-size: cover;
 `;
 
 const HomePage = () => {
-  const { user, status, error } = useContext(UserContext);
-  const { friends } = useContext(FriendContext);
+  const { status, error } = useContext(UserContext);
 
   if (status === 503 && (error || {}).apiName === "Steam") {
     return showError(error.message);
@@ -34,26 +35,7 @@ const HomePage = () => {
 
   return (
     <Wrapper>
-      <Welcome>
-        {user
-          ? `Good to see you, ${user.personaName}!`
-          : "Welcome to SteamMates!"}
-      </Welcome>
-      {!user ? (
-        <Instruction>
-          Please sign in through Steam to begin using our services.
-        </Instruction>
-      ) : friends.length > 0 ? (
-        <Instruction>
-          Find out which <Link to={GAMES_IN_COMMON}>games</Link> you and your
-          selected friends can play together.
-        </Instruction>
-      ) : (
-        <Instruction>
-          Select some <Link to={FRIENDS}>friends</Link> first who you want to
-          play with.
-        </Instruction>
-      )}
+      <Header />
     </Wrapper>
   );
 };
