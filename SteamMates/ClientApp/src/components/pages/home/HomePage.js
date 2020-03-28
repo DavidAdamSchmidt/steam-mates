@@ -3,6 +3,7 @@ import styled, { keyframes } from "styled-components";
 import UserContext from "../../../contexts/UserContext";
 import { showError } from "../../../utils/errorUtils";
 import hero from "../../../static/images/home_page_hero.jpg";
+import { MEDIUM, BIG } from "../../../constants/style";
 import { NETWORK_ERROR } from "../../../constants/request";
 
 const moveInFromLeft = keyframes`
@@ -48,6 +49,7 @@ const Header = styled.div`
 `;
 
 const Wrapper = styled.div`
+  overflow: hidden;
   margin-top: -55px;
   height: calc(100vh - 70px);
   max-width: 100%;
@@ -60,26 +62,55 @@ const TextBox = styled.div`
   top: 18%;
   left: 50%;
   transform: translate(-50%, -50%);
-  margin-left: 10px;
+  margin-left: 1.22vw;
   font-weight: bold;
   text-transform: uppercase;
   white-space: nowrap;
+  user-select: none;
+
+  @media (${MEDIUM}) {
+    margin-left: 0.95vw;
+  }
+
+  @media (${BIG}) {
+    margin-left: 10px;
+  }
 `;
 
 const TextBoxMain = styled.span`
   display: block;
-  animation: ${moveInFromLeft} 1.6s ease-out;
   margin-bottom: 10px;
-  font-size: 72px;
-  letter-spacing: 20px;
+  font-size: 8.9vw;
+  letter-spacing: 2.44vw;
+
+  @media (${MEDIUM}) {
+    font-size: 6.85vw;
+    letter-spacing: 1.88vw;
+  }
+
+  @media (${BIG}) {
+    animation: ${moveInFromLeft} 1.6s ease-out;
+    font-size: 72px;
+    letter-spacing: 20px;
+  }
 `;
 
 const TextBoxSub = styled.span`
   display: block;
-  animation: ${moveInFromRight} 1.6s ease-out;
-  font-size: 18px;
-  letter-spacing: 5.3px;
+  font-size: 2.23vw;
+  letter-spacing: 0.65vw;
   color: orange;
+
+  @media (${MEDIUM}) {
+    font-size: 1.72vw;
+    letter-spacing: 0.5vw;
+  }
+
+  @media (${BIG}) {
+    animation: ${moveInFromRight} 1.6s ease-out;
+    font-size: 18px;
+    letter-spacing: 5.37px;
+  }
 `;
 
 const HomePage = () => {
