@@ -67,8 +67,8 @@ const TogglerWrapper = styled.div`
 `;
 
 const Toggler = styled.img`
-  display: block;
   height: 40px;
+  vertical-align: bottom;
 
   &:hover {
     cursor: pointer;

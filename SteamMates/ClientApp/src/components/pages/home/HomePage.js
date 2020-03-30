@@ -44,7 +44,7 @@ const Header = styled.div`
   max-width: 1050px;
   height: 100%;
   max-height: 61vh;
-  background: url(${hero}) no-repeat center;
+  background: url(${hero}) no-repeat bottom;
   background-size: cover;
 `;
 

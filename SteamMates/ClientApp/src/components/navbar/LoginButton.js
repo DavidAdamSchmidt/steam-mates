@@ -26,6 +26,10 @@ const Button = styled.button`
   &:focus {
     outline: 0;
   }
+
+  & img {
+    vertical-align: bottom;
+  }
 `;
 
 const LoginButton = () => {
