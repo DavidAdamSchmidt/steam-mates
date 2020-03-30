@@ -5,14 +5,17 @@ import no_user from "../../static/images/no_user.png";
 
 const Avatar = styled.img`
   display: block;
-  width: 45px;
-  height: 45px;
+  width: 38px;
 
   ${props =>
     props.noAvatar &&
     css`
       filter: brightness(50%);
     `}
+
+  @media (min-width: 450px) {
+    width: 45px;
+  }
 `;
 
 const Remove = styled.span`
@@ -28,21 +31,20 @@ const Remove = styled.span`
 const Wrapper = styled.div`
   margin-left: 2px;
   padding: 2px;
-  cursor: pointer;
-  
-  ${props =>
-    (props.isUser &&
-      css`
-        border: 2px solid rgba(240, 243, 43, 0.81);
-      `) ||
-    css`
-      border: 1px solid rgba(148, 92, 47, 0.81);
 
-      &:hover {
-        filter: brightness(50%);
-      }
-    `}
-  
+  ${props =>
+    props.isUser
+      ? css`
+          border: 2px solid rgba(240, 243, 43, 0.81);
+        `
+      : css`
+          border: 1px solid rgba(148, 92, 47, 0.81);
+        `}
+
+  &:hover {
+    filter: brightness(50%);
+  }
+
   &:hover ${Remove} {
     display: block;
   }
@@ -64,7 +66,7 @@ const UserAvatar = ({ profile, isFriend }) => {
         src={profile ? profile.avatarMedium : no_user}
         alt="Avatar"
       />
-      {isFriend && profile.avatarMedium && <Remove>X</Remove>}
+      {profile && profile.avatarMedium && <Remove>X</Remove>}
     </Wrapper>
   );
 };

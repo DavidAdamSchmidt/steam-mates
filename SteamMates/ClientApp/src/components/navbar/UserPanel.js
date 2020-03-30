@@ -5,13 +5,13 @@ import FriendContext from "../../contexts/FriendContext";
 import UserAvatar from "./UserAvatar";
 import Tooltip from "./Tooltip";
 import LogoutButton from "./LogoutButton";
-import { API_URL } from "../../constants/api";
 
 const Wrapper = styled.div`
   display: flex;
   align-items: center;
-  justify-content: center;
   height: 100%;
+  padding: 0 5px 0 18px;
+  user-select: none;
 `;
 
 const UserPanel = () => {
@@ -38,9 +38,10 @@ const UserPanel = () => {
         </Tooltip>
       ))}
       <Tooltip text={`${user.personaName} (you)`}>
-        <UserAvatar profile={user} isFriend={false} />
+        <LogoutButton>
+          <UserAvatar profile={user} isFriend={false} />
+        </LogoutButton>
       </Tooltip>
-      <LogoutButton path={`${API_URL}/user/logout`} />
     </Wrapper>
   );
 };

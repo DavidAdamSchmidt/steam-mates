@@ -1,5 +1,6 @@
 import React from "react";
-import styled from "styled-components";
+import styled, { css } from "styled-components";
+import { MEDIUM } from "../../constants/style";
 
 const Text = styled.div`
   display: flex;
@@ -8,17 +9,43 @@ const Text = styled.div`
   height: 100%;
   font-size: 18px;
   font-weight: bold;
-  color: #b1b1b1;
+  user-select: none;
+
+  ${({ disabled }) =>
+    disabled
+      ? css`
+          color: #a5a5a5;
+        `
+      : css`
+          color: #393939;
+        `};
 
   &:hover {
     background: darkgreen;
     cursor: pointer;
     color: white;
   }
+  
+  ${({ clickable }) =>
+    !clickable &&
+    css`
+      &:hover {
+        cursor: default;
+      }
+    `}
+  
+
+  @media (${MEDIUM}) {
+    color: #b1b1b1;
+  }
 `;
 
-const Menu = ({ text }) => {
-  return <Text>{text}</Text>;
+const Menu = ({ text, disabled, clickable }) => {
+  return (
+    <Text disabled={disabled} clickable={clickable}>
+      {text}
+    </Text>
+  );
 };
 
 export default Menu;

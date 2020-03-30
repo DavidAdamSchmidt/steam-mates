@@ -1,19 +1,26 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import styled, { css } from "styled-components";
 import { Link } from "react-router-dom";
 import Menu from "./Menu";
 
-const Wrapper = styled.div``;
+const Wrapper = styled.div`
+  width: 100%;
+  height: 100%;
+`;
 
 const Dropdown = styled.div`
   position: absolute;
   visibility: hidden;
-  width: 192px;
   background: rgb(214, 218, 232);
 
   ${Wrapper}:hover & {
     visibility: visible;
   }
+
+  ${({ width }) =>
+    css`
+      width: ${width}px;
+    `};
 `;
 
 const Entry = styled(Link)`
@@ -24,7 +31,6 @@ const Entry = styled(Link)`
   text-align: center;
   text-decoration: none;
   height: 44px;
-  color: red;
 
   ${props =>
     props.disabled
@@ -34,7 +40,6 @@ const Entry = styled(Link)`
       : css`
           &:hover {
             background: darkgreen;
-            cursor: pointer;
           }
         `}
 `;
@@ -55,13 +60,23 @@ const Text = styled.div`
 `;
 
 const DropdownMenu = ({ name, entries }) => {
+  const [dropdownWidth, setDropdownWidth] = useState();
   const [showDropdown, setShowDropdown] = useState(true);
+  const wrapperRef = useRef();
+
+  useEffect(() => {
+    setDropdownWidth(wrapperRef.current.clientWidth);
+  }, []);
+
+  if (dropdownWidth !== (wrapperRef.current || {}).clientWidth) {
+    setDropdownWidth(wrapperRef.current.clientWidth);
+  }
 
   return (
-    <Wrapper onMouseEnter={() => setShowDropdown(true)}>
-      <Menu text={name} />
+    <Wrapper ref={wrapperRef} onMouseEnter={() => setShowDropdown(true)}>
+      <Menu text={name} clickable={false} />
       {showDropdown && (
-        <Dropdown>
+        <Dropdown width={dropdownWidth}>
           {entries &&
             entries.map((entry, index) => (
               <Entry

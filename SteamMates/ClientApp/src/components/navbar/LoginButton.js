@@ -1,6 +1,11 @@
 import React from "react";
 import styled from "styled-components";
 import login_button from "../../static/images/login_button.png";
+import { API_URL } from "../../constants/api";
+
+const Wrapper = styled.div`
+  padding: 0 20px;
+`;
 
 const Form = styled.form`
   height: 23px;
@@ -12,6 +17,7 @@ const Button = styled.button`
   border: none;
   height: 23px;
   padding: 0;
+  background: rgb(7, 2, 6);
 
   &:hover {
     cursor: pointer;
@@ -22,13 +28,15 @@ const Button = styled.button`
   }
 `;
 
-const LoginButton = ({ path }) => {
+const LoginButton = () => {
   return (
-    <Form action={path} method="post">
-      <Button>
-        <img src={login_button} alt="LoginButton" />
-      </Button>
-    </Form>
+    <Wrapper>
+      <Form action={`${API_URL}/user/auth`} method="post">
+        <Button>
+          <img src={login_button} alt="LoginButton" />
+        </Button>
+      </Form>
+    </Wrapper>
   );
 };
 

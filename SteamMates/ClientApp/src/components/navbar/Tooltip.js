@@ -13,11 +13,16 @@ const Text = styled.span`
   position: absolute;
   z-index: 2;
   top: -5px;
-  left: 105%;
+  right: 100%;
   display: none;
   visibility: hidden;
   background: rgba(72, 70, 119, 0.9);
   color: white;
+
+  @media (min-width: 1400px) {
+    left: 100%;
+    right: 0;
+  }
 
   ${Wrapper}:hover & {
     display: block;
