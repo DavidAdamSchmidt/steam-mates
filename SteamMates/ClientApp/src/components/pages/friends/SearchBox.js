@@ -3,7 +3,10 @@ import styled from "styled-components";
 import UserContext from "../../../contexts/UserContext";
 import SearchTermContext from "../../../contexts/SearchTermContext";
 import SearchResultContainer from "./SearchResultContainer";
-import { getMatchingFriends } from "../../../utils/friendSearchUtils";
+import {
+  getAllFriends,
+  getMatchingFriends
+} from "../../../utils/friendSearchUtils";
 import {
   PERSONA_NAME,
   REAL_NAME,
@@ -38,6 +41,7 @@ const SearchBox = () => {
   const [input, setInput] = useState("");
   const [results, setResults] = useState([]);
   const { user } = useContext(UserContext);
+  const [allFriends] = useState(getAllFriends(user.friends));
 
   const onInputChange = e => {
     const searchTerm = e.target.value;
@@ -56,11 +60,11 @@ const SearchBox = () => {
         value={input}
         onChange={onInputChange}
       />
-      {results && (
-        <SearchTermContext.Provider value={input}>
-          <SearchResultContainer results={results} />
-        </SearchTermContext.Provider>
-      )}
+      <SearchTermContext.Provider value={input}>
+        <SearchResultContainer
+          results={input.length > 0 ? results : allFriends}
+        />
+      </SearchTermContext.Provider>
     </div>
   );
 };

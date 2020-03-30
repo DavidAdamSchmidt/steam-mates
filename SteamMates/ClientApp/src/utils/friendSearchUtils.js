@@ -7,6 +7,18 @@ import {
 
 const types = [PERSONA_NAME, REAL_NAME, VANITY_ID, STEAM_ID_64];
 
+export const getAllFriends = friends => {
+  return friends.map(obj => ({
+    user: obj,
+    matches: [
+      { type: PERSONA_NAME, startIndex: -1 },
+      { type: REAL_NAME, startIndex: -1 },
+      { type: VANITY_ID, startIndex: -1 },
+      { type: STEAM_ID_64, startIndex: -1 }
+    ]
+  }));
+};
+
 export const getMatchingFriends = (friends, searchTerm) => {
   const results = [];
   if (searchTerm.length === 0) {
