@@ -15,7 +15,7 @@ const Wrapper = styled.span`
   }
 `;
 
-const Property = styled.span`
+const Property = styled.div`
   font-size: 14px;
   color: #a4a4a4;
 `;
