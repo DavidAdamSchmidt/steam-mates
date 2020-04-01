@@ -7,7 +7,7 @@ const Wrapper = styled.div`
   display: flex;
   flex-wrap: wrap;
   justify-content: space-evenly;
-  margin-bottom: 40px;
+  margin: 100px 0 40px 0;
   border-radius: 20px;
   padding: 20px;
   background: #e4e4e4;

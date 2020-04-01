@@ -35,8 +35,8 @@ const Wrapper = styled.div`
   height: 60px;
   background: rgb(7, 2, 6);
 
-  @media (min-width: 903px) {
-    height: 6.65vw;
+  @media (min-width: 915px) {
+    height: 6.56vw;
   }
 
   @media (${BIG}) {

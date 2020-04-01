@@ -18,7 +18,7 @@ const Wrapper = styled.span`
 
           @media (${MEDIUM}) {
             display: block;
-            font-size: 2.67vw;
+            font-size: 2.62vw;
           }
 
           @media (${BIG}) {

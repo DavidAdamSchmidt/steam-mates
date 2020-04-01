@@ -17,10 +17,6 @@ import { checkPageError } from "../../../utils/errorUtils";
 import { constructUserInfo } from "../../../utils/userInfoUtils";
 import { HOME } from "../../../constants/routes";
 
-const Container = styled.div`
-  margin-top: -70px;
-`;
-
 const Wrapper = styled.span`
   width: 640px;
 `;
@@ -64,7 +60,7 @@ const GamePage = ({ match }) => {
   const info = constructUserInfo(user, friends, data.userInfo);
 
   return (
-    <Container>
+    <div>
       <GamePageHeader
         id={id}
         name={data.name}
@@ -91,7 +87,7 @@ const GamePage = ({ match }) => {
         macRequirements={data.macRequirements}
         linuxRequirements={data.linuxRequirements}
       />
-    </Container>
+    </div>
   );
 };
 

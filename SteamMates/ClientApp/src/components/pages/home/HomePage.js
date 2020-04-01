@@ -80,11 +80,11 @@ const TextBoxMain = styled.span`
   display: block;
   margin-bottom: 10px;
   font-size: 8.9vw;
-  letter-spacing: 2.44vw;
+  letter-spacing: 2.46vw;
 
   @media (${MEDIUM}) {
-    font-size: 6.85vw;
-    letter-spacing: 1.88vw;
+    font-size: 6.75vw;
+    letter-spacing: 1.86vw;
   }
 
   @media (${BIG}) {
@@ -97,11 +97,11 @@ const TextBoxMain = styled.span`
 const TextBoxSub = styled.span`
   display: block;
   font-size: 2.23vw;
-  letter-spacing: 0.65vw;
+  letter-spacing: 0.66vw;
   color: orange;
 
   @media (${MEDIUM}) {
-    font-size: 1.72vw;
+    font-size: 1.687vw;
     letter-spacing: 0.5vw;
   }
 
