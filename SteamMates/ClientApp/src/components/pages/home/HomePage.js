@@ -50,7 +50,6 @@ const Header = styled.div`
 
 const Wrapper = styled.div`
   overflow: hidden;
-  margin-top: -65px;
   height: calc(100vh - 60px);
   max-width: 100%;
   background: #131919;

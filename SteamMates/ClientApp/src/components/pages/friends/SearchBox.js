@@ -1,28 +1,25 @@
-import React, { useState, useContext } from "react";
+import React from "react";
 import styled from "styled-components";
-import UserContext from "../../../contexts/UserContext";
-import SearchTermContext from "../../../contexts/SearchTermContext";
-import SearchResultContainer from "./SearchResultContainer";
-import {
-  getAllFriends,
-  getMatchingFriends
-} from "../../../utils/friendSearchUtils";
+import useWindowSize from "../../../hooks/useWindowSize";
 import {
   PERSONA_NAME,
   REAL_NAME,
   STEAM_ID_64,
   VANITY_ID
 } from "../../../constants/user";
+import { FRIENDS } from "../../../constants/style";
 
 const InputField = styled.input`
-  box-sizing: border-box;
+  margin-top: 40px;
   box-shadow: 0 0 5px #9d9d9d;
   -moz-box-shadow: 0 0 5px #9d9d9d;
   -webkit-box-shadow: 0 0 5px #9d9d9d;
+  box-sizing: border-box;
   border: none;
   border-radius: 25px;
   width: 100%;
-  height: 45px;
+  min-width: 244px;
+  height: 35px;
   padding-left: 25px;
   font-size: 16px;
   color: gray;
@@ -35,37 +32,30 @@ const InputField = styled.input`
     font-style: italic;
     color: #bababa;
   }
+
+  @media (${FRIENDS.TIER_FIVE}) {
+    margin: 0;
+  }
+
+  @media (${FRIENDS.TIER_TWO}) {
+    height: 40px;
+  }
 `;
 
-const SearchBox = () => {
-  const [input, setInput] = useState("");
-  const [results, setResults] = useState([]);
-  const { user } = useContext(UserContext);
-  const [allFriends] = useState(getAllFriends(user.friends));
-
-  const onInputChange = e => {
-    const searchTerm = e.target.value;
-
-    setInput(searchTerm);
-    setResults(() =>
-      getMatchingFriends(user.friends, searchTerm.toLowerCase())
-    );
-  };
+const SearchBox = ({ input, onInputChange }) => {
+  const [width] = useWindowSize();
 
   return (
-    <div>
-      <InputField
-        type="text"
-        placeholder={`Search friends by ${PERSONA_NAME}, ${REAL_NAME}, ${VANITY_ID} or ${STEAM_ID_64}...`}
-        value={input}
-        onChange={onInputChange}
-      />
-      <SearchTermContext.Provider value={input}>
-        <SearchResultContainer
-          results={input.length > 0 ? results : allFriends}
-        />
-      </SearchTermContext.Provider>
-    </div>
+    <InputField
+      type="text"
+      placeholder={`Search friends${
+        width > 620
+          ? ` by ${PERSONA_NAME}, ${REAL_NAME}, ${VANITY_ID} or ${STEAM_ID_64}`
+          : ""
+      }...`}
+      value={input}
+      onChange={e => onInputChange(e.target.value)}
+    />
   );
 };
 
