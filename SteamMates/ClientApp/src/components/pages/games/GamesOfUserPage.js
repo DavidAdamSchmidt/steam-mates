@@ -3,6 +3,7 @@ import { Redirect } from "react-router-dom";
 import useRequest from "../../../hooks/useRequest";
 import UserContext from "../../../contexts/UserContext";
 import { TagProvider } from "../../../contexts/TagContext";
+import LoadingIndicator from "../../common/LoadingIndicator";
 import TagContainer from "./TagContainer";
 import GameContainer from "./GameContainer";
 import { checkPageError } from "../../../utils/errorUtils";
@@ -27,16 +28,19 @@ const GamesOfUserPage = () => {
     return hasError;
   }
 
+  if (loading) {
+    return <LoadingIndicator />;
+  }
+
+  if (!data) {
+    return null;
+  }
+
   return (
-    <div>
-      {loading && <span>Loading...</span>}
-      {!loading && data && (
-        <TagProvider>
-          <TagContainer />
-          <GameContainer data={data} />
-        </TagProvider>
-      )}
-    </div>
+    <TagProvider>
+      <TagContainer />
+      <GameContainer data={data} />
+    </TagProvider>
   );
 };
 

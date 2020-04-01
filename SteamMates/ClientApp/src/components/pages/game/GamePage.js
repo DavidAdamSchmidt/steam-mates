@@ -4,6 +4,7 @@ import { Redirect } from "react-router-dom";
 import useRequest from "../../../hooks/useRequest";
 import UserContext from "../../../contexts/UserContext";
 import FriendContext from "../../../contexts/FriendContext";
+import LoadingIndicator from "../../common/LoadingIndicator";
 import GamePageHeader from "./GamePageHeader";
 import ShortDescription from "./ShortDescription";
 import Media from "./Media";
@@ -53,8 +54,12 @@ const GamePage = ({ match }) => {
     return <Redirect to={HOME} />;
   }
 
-  if (loading || !data) {
-    return <div>{loading && <span>Loading...</span>}</div>;
+  if (loading) {
+    return <LoadingIndicator />;
+  }
+
+  if (!data) {
+    return null;
   }
 
   const info = constructUserInfo(user, friends, data.userInfo);

@@ -4,6 +4,7 @@ import useRequest from "../../../hooks/useRequest";
 import UserContext from "../../../contexts/UserContext";
 import FriendContext from "../../../contexts/FriendContext";
 import { TagProvider } from "../../../contexts/TagContext";
+import LoadingIndicator from "../../common/LoadingIndicator";
 import TagContainer from "./TagContainer";
 import GameContainer from "./GameContainer";
 import {
@@ -66,21 +67,25 @@ const GamesInCommonPage = () => {
     return hasError;
   }
 
-  if (!loading && data) {
-    addAverageOfRatings(data.games);
-    data.games.sort(ratingComparer);
-
-    return (
-      <div>
-        <TagProvider>
-          <TagContainer />
-          <GameContainer data={data} />
-        </TagProvider>
-      </div>
-    );
+  if (loading) {
+    return <LoadingIndicator />;
   }
 
-  return <div>{loading && <span>Loading...</span>}</div>;
+  if (!data) {
+    return null;
+  }
+
+  addAverageOfRatings(data.games);
+  data.games.sort(ratingComparer);
+
+  return (
+    <div>
+      <TagProvider>
+        <TagContainer />
+        <GameContainer data={data} />
+      </TagProvider>
+    </div>
+  );
 };
 
 export default GamesInCommonPage;
