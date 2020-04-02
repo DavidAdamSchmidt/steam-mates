@@ -1,65 +1,152 @@
-import React from "react";
-import styled from "styled-components";
+import React, { useState } from "react";
+import styled, { css } from "styled-components";
+import {
+  calculateTitleFontSize,
+  calculateCreatorsFontSize
+} from "../../../utils/gamePageUtils";
 import library_hero_default from "../../../static/images/library_hero_default.png";
 import { IMAGE_ROOT, STORE_PAGE } from "../../../constants/steam";
+import { MEDIUM, BIG } from "../../../constants/style";
 
 const Header = styled.div`
   position: relative;
+  overflow: hidden;
+  height: 242px;
   font-weight: bold;
+
+  @media (${MEDIUM}) {
+    height: initial;
+  }
+
+  @media (${BIG}) {
+    width: 1050px;
+    height: 339px;
+  }
 `;
 
 const Image = styled.img`
-  width: 1050px;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 751px;
+  height: 100%;
+  vertical-align: bottom;
+
+  @media (${MEDIUM}) {
+    position: initial;
+    transform: translateX(0);
+    width: 100%;
+  }
 `;
 
 const Anchor = styled.a`
   text-decoration: none;
 `;
 
+const TextWrapper = styled.div`
+  ${({ fontSize }) =>
+    css`
+      font-size: ${fontSize}px;
+    `}
+`;
+
 const Title = styled.div`
   position: absolute;
   top: 0;
-  margin: 30px;
   padding: 0 10px;
   background: rgba(0, 0, 0, 0.58);
-  font-size: 52px;
-  letter-spacing: 5px;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
   color: white;
+
+  @media (${MEDIUM}) {
+    margin: 2.81vw;
+    font-size: 1.3em;
+  }
+
+  @media (${BIG}) {
+    margin: 30px;
+    font-size: 1.8em;
+  }
+
+  ${({ originalFontSize }) =>
+    originalFontSize < 31 &&
+    css`
+      font-size: 0.6em;
+
+      @media (min-width: 360px) {
+        font-size: 1em;
+      }
+
+      @media (min-width: 449px) {
+        font-size: 1.2em;
+      }
+
+      @media (min-width: 930px) {
+        font-size: 1.5em;
+      }
+    `}
 `;
 
 const Creators = styled.div`
   position: absolute;
   bottom: 0;
-  margin: 40px;
   padding: 5px 10px;
   background: rgba(0, 0, 0, 0.58);
-  line-height: 30px;
-  letter-spacing: 1.5px;
+  font-size: 1.2em;
+  letter-spacing: 0.095em;
   color: white;
+
+  & div:first-of-type {
+    padding: 5px 0 8px 0;
+  }
+
+  & div:last-of-type {
+    padding: 8px 0 5px 0;
+  }
+
+  @media (${MEDIUM}) {
+    margin: 2.81vw;
+    font-size: 1.4em;
+  }
+
+  @media (${BIG}) {
+    margin: 30px;
+    font-size: 1.6em;
+  }
 `;
 
 const Button = styled.div`
   position: absolute;
   bottom: 0;
   right: 0;
+  display: none;
   margin: 40px;
   border-radius: 10px;
   padding: 5px 20px;
   background: linear-gradient(#b9ffbe, #13b413 40%);
-  font-size: 36px;
+  font-size: 30px;
   letter-spacing: 1.5px;
   text-transform: uppercase;
   color: white;
 
   &:hover {
-    margin: 39px;
-    padding: 6px 21px;
     background: linear-gradient(#c4ffc8, #13cd13 40%);
+  }
+
+  @media (${BIG}) {
+    display: initial;
   }
 `;
 
 const GamePageHeader = ({ id, name, developers, publishers, owned }) => {
+  const [developersText] = useState((developers || []).join(", "));
+  const [publishersText] = useState((publishers || []).join(", "));
+  const [titleFontSize] = useState(calculateTitleFontSize(name.length));
+  const [creatorsFontSize] = useState(
+    calculateCreatorsFontSize(developersText.length, publishersText.length)
+  );
+
   return (
     <Header>
       <Image
@@ -72,20 +159,24 @@ const GamePageHeader = ({ id, name, developers, publishers, owned }) => {
         target="_blank"
         rel="noopener noreferrer"
       >
-        <Title>{name}</Title>
+        <TextWrapper fontSize={titleFontSize}>
+          <Title originalFontSize={titleFontSize}>{name}</Title>
+        </TextWrapper>
       </Anchor>
-      <Creators>
-        {developers && (
-          <div>
-            Developer{developers.length > 1 && "s"}: {developers.join(", ")}
-          </div>
-        )}
-        {publishers && (
-          <div>
-            Publisher{publishers.length > 1 && "s"}: {publishers.join(", ")}
-          </div>
-        )}
-      </Creators>
+      <TextWrapper fontSize={creatorsFontSize}>
+        <Creators>
+          {developers && (
+            <div>
+              Developer{developers.length > 1 && "s"}: {developersText}
+            </div>
+          )}
+          {publishers && (
+            <div>
+              Publisher{publishers.length > 1 && "s"}: {publishersText}
+            </div>
+          )}
+        </Creators>
+      </TextWrapper>
       {owned && (
         <Anchor href={`steam://run/${id}`}>
           <Button>▷ Play</Button>
