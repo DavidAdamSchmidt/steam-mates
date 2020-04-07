@@ -1,10 +1,11 @@
 import React, { useState } from "react";
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 import GameCardMenu from "./GameCardMenu";
 import StarRatings from "../../common/StarRatings";
 import AverageOfRatings from "./AverageOfRatings";
 import { getGameCardBackgroundColor } from "../../../utils/gamesInCommonUtils";
-import { LOGO_URL } from "../../../constants/steam";
+import game_card_default from "./../../../static/images/game_card_default.jpg";
+import { IMAGE_ROOT, LOGO_URL } from "../../../constants/steam";
 
 const Wrapper = styled.div`
   position: relative;
@@ -40,6 +41,30 @@ const Icon = styled.img`
   }
 `;
 
+const ImageContainer = styled.div`
+  width: 184px;
+  height: 276px;
+
+  ${({ logoUsed }) =>
+    logoUsed &&
+    css`
+      position: relative;
+      background: linear-gradient(to right bottom, grey, rgba(128, 128, 128, 0)),
+        url(${game_card_default}) center;
+    `}
+`;
+
+const Image = styled.img`
+  width: 100%;
+
+  ${({ logoUsed }) =>
+    logoUsed &&
+    css`
+      position: absolute;
+      top: 55px;
+    `}
+`;
+
 const RatingWrapper = styled.div`
   margin: 14px 0;
   height: 32px;
@@ -62,6 +87,7 @@ const Tag = styled.span`
 
 const GameCard = ({ info }) => {
   const [showMenu, setShowMenu] = useState(false);
+  const [hasBigImage, setHasBigImage] = useState(true);
 
   return (
     <Wrapper avg={info.averageOfRatings}>
@@ -77,10 +103,18 @@ const GameCard = ({ info }) => {
           closeMenu={() => setShowMenu(false)}
         />
       )}
-      <img
-        src={`${LOGO_URL}/${info.game.appId}/${info.game.imgLogoUrl}.jpg`}
-        alt="GameLogo"
-      />
+      <ImageContainer logoUsed={!hasBigImage}>
+        <Image
+          logoUsed={!hasBigImage}
+          src={
+            hasBigImage
+              ? `${IMAGE_ROOT}/${info.game.appId}/library_600x900.jpg`
+              : `${LOGO_URL}/${info.game.appId}/${info.game.imgLogoUrl}.jpg`
+          }
+          alt="GameLogo"
+          onError={() => setHasBigImage(false)}
+        />
+      </ImageContainer>
       {info.rating !== undefined && (
         <RatingWrapper>
           <StarRatings
