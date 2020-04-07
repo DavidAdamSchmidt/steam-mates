@@ -23,6 +23,7 @@ const StarRating = styled.div`
   background-image: url(${props =>
     props.initialValue <= props.currentValue ? full_star : empty_star});
   background-repeat: no-repeat;
+  background-position: center;
   
   &:hover {
   ${({ changeable }) =>

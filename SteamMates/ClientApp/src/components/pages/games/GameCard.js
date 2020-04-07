@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import styled, { css } from "styled-components";
-import GameCardMenu from "./GameCardMenu";
 import StarRatings from "../../common/StarRatings";
 import AverageOfRatings from "./AverageOfRatings";
 import { getGameCardBackgroundColor } from "../../../utils/gamesInCommonUtils";
@@ -8,13 +7,47 @@ import game_card_default from "./../../../static/images/game_card_default.jpg";
 import { IMAGE_ROOT, LOGO_URL } from "../../../constants/steam";
 
 const Wrapper = styled.div`
-  position: relative;
   margin: 14px;
+`;
+
+const side = css`
+  position: absolute;
+  top: 0;
+  left: 0;
+  transition: 1s;
+  backface-visibility: hidden;
   box-shadow: 4px 4px 4px rgba(0, 0, 0, 0.45);
   border-radius: 10px;
-  width: 184px;
+  box-sizing: border-box;
+  width: 100%;
+  height: 100%;
   padding: 24px;
   background: ${props => getGameCardBackgroundColor(props.avg)};
+`;
+
+const Front = styled.div`
+  ${side};
+`;
+
+const Back = styled.div`
+  ${side};
+
+  transform: rotateY(-180deg);
+`;
+
+const Card = styled.div`
+  position: relative;
+  perspective: 2500px;
+  width: 232px;
+  height: 368px;
+
+  &:hover ${Front} {
+    transform: rotateY(180deg);
+  }
+
+  &:hover ${Back} {
+    transform: rotateY(0);
+  }
 `;
 
 const Title = styled.div`
@@ -35,10 +68,6 @@ const Icon = styled.img`
   right: 9px;
   box-shadow: 2px 2px 2px rgba(255, 255, 255, 0.5);
   border-radius: 100%;
-
-  &:hover {
-    cursor: pointer;
-  }
 `;
 
 const ImageContainer = styled.div`
@@ -67,67 +96,48 @@ const Image = styled.img`
 
 const RatingWrapper = styled.div`
   margin: 14px 0;
+  width: 180px;
   height: 32px;
 `;
 
-const Tag = styled.span`
-  display: inline-block;
-  margin-top: 10px;
-  margin-right: 6px;
-  border-radius: 10px;
-  padding: 6px;
-  background: #62a7ff;
-  font-size: 10px;
-  color: white;
-
-  &:last-of-type {
-    margin-right: 0;
-  }
-`;
-
 const GameCard = ({ info }) => {
-  const [showMenu, setShowMenu] = useState(false);
   const [hasBigImage, setHasBigImage] = useState(true);
 
   return (
-    <Wrapper avg={info.averageOfRatings}>
-      <Title>{info.game.name}</Title>
-      <Icon
-        onClick={() => setShowMenu(true)}
-        src={`${LOGO_URL}/${info.game.appId}/${info.game.imgIconUrl}.jpg`}
-        alt="GameIcon"
-      />
-      {showMenu && (
-        <GameCardMenu
-          id={info.game.appId}
-          closeMenu={() => setShowMenu(false)}
-        />
-      )}
-      <ImageContainer logoUsed={!hasBigImage}>
-        <Image
-          logoUsed={!hasBigImage}
-          src={
-            hasBigImage
-              ? `${IMAGE_ROOT}/${info.game.appId}/library_600x900.jpg`
-              : `${LOGO_URL}/${info.game.appId}/${info.game.imgLogoUrl}.jpg`
-          }
-          alt="GameLogo"
-          onError={() => setHasBigImage(false)}
-        />
-      </ImageContainer>
-      {info.rating !== undefined && (
-        <RatingWrapper>
-          <StarRatings
-            amountOfStars={5}
-            gameId={info.game.appId}
-            rating={info.rating}
+    <Wrapper>
+      <Card>
+        <Front avg={info.averageOfRatings}>
+          <Title>{info.game.name}</Title>
+          <Icon
+            src={`${LOGO_URL}/${info.game.appId}/${info.game.imgIconUrl}.jpg`}
+            alt="GameIcon"
           />
-        </RatingWrapper>
-      )}
-      {info.ratings && <AverageOfRatings avg={info.averageOfRatings} />}
-      {info.tags.map((tag, index) => (
-        <Tag key={index}>{tag}</Tag>
-      ))}
+          <ImageContainer logoUsed={!hasBigImage}>
+            <Image
+              logoUsed={!hasBigImage}
+              src={
+                hasBigImage
+                  ? `${IMAGE_ROOT}/${info.game.appId}/library_600x900.jpg`
+                  : `${LOGO_URL}/${info.game.appId}/${info.game.imgLogoUrl}.jpg`
+              }
+              alt="GameLogo"
+              onError={() => setHasBigImage(false)}
+            />
+          </ImageContainer>
+        </Front>
+        <Back avg={info.averageOfRatings}>
+          {info.ratings && <AverageOfRatings avg={info.averageOfRatings} />}
+          {info.rating !== undefined && (
+            <RatingWrapper>
+              <StarRatings
+                amountOfStars={5}
+                gameId={info.game.appId}
+                rating={info.rating}
+              />
+            </RatingWrapper>
+          )}
+        </Back>
+      </Card>
     </Wrapper>
   );
 };
