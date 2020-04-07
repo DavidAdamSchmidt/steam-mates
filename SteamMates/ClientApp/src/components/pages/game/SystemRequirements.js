@@ -9,19 +9,32 @@ const Container = styled.div`
 `;
 
 const SelectionMenu = styled.div`
+  display: flex;
+  flex-direction: column;
+
+  @media (min-width: 450px) {
+    display: block;
+  }
+
   margin: 10px 0 20px 0;
   border-radius: 3px;
   padding: 12px;
   background: linear-gradient(#f3f3f3, #d4d4d4);
 `;
 
-const Option = styled.span`
-  margin: 0 20px;
+const Option = styled.div`
+  display: inline-block;
   padding: 3px;
   cursor: pointer;
   font-size: 16px;
   font-weight: bold;
+  text-align: center;
   color: #5c5c5c;
+
+  @media (min-width: 450px) {
+    margin: 0 20px;
+    text-align: initial;
+  }
 
   ${({ selected }) =>
     selected &&
@@ -41,7 +54,10 @@ const Option = styled.span`
 
 const Requirements = styled.span`
   width: 480px;
-  padding: 0 20px;
+
+  @media (min-width: 450px) {
+    padding: 0 20px;
+  }
 `;
 
 const SystemRequirements = ({

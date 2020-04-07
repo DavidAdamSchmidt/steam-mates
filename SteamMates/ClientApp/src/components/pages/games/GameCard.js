@@ -42,6 +42,7 @@ const Icon = styled.img`
 
 const RatingWrapper = styled.div`
   margin: 14px 0;
+  height: 32px;
 `;
 
 const Tag = styled.span`

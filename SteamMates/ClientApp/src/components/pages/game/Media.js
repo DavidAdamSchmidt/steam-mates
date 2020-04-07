@@ -1,25 +1,51 @@
 import React, { useState } from "react";
-import styled from "styled-components";
-import Thumbnails from "./Thumbnails";
+import styled, { css } from "styled-components";
+import Thumbnail from "./Thumbnail";
+import { MEDIUM, BIG } from "../../../constants/style";
+
+const contentSize = css`
+  width: auto;
+  height: auto;
+  max-width: 100%;
+  max-height: 100%;
+`;
 
 const Container = styled.div`
-  width: 100%;
+  @media (${MEDIUM}) {
+    padding-top: 0;
+  }
+`;
+
+const Selected = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: calc((360 / 640) * (100vw - 2.6vw * 2 - var(--scrollbar-width)));
+  background: black;
+
+  @media (${MEDIUM}) {
+    height: calc((360 / 640) * 56.37vw);
+  }
+
+  @media (${BIG}) {
+    height: 360px;
+  }
 `;
 
 const Video = styled.video`
-  width: 100%;
-  height: 360px;
+  ${contentSize};
+
   outline: 0;
 `;
 
 const Screenshot = styled.img`
-  width: 100%;
-  height: 360px;
+  ${contentSize};
+
   cursor: pointer;
 `;
 
 const SelectorMenu = styled.div`
-  display: flex;
+  width: 100%;
   white-space: nowrap;
   overflow-x: auto;
 `;
@@ -34,33 +60,33 @@ const Media = ({ movies, screenshots }) => {
 
   return (
     <Container>
-      <div>
-        {selectedIsVideo && (
+      {selectedIsVideo && (
+        <Selected>
           <Video key={selected} controls autoPlay muted>
             <source src={selected} type="video/webm" />
           </Video>
-        )}
-        {!selectedIsVideo && (
-          <a href={selected} target="_blank" rel="noopener noreferrer">
+        </Selected>
+      )}
+      {!selectedIsVideo && (
+        <a href={selected} target="_blank" rel="noopener noreferrer">
+          <Selected>
             <Screenshot src={selected} alt="Screenshot" />
-          </a>
-        )}
-      </div>
+          </Selected>
+        </a>
+      )}
       <SelectorMenu>
-        <Thumbnails
-          thumbnails={movies || []}
-          areVideos={true}
-          selected={selected}
-          setSelected={setSelected}
-          setSelectedIsVideo={setSelectedIsVideo}
-        />
-        <Thumbnails
-          thumbnails={screenshots || []}
-          areVideos={false}
-          selected={selected}
-          setSelected={setSelected}
-          setSelectedIsVideo={setSelectedIsVideo}
-        />
+        {[movies || [], screenshots || []].map((array, index) =>
+          array.map(thumbnail => (
+            <Thumbnail
+              key={thumbnail.id}
+              thumbnail={thumbnail}
+              areVideos={!index}
+              selected={selected}
+              setSelected={setSelected}
+              setSelectedIsVideo={setSelectedIsVideo}
+            />
+          ))
+        )}
       </SelectorMenu>
     </Container>
   );

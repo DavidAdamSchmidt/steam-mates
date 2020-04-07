@@ -1,26 +1,15 @@
 import React, { useState, useContext, useEffect } from "react";
-import styled from "styled-components";
 import { Redirect } from "react-router-dom";
 import useRequest from "../../../hooks/useRequest";
 import UserContext from "../../../contexts/UserContext";
 import FriendContext from "../../../contexts/FriendContext";
 import LoadingIndicator from "../../common/LoadingIndicator";
 import GamePageHeader from "./GamePageHeader";
-import ShortDescription from "./ShortDescription";
-import Media from "./Media";
-import ExtraInfo from "./ExtraInfo";
-import UserInfo from "./UserInfo";
-import DetailedDescription from "./DetailedDescription";
-import SystemRequirements from "./SystemRequirements";
-import FlexWrapper from "../../common/FlexWrapper";
+import GamePageBody from "./GamePageBody";
 import { constructGamePageUrl } from "../../../utils/urlUtils";
 import { checkPageError } from "../../../utils/errorUtils";
 import { constructUserInfo } from "../../../utils/userInfoUtils";
 import { HOME } from "../../../constants/routes";
-
-const Wrapper = styled.span`
-  width: 640px;
-`;
 
 const GamePage = ({ match }) => {
   const [id, setId] = useState(null);
@@ -73,25 +62,7 @@ const GamePage = ({ match }) => {
         publishers={data.publishers}
         owned={info[0].rating || info[0].hasGame}
       />
-      <ShortDescription description={data.shortDescription} />
-      <FlexWrapper>
-        <Wrapper>
-          <Media movies={data.movies} screenshots={data.screenshots} />
-          <ExtraInfo
-            releaseDate={data.releaseDate}
-            supportedLanguages={data.supportedLanguages}
-            controllerSupport={data.controllerSupport}
-            website={data.website}
-          />
-        </Wrapper>
-        <UserInfo id={id} info={info} />
-      </FlexWrapper>
-      <DetailedDescription description={data.detailedDescription} />
-      <SystemRequirements
-        pcRequirements={data.pcRequirements}
-        macRequirements={data.macRequirements}
-        linuxRequirements={data.linuxRequirements}
-      />
+      <GamePageBody id={id} data={data} info={info} />
     </div>
   );
 };

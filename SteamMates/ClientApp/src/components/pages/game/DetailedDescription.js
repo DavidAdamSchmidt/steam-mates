@@ -15,6 +15,14 @@ const Description = styled.div`
   css`
     max-height: 400px;
   `};
+
+  & h1 {
+    line-height: 1em;
+  }
+  
+  & img {
+    max-width: 100%;
+  }
 `;
 
 const FadeContainer = styled.div`

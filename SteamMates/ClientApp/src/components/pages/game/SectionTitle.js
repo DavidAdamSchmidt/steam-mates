@@ -7,6 +7,7 @@ const SectionTitle = styled.div`
   font-size: 18px;
   font-weight: bold;
   text-transform: uppercase;
+  word-break: break-all;
 `;
 
 export default SectionTitle;

@@ -11,17 +11,19 @@ import { DATABASE_ERROR } from "../../constants/request";
 const Wrapper = styled.div`
   display: flex;
   justify-content: space-evenly;
-  height: 32px;
+  width: 100%;
+  height: 100%;
 `;
 
 const StarRating = styled.div`
   display: inline-block;
-  width: 32px;
-  height: 32px;
+  width: 100%;
+  height: 100%;
   background-size: contain;
   background-image: url(${props =>
     props.initialValue <= props.currentValue ? full_star : empty_star});
-
+  background-repeat: no-repeat;
+  
   &:hover {
   ${({ changeable }) =>
     changeable &&
@@ -30,7 +32,7 @@ const StarRating = styled.div`
     `}
 `;
 
-const StarRatings = ({ amountOfStars, gameId, rating, frozen }) => {
+const StarRatings = ({ amountOfStars, gameId, rating, frozen, size }) => {
   const [requestBody, setRequestBody] = useState({});
   const [sendRequest, setSendRequest] = useState(false);
   const [databaseError, setDatabaseError] = useState(false);
@@ -74,7 +76,7 @@ const StarRatings = ({ amountOfStars, gameId, rating, frozen }) => {
   }
 
   return (
-    <Wrapper>
+    <Wrapper size={size}>
       {databaseError && <Error message="Database Error" />}
       {values.map(value =>
         frozen ? (
