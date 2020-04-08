@@ -33,7 +33,14 @@ const StarRating = styled.div`
     `}
 `;
 
-const StarRatings = ({ amountOfStars, gameId, rating, frozen, size }) => {
+const StarRatings = ({
+  amountOfStars,
+  gameId,
+  rating,
+  frozen,
+  size,
+  setRating
+}) => {
   const [requestBody, setRequestBody] = useState({});
   const [sendRequest, setSendRequest] = useState(false);
   const [databaseError, setDatabaseError] = useState(false);
@@ -55,6 +62,12 @@ const StarRatings = ({ amountOfStars, gameId, rating, frozen, size }) => {
       status === 500 && (error || {}).message === DATABASE_ERROR
     );
   }, [status, error]);
+
+  useEffect(() => {
+    if (setRating && sendRequest && (status === 201 || status === 204)) {
+      setRating(selectedValue);
+    }
+  }, [status, setRating, sendRequest, selectedValue]);
 
   const rateGame = () => {
     if (selectedValue === currentValue) {

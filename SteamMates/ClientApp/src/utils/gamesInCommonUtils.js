@@ -32,20 +32,22 @@ export const getGameGroups = games => {
   return gameGroups;
 };
 
-export const getGameCardBackgroundColor = avg => {
+export const getGameCardBackgroundColor = rating => {
   switch (true) {
-    case avg === undefined:
-      return css`rgba(0, 0, 39, 0.69)`;
-    case avg >= 4.5:
-      return css`rgba(31, 93, 43, 0.9)`;
-    case avg >= 3.5:
-      return css`rgba(27, 78, 128, 0.9)`;
-    case avg >= 2.5:
-      return css`rgba(200, 149, 69, 0.9)`;
-    case avg >= 0.0:
-      return css`rgba(186, 65, 41, 0.9)`;
+    case rating >= 4.5:
+      return css`linear-gradient(to right bottom, rgba(7,76,0,0.9), rgba(98,181,91,0.9)
+)`;
+    case rating >= 3.5:
+      return css`linear-gradient(to right bottom, rgba(43,43,133,0.9), rgba(0,159,253,0.9)
+)`;
+    case rating >= 2.5:
+      return css`linear-gradient(to right bottom, rgba(255,119,48,0.9), rgba(255,185,0,0.9))`;
+    case rating >= 1.5:
+      return css`linear-gradient(to right bottom, rgba(164,6,6,0.9), rgba(252,152,66,0.9))`;
+    case rating >= 0.0:
+      return css`linear-gradient(to right bottom, rgba(11,11,11,0.9), rgba(105,105,105,0.9))`;
     default:
-      return css`rgba(61, 61, 61, 0.9)`;
+      return css`rgba(0,0,39,0.69)`;
   }
 };
 
