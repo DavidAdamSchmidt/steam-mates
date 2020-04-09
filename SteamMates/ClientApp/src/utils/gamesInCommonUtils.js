@@ -16,20 +16,18 @@ export const ratingComparer = (a, b) => {
   return a.game.name.localeCompare(b.game.name);
 };
 
-export const getGameGroups = games => {
-  const gameGroups = [];
+export const organizeByRatingCount = games => {
+  let data = [];
 
   for (let i = 4; i >= 0; i--) {
     let result = games.filter(x => x.ratings.length === i);
     if (result.length > 0) {
-      gameGroups.push({
-        title: i ? `Rated by ${i} user${i > 1 ? "s" : ""}` : "Unrated",
-        games: result
-      });
+      result[0].title = i ? `Rated by ${i} user${i > 1 ? "s" : ""}` : "Unrated";
     }
+    data = data.concat(result);
   }
 
-  return gameGroups;
+  return data;
 };
 
 export const getGameCardBackgroundColor = rating => {

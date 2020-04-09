@@ -1,10 +1,12 @@
-import React from "react";
+import React, { Fragment, useCallback, useState } from "react";
 import styled from "styled-components";
-import GameCard from "./GameCard";
+import useInfiniteScroll from "../../../hooks/useInfiniteScroll";
 import AmountOfRatings from "./AmountOfRatings";
+import GameCard from "./GameCard";
+import SpinnerIcon from "../../common/SpinnerIcon";
 
 const Wrapper = styled.div`
-  margin: 50px 0 50px;
+  margin-top: 50px;
 `;
 
 const GameCardContainer = styled.div`
@@ -14,14 +16,46 @@ const GameCardContainer = styled.div`
   justify-content: center;
 `;
 
-const GameContainerBody = ({ data, title }) => {
+const SpinnerWrapper = styled.div`
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  height: 80px;
+`;
+
+const GameContainerBody = ({ data }) => {
+  const increaseAmount = () => {
+    setIsLoading(false);
+    setAmount(prevState => prevState + 32);
+  };
+
+  const [amount, setAmount] = useState(32);
+  const [currentTitleIndex, setCurrentTitleIndex] = useState(0);
+  const [isLoading, setIsLoading] = useInfiniteScroll(
+    amount < data.length,
+    useCallback(increaseAmount, [])
+  );
+
+  const adjustAmount = titleIndex => {
+    if (titleIndex > currentTitleIndex) {
+      setCurrentTitleIndex(titleIndex);
+      setAmount(prevState => prevState + (titleIndex % 4));
+    }
+  };
+
   return (
     <Wrapper>
-      {title && <AmountOfRatings text={title} />}
       <GameCardContainer>
-        {data.map(info => (
-          <GameCard key={info.game.appId} info={info} />
+        {data.slice(0, amount).map((info, index) => (
+          <Fragment key={info.game.appId}>
+            {info.title && <AmountOfRatings text={info.title} />}
+            {info.title && adjustAmount(index)}
+            <GameCard info={info} />
+          </Fragment>
         ))}
+        {amount < data.length && (
+          <SpinnerWrapper>{isLoading && <SpinnerIcon />}</SpinnerWrapper>
+        )}
       </GameCardContainer>
     </Wrapper>
   );

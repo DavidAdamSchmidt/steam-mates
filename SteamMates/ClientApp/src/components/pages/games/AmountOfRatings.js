@@ -3,6 +3,7 @@ import styled from "styled-components";
 
 const Wrapper = styled.div`
   margin: 0 26px;
+  width: 100%;
 `;
 
 const Title = styled.div`
