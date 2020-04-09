@@ -3,7 +3,6 @@ import { Link } from "react-router-dom";
 import styled, { css } from "styled-components";
 import UserContext from "../../../contexts/UserContext";
 import FriendContext from "../../../contexts/FriendContext";
-import TagContext from "../../../contexts/TagContext";
 import StarRatings from "../../common/StarRatings";
 import { getGameCardBackgroundColor } from "../../../utils/gamesInCommonUtils";
 import game_card_default from "./../../../static/images/game_card_default.jpg";
@@ -218,7 +217,6 @@ const GameCard = ({ info }) => {
   const [hasBigImage, setHasBigImage] = useState(true);
   const { user } = useContext(UserContext);
   const { friends } = useContext(FriendContext);
-  const { initialTagsState } = useContext(TagContext);
 
   return (
     <Wrapper>
@@ -269,7 +267,12 @@ const GameCard = ({ info }) => {
             )}
             <Button to={`${GAMES}/${info.game.appId}`}>Page</Button>
             <Tags>
-              {initialTagsState.map(tag => (
+              {[
+                "Multiplayer",
+                "Local Multiplayer",
+                "Online Co-Op",
+                "Local Co-Op"
+              ].map(tag => (
                 <Tag key={tag}>
                   {tag}{" "}
                   {info.tags.includes(tag) ? (

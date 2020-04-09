@@ -2,9 +2,7 @@ import React, { useContext } from "react";
 import { Redirect } from "react-router-dom";
 import useRequest from "../../../hooks/useRequest";
 import UserContext from "../../../contexts/UserContext";
-import { TagProvider } from "../../../contexts/TagContext";
 import LoadingIndicator from "../../common/LoadingIndicator";
-import TagContainer from "./TagContainer";
 import GameContainer from "./GameContainer";
 import { checkPageError } from "../../../utils/errorUtils";
 import { API_URL } from "../../../constants/api";
@@ -36,12 +34,7 @@ const GamesOfUserPage = () => {
     return null;
   }
 
-  return (
-    <TagProvider>
-      <TagContainer />
-      <GameContainer data={data} />
-    </TagProvider>
-  );
+  return <GameContainer data={data.games} />;
 };
 
 export default GamesOfUserPage;

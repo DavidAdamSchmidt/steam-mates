@@ -3,9 +3,7 @@ import { Redirect } from "react-router-dom";
 import useRequest from "../../../hooks/useRequest";
 import UserContext from "../../../contexts/UserContext";
 import FriendContext from "../../../contexts/FriendContext";
-import { TagProvider } from "../../../contexts/TagContext";
 import LoadingIndicator from "../../common/LoadingIndicator";
-import TagContainer from "./TagContainer";
 import GameContainer from "./GameContainer";
 import {
   showError,
@@ -14,7 +12,8 @@ import {
 } from "../../../utils/errorUtils";
 import {
   addAverageOfRatings,
-  ratingComparer
+  ratingComparer,
+  organizeByRatingCount
 } from "../../../utils/gamesInCommonUtils";
 import { API_URL } from "../../../constants/api";
 import { HOME } from "../../../constants/routes";
@@ -78,14 +77,7 @@ const GamesInCommonPage = () => {
   addAverageOfRatings(data.games);
   data.games.sort(ratingComparer);
 
-  return (
-    <div>
-      <TagProvider>
-        <TagContainer />
-        <GameContainer data={data} />
-      </TagProvider>
-    </div>
-  );
+  return <GameContainer data={organizeByRatingCount(data.games)} />;
 };
 
 export default GamesInCommonPage;
