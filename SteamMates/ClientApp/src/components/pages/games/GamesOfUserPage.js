@@ -59,7 +59,7 @@ const GamesOfUserPage = () => {
   return (
     <Wrapper>
       <Header
-        title="Some games are more equal than others"
+        title="Rating time!"
         image={tf2_luxury_lounge}
       >
         <p>
