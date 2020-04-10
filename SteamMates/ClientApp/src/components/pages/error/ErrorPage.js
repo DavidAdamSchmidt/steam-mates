@@ -4,7 +4,13 @@ import { useHistory, Redirect } from "react-router-dom";
 import FriendContext from "../../../contexts/FriendContext";
 import { HOME } from "../../../constants/routes";
 
-const Message = styled.span`
+const Wrapper = styled.div`
+  margin-top: 100px;
+`;
+
+const Message = styled.div`
+  display: inline-block;
+  margin: 0 20px;
   border-radius: 10px;
   padding: 10px;
   background: rgba(255, 0, 0, 0.71);
@@ -29,9 +35,9 @@ const ErrorPage = props => {
 
   if (message) {
     return (
-      <div>
+      <Wrapper>
         <Message>Error: {message}</Message>
-      </div>
+      </Wrapper>
     );
   }
 
