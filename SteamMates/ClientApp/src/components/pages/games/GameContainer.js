@@ -3,7 +3,7 @@ import styled from "styled-components";
 import useInfiniteScroll from "../../../hooks/useInfiniteScroll";
 import AmountOfRatings from "./AmountOfRatings";
 import GameCard from "./GameCard";
-import SpinnerIcon from "../../common/SpinnerIcon";
+import LoadingIndicator from "../../common/LoadingIndicator";
 
 const Wrapper = styled.div`
   display: flex;
@@ -13,8 +13,6 @@ const Wrapper = styled.div`
 `;
 
 const SpinnerWrapper = styled.div`
-  display: flex;
-  justify-content: center;
   width: 100%;
   height: 80px;
 `;
@@ -49,7 +47,7 @@ const GameContainer = ({ data }) => {
         </Fragment>
       ))}
       {amount < data.length && (
-        <SpinnerWrapper>{isLoading && <SpinnerIcon />}</SpinnerWrapper>
+        <SpinnerWrapper>{isLoading && <LoadingIndicator />}</SpinnerWrapper>
       )}
     </Wrapper>
   );

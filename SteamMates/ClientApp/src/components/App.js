@@ -18,7 +18,7 @@ const App = () => {
   }, [width]);
 
   if (loading) {
-    return <LoadingIndicator />;
+    return <LoadingIndicator marginTop={"100px"} />;
   }
 
   return (

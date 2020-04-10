@@ -44,7 +44,7 @@ const GamePage = ({ match }) => {
   }
 
   if (loading) {
-    return <LoadingIndicator />;
+    return <LoadingIndicator marginTop={"100px"} />;
   }
 
   if (!data) {

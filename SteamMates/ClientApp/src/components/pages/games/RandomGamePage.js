@@ -2,7 +2,6 @@ import React, { useContext } from "react";
 import { Redirect } from "react-router-dom";
 import useRequest from "../../../hooks/useRequest";
 import UserContext from "../../../contexts/UserContext";
-import LoadingIndicator from "../../common/LoadingIndicator";
 import { checkPageError } from "../../../utils/errorUtils";
 import { API_URL } from "../../../constants/api";
 import { HOME, GAMES } from "../../../constants/routes";
@@ -10,7 +9,7 @@ import { HOME, GAMES } from "../../../constants/routes";
 const RandomGamePage = () => {
   const { user } = useContext(UserContext);
 
-  const [loading, status, data, error] = useRequest(
+  const [, status, data, error] = useRequest(
     `${API_URL}/games`,
     user,
     "GET"
@@ -23,10 +22,6 @@ const RandomGamePage = () => {
   const hasError = checkPageError(status, error);
   if (hasError) {
     return hasError;
-  }
-
-  if (loading) {
-    return <LoadingIndicator delay={150} />;
   }
 
   if (!data) {
