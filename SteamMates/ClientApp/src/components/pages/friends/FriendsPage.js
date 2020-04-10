@@ -1,9 +1,10 @@
 import React, { useContext, useState } from "react";
 import styled from "styled-components";
 import { Redirect } from "react-router-dom";
+import useWindowSize from "../../../hooks/useWindowSize";
 import UserContext from "../../../contexts/UserContext";
 import Header from "../../common/Header";
-import SearchBox from "./SearchBox";
+import SearchBox from "../../common/SearchBox";
 import FriendRow from "./FriendRow";
 import {
   getAllFriends,
@@ -13,6 +14,12 @@ import { getElapsedTimeText } from "../../../utils/updateInfoUtils";
 import tf2_party from "./../../../static/images/tf2_kazotsky_kick.png";
 import { MEDIUM } from "../../../constants/style";
 import { HOME } from "../../../constants/routes";
+import {
+  PERSONA_NAME,
+  REAL_NAME,
+  VANITY_ID,
+  STEAM_ID_64
+} from "../../../constants/user";
 
 const Wrapper = styled.div`
   @media (${MEDIUM}) {
@@ -39,6 +46,7 @@ const FriendsPage = () => {
   const [input, setInput] = useState("");
   const { user } = useContext(UserContext);
   const [allFriends] = useState(getAllFriends(user.friends));
+  const [width] = useWindowSize();
 
   if (!user) {
     return <Redirect to={HOME} />;
@@ -63,7 +71,14 @@ const FriendsPage = () => {
         </LatestUpdate>
       </Header>
       <Main>
-        <SearchBox input={input} onInputChange={onInputChange} />
+        <SearchBox
+          onInputChange={onInputChange}
+          placeholder={`Search friends${
+            width > 620
+              ? ` by ${PERSONA_NAME}, ${REAL_NAME}, ${VANITY_ID} or ${STEAM_ID_64}`
+              : ""
+          }...`}
+        />
         <FriendsTable>
           {(input.length > 0 ? results : allFriends).map(result => (
             <FriendRow

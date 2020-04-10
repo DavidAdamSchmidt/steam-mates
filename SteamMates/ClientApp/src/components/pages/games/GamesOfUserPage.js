@@ -52,16 +52,13 @@ const GamesOfUserPage = () => {
     return null;
   }
 
-  if (data.games) {
-    data.games[0].title = `Results`;
+  if ((data.games || []).length > 0) {
+    data.games[0].title = `Results (${data.games.length})`;
   }
 
   return (
     <Wrapper>
-      <Header
-        title="Rating time!"
-        image={tf2_luxury_lounge}
-      >
+      <Header title="Rating time!" image={tf2_luxury_lounge}>
         <p>
           Welcome to your personal game page! This section contains all your
           games matching <em>at least</em> one of the following Steam tags:{" "}

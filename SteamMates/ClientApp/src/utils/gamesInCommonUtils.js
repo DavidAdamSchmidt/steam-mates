@@ -20,11 +20,15 @@ export const organizeByRatingCount = games => {
   let data = [];
 
   for (let i = 4; i >= 0; i--) {
-    let result = games.filter(x => x.ratings.length === i);
-    if (result.length > 0) {
-      result[0].title = i ? `Rated by ${i} user${i > 1 ? "s" : ""}` : "Unrated";
+    let results = games.filter(x => x.ratings.length === i);
+
+    if (results.length > 0) {
+      results[0].title = `${
+        i ? `Rated by ${i} user${i > 1 ? "s" : ""}` : "Unrated"
+      } (${results.length})`;
     }
-    data = data.concat(result);
+
+    data = data.concat(results);
   }
 
   return data;

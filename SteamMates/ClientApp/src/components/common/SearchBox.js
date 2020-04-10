@@ -1,13 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import useWindowSize from "../../../hooks/useWindowSize";
-import {
-  PERSONA_NAME,
-  REAL_NAME,
-  STEAM_ID_64,
-  VANITY_ID
-} from "../../../constants/user";
-import { FRIENDS } from "../../../constants/style";
+import { FRIENDS } from "../../constants/style";
 
 const InputField = styled.input`
   margin-top: 40px;
@@ -42,18 +35,11 @@ const InputField = styled.input`
   }
 `;
 
-const SearchBox = ({ input, onInputChange }) => {
-  const [width] = useWindowSize();
-
+const SearchBox = ({ onInputChange, placeholder }) => {
   return (
     <InputField
       type="text"
-      placeholder={`Search friends${
-        width > 620
-          ? ` by ${PERSONA_NAME}, ${REAL_NAME}, ${VANITY_ID} or ${STEAM_ID_64}`
-          : ""
-      }...`}
-      value={input}
+      placeholder={placeholder}
       onChange={e => onInputChange(e.target.value)}
     />
   );
