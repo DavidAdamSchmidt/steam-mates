@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import styled, { css } from "styled-components";
 import SectionTitle from "./SectionTitle";
-import FlexWrapper from "../../common/FlexWrapper";
 
 const Container = styled.div`
   min-height: 300px;
@@ -20,6 +19,12 @@ const SelectionMenu = styled.div`
   border-radius: 3px;
   padding: 12px;
   background: linear-gradient(#f3f3f3, #d4d4d4);
+`;
+
+const Wrapper = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
 `;
 
 const Option = styled.div`
@@ -107,7 +112,7 @@ const SystemRequirements = ({
           ))}
         </SelectionMenu>
       )}
-      <FlexWrapper>
+      <Wrapper>
         {selected.minimum && (
           <Requirements
             dangerouslySetInnerHTML={{ __html: selected.minimum }}
@@ -118,7 +123,7 @@ const SystemRequirements = ({
             dangerouslySetInnerHTML={{ __html: selected.recommended }}
           />
         )}
-      </FlexWrapper>
+      </Wrapper>
     </Container>
   );
 };
