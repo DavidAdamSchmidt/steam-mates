@@ -1,9 +1,11 @@
 import React, { useState, useContext, useEffect } from "react";
+import styled from "styled-components";
 import { Redirect } from "react-router-dom";
 import useRequest from "../../../hooks/useRequest";
 import UserContext from "../../../contexts/UserContext";
 import FriendContext from "../../../contexts/FriendContext";
 import LoadingIndicator from "../../common/LoadingIndicator";
+import Header from "../../common/Header";
 import GameContainer from "./GameContainer";
 import {
   showError,
@@ -15,8 +17,25 @@ import {
   ratingComparer,
   organizeByRatingCount
 } from "../../../utils/gamesInCommonUtils";
+import { getElapsedTimeText } from "../../../utils/updateInfoUtils";
+import tf2_high_five from "./../../../static/images/tf2_high_five.png";
+import tf2_spy_shocked from "./../../../static/images/tf2_spy_shocked.png";
 import { API_URL } from "../../../constants/api";
 import { HOME } from "../../../constants/routes";
+import { MEDIUM } from "../../../constants/style";
+
+const Wrapper = styled.div`
+  @media (${MEDIUM}) {
+    margin-top: 100px;
+  }
+`;
+
+const LatestUpdate = styled.p`
+  margin: 5px 0;
+  font-size: 14px;
+  font-style: italic;
+  color: #a4a4a4;
+`;
 
 const GamesInCommonPage = () => {
   const [sendRequest, setSendRequest] = useState(false);
@@ -74,10 +93,63 @@ const GamesInCommonPage = () => {
     return null;
   }
 
+  const displayLatestUpdates = () => {
+    return (
+      <>
+        <LatestUpdate>
+          Your library was updated{" "}
+          {getElapsedTimeText(data.latestUpdates[user.steamId])}
+        </LatestUpdate>
+        {friends.map(friend => (
+          <LatestUpdate key={friend.steamId}>
+            {friend.personaName}'s library was updated{" "}
+            {getElapsedTimeText(data.latestUpdates[friend.steamId])}
+          </LatestUpdate>
+        ))}
+        <LatestUpdate>
+          Tags were updated {getElapsedTimeText(data.latestUpdates["tags"])}
+        </LatestUpdate>
+      </>
+    );
+  };
+
+  if (data.games.length === 0) {
+    return (
+      <Wrapper>
+        <Header title=":(" image={tf2_spy_shocked}>
+          <p>
+            No match were found with{" "}
+            {friends.length === 1 ? "this friend" : "these friends"}. Try
+            another combination.
+          </p>
+          {displayLatestUpdates()}
+        </Header>
+      </Wrapper>
+    );
+  }
+
   addAverageOfRatings(data.games);
   data.games.sort(ratingComparer);
 
-  return <GameContainer data={organizeByRatingCount(data.games)} />;
+  return (
+    <Wrapper>
+      <Header title="It's a match!" image={tf2_high_five}>
+        <p>
+          Welcome to the <em>games in common</em> page! This section contains
+          all the games you and your selected friends can play together based on
+          the following Steam tags: <strong>Multiplayer</strong>,{" "}
+          <strong>Local Multiplayer</strong>, <strong>Online Co-Op</strong> and{" "}
+          <strong>Local Co-Op</strong>.
+        </p>
+        <p>
+          Games are grouped together by amount of ratings to get the most
+          relevant results on top.
+        </p>
+        {displayLatestUpdates()}
+      </Header>
+      <GameContainer data={organizeByRatingCount(data.games)} />
+    </Wrapper>
+  );
 };
 
 export default GamesInCommonPage;

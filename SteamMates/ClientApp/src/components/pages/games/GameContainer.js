@@ -6,14 +6,10 @@ import GameCard from "./GameCard";
 import SpinnerIcon from "../../common/SpinnerIcon";
 
 const Wrapper = styled.div`
-  margin: 100px 0 25px 0;
-`;
-
-const GameCardContainer = styled.div`
   display: flex;
   flex-wrap: wrap;
-  align-items: stretch;
   justify-content: center;
+  margin-bottom: 25px;
 `;
 
 const SpinnerWrapper = styled.div`
@@ -45,18 +41,16 @@ const GameContainer = ({ data }) => {
 
   return (
     <Wrapper>
-      <GameCardContainer>
-        {data.slice(0, amount).map((info, index) => (
-          <Fragment key={info.game.appId}>
-            {info.title && <AmountOfRatings text={info.title} />}
-            {info.title && adjustAmount(index)}
-            <GameCard info={info} />
-          </Fragment>
-        ))}
-        {amount < data.length && (
-          <SpinnerWrapper>{isLoading && <SpinnerIcon />}</SpinnerWrapper>
-        )}
-      </GameCardContainer>
+      {data.slice(0, amount).map((info, index) => (
+        <Fragment key={info.game.appId}>
+          {info.title && <AmountOfRatings text={info.title} />}
+          {info.title && adjustAmount(index)}
+          <GameCard info={info} />
+        </Fragment>
+      ))}
+      {amount < data.length && (
+        <SpinnerWrapper>{isLoading && <SpinnerIcon />}</SpinnerWrapper>
+      )}
     </Wrapper>
   );
 };
