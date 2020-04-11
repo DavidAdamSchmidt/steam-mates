@@ -14,7 +14,7 @@ import AdvancedOptions from "./AdvancedOptions";
 import AmountOfRatings from "./AmountOfRatings";
 import GameCard from "./GameCard";
 import LoadingIndicator from "../../common/LoadingIndicator";
-import { getMatchingGames } from "../../../utils/gameSearchUtils";
+import { filterGames } from "../../../utils/gameSearchUtils";
 import { copyData } from "../../../utils/sharedUtils";
 import { FRIENDS } from "../../../constants/style";
 
@@ -24,7 +24,6 @@ const Wrapper = styled.div`
   flex-wrap: wrap;
   justify-content: center;
   margin-bottom: 25px;
-  height: 75px;
 `;
 
 const SpinnerWrapper = styled.div`
@@ -66,13 +65,19 @@ const CogIcon = styled.div`
 
 const pageSize = 32;
 
-const GameContainer = ({ data }) => {
+const GameContainer = ({ data, dataOrganizer }) => {
   const increaseAmount = () => {
     setIsLoading(false);
     setAmount(prevState => prevState + pageSize);
   };
 
   const [games, setGames] = useState(data);
+  const [tags, setTags] = useState([
+    { name: "Multiplayer", checked: true },
+    { name: "Local Multiplayer", checked: true },
+    { name: "Online Co-Op", checked: true },
+    { name: "Local Co-Op", checked: true }
+  ]);
   const [amount, setAmount] = useState(pageSize);
   const [currentTitleIndex, setCurrentTitleIndex] = useState(0);
   const [showAdvancedOptions, setShowAdvancedOptions] = useState(false);
@@ -87,23 +92,14 @@ const GameContainer = ({ data }) => {
     setAmount(pageSize);
   }, [games]);
 
-  const filterGames = input => {
-    const matchingGames = getMatchingGames(copyData(data), input.toLowerCase());
-
-    if (matchingGames.length > 0) {
-      matchingGames[0].title = `Results (${matchingGames.length})`;
-    }
-
-    return matchingGames;
-  };
+  useEffect(() => {
+    setGames(
+      filterGames(copyData(data), tags, inputRef.current, dataOrganizer)
+    );
+  }, [tags, data, dataOrganizer]);
 
   const onInputChange = newInput => {
-    if (newInput.length > 2) {
-      setGames(filterGames(newInput));
-    } else if (inputRef.current.length > 2) {
-      setGames(copyData(data));
-    }
-
+    setGames(filterGames(copyData(data), tags, newInput, dataOrganizer));
     inputRef.current = newInput;
   };
 
@@ -126,7 +122,11 @@ const GameContainer = ({ data }) => {
         >
           <FontAwesomeIcon size="lg" style={{ color: "white" }} icon={faCog} />
         </CogIcon>
-        <AdvancedOptions show={showAdvancedOptions} />
+        <AdvancedOptions
+          show={showAdvancedOptions}
+          tags={tags}
+          setTags={setTags}
+        />
       </SearchBoxWrapper>
       {games.slice(0, amount).map((info, index) => (
         <Fragment key={info.game.appId}>

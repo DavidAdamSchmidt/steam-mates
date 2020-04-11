@@ -16,24 +16,6 @@ export const ratingComparer = (a, b) => {
   return a.game.name.localeCompare(b.game.name);
 };
 
-export const organizeByRatingCount = games => {
-  let data = [];
-
-  for (let i = 4; i >= 0; i--) {
-    let results = games.filter(x => x.ratings.length === i);
-
-    if (results.length > 0) {
-      results[0].title = `${
-        i ? `Rated by ${i} user${i > 1 ? "s" : ""}` : "Unrated"
-      } (${results.length})`;
-    }
-
-    data = data.concat(results);
-  }
-
-  return data;
-};
-
 export const getGameCardBackgroundColor = rating => {
   switch (true) {
     case rating >= 4.5:

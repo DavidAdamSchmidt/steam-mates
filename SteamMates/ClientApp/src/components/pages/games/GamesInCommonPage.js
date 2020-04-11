@@ -14,10 +14,10 @@ import {
 } from "../../../utils/errorUtils";
 import {
   addAverageOfRatings,
-  ratingComparer,
-  organizeByRatingCount
+  ratingComparer
 } from "../../../utils/gamesInCommonUtils";
 import { getElapsedTimeText } from "../../../utils/updateInfoUtils";
+import { organizeByRatingCount } from "../../../utils/gameSearchUtils";
 import tf2_high_five from "./../../../static/images/tf2_high_five.png";
 import tf2_spy_shocked from "./../../../static/images/tf2_spy_shocked.png";
 import { API_URL } from "../../../constants/api";
@@ -147,7 +147,7 @@ const GamesInCommonPage = () => {
         </p>
         {displayLatestUpdates()}
       </Header>
-      <GameContainer data={organizeByRatingCount(data.games)} />
+      <GameContainer data={data.games} dataOrganizer={organizeByRatingCount} />
     </Wrapper>
   );
 };
