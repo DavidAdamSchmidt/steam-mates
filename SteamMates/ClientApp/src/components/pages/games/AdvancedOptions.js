@@ -8,6 +8,8 @@ const Wrapper = styled.div`
 `;
 
 const Panel = styled.div`
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
   border-radius: 4px;
   padding: 0 40px;
   box-sizing: border-box;
@@ -29,10 +31,34 @@ const ListItem = styled.li`
   margin: 5px 0;
 `;
 
-const AdvancedOptions = ({ show, tags, setTags }) => {
-  const handleChange = tag => {
+const DropdownText = styled.span`
+  display: inline-block;
+  padding-left: 20px;
+  width: 50px;
+`;
+
+const Dropdown = styled.select`
+  &:disabled {
+    background: #dadada;
+  }
+`;
+
+const AdvancedOptions = ({ show, tags, setTags, ratings, setRatings }) => {
+  const handleTagChange = tag => {
     tag.checked = !tag.checked;
     setTags([...tags]);
+  };
+
+  const handleRatingChange = rating => {
+    rating.checked = !rating.checked;
+    setRatings([...ratings]);
+  };
+
+  const handleRatingValueChange = (rating, e) => {
+    rating.selected = parseInt(e.target.value);
+    ratings[1].max = ratings[2].selected;
+    ratings[2].min = ratings[1].selected;
+    setRatings([...ratings]);
   };
 
   return (
@@ -46,9 +72,46 @@ const AdvancedOptions = ({ show, tags, setTags }) => {
                 <input
                   type="checkbox"
                   checked={tag.checked}
-                  onChange={() => handleChange(tag)}
+                  onChange={() => handleTagChange(tag)}
                 />
-                {tag.name}
+                <span>{tag.name}</span>
+              </ListItem>
+            ))}
+          </List>
+        </Block>
+        <Block>
+          <h3>Filter by ratings</h3>
+          <List>
+            {ratings.map(rating => (
+              <ListItem key={rating.name}>
+                {rating.type === "checkbox" && (
+                  <>
+                    <input
+                      type="checkbox"
+                      checked={rating.checked}
+                      onChange={() => handleRatingChange(rating)}
+                    />
+                    <span>{rating.name}</span>
+                  </>
+                )}
+                {rating.type === "dropdown" && (
+                  <>
+                    <DropdownText>{rating.name}</DropdownText>
+                    <Dropdown
+                      defaultValue={rating.selected}
+                      disabled={!ratings[0].checked}
+                      onChange={e => handleRatingValueChange(rating, e)}
+                    >
+                      {Array.from(Array(rating.max).keys())
+                        .slice(rating.min - 1, rating.max)
+                        .map(value => (
+                          <option key={value} value={value + 1}>
+                            {value + 1}
+                          </option>
+                        ))}
+                    </Dropdown>
+                  </>
+                )}
               </ListItem>
             ))}
           </List>

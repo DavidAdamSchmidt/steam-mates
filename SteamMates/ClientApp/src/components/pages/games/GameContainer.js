@@ -78,6 +78,12 @@ const GameContainer = ({ data, dataOrganizer }) => {
     { name: "Online Co-Op", checked: true },
     { name: "Local Co-Op", checked: true }
   ]);
+  const [ratings, setRatings] = useState([
+    { name: "Rated", type: "checkbox", checked: true },
+    { name: "From", type: "dropdown", min: 1, max: 5, selected: 1 },
+    { name: "To", type: "dropdown", min: 1, max: 5, selected: 5 },
+    { name: "Unrated", type: "checkbox", checked: true }
+  ]);
   const [amount, setAmount] = useState(pageSize);
   const [currentTitleIndex, setCurrentTitleIndex] = useState(0);
   const [showAdvancedOptions, setShowAdvancedOptions] = useState(false);
@@ -94,12 +100,20 @@ const GameContainer = ({ data, dataOrganizer }) => {
 
   useEffect(() => {
     setGames(
-      filterGames(copyData(data), tags, inputRef.current, dataOrganizer)
+      filterGames(
+        copyData(data),
+        tags,
+        ratings,
+        inputRef.current,
+        dataOrganizer
+      )
     );
-  }, [tags, data, dataOrganizer]);
+  }, [tags, ratings, data, dataOrganizer]);
 
   const onInputChange = newInput => {
-    setGames(filterGames(copyData(data), tags, newInput, dataOrganizer));
+    setGames(
+      filterGames(copyData(data), tags, ratings, newInput, dataOrganizer)
+    );
     inputRef.current = newInput;
   };
 
@@ -126,6 +140,8 @@ const GameContainer = ({ data, dataOrganizer }) => {
           show={showAdvancedOptions}
           tags={tags}
           setTags={setTags}
+          ratings={ratings}
+          setRatings={setRatings}
         />
       </SearchBoxWrapper>
       {games.slice(0, amount).map((info, index) => (

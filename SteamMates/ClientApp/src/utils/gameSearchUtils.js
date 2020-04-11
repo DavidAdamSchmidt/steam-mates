@@ -1,5 +1,16 @@
-export const filterGames = (games, tags, searchTerm, dataOrganizer) => {
-  const matchingGames = getMatchingGames(games, tags, searchTerm.toLowerCase());
+export const filterGames = (
+  games,
+  tags,
+  ratings,
+  searchTerm,
+  dataOrganizer
+) => {
+  const matchingGames = getMatchingGames(
+    games,
+    tags,
+    ratings,
+    searchTerm.toLowerCase()
+  );
 
   dataOrganizer(matchingGames, searchTerm);
 
@@ -36,17 +47,18 @@ export const organizeByRatingCount = (games, searchTerm) => {
   return data;
 };
 
-const getMatchingGames = (games, tags, searchTerm) => {
+const getMatchingGames = (games, tags, ratings, searchTerm) => {
   const results = [];
   const filteredByTags = tags.some(tag => !tag.checked)
     ? filterGamesByTags(games, tags)
     : games;
+  const filteredByRatings = filterGamesByRatings(filteredByTags, ratings);
 
   if (searchTerm.length < 3) {
-    return filteredByTags;
+    return filteredByRatings;
   }
 
-  for (const game of filteredByTags) {
+  for (const game of filteredByRatings) {
     let startIndex = game.game.name.toLowerCase().indexOf(searchTerm);
 
     if (startIndex > -1) {
@@ -64,6 +76,26 @@ const filterGamesByTags = (games, tags) => {
   const tagNames = tags.filter(x => x.checked).map(x => x.name);
 
   return games.filter(game => game.tags.some(tag => tagNames.includes(tag)));
+};
+
+const filterGamesByRatings = (games, ratings) => {
+  if (games.some(game => game.averageOfRatings)) {
+    return games.filter(
+      game =>
+        (ratings[3].checked && !game.averageOfRatings) ||
+        (ratings[0].checked &&
+          game.averageOfRatings >= ratings[1].selected &&
+          game.averageOfRatings <= ratings[2].selected)
+    );
+  }
+
+  return games.filter(
+    game =>
+      (ratings[3].checked && !game.rating) ||
+      (ratings[0].checked &&
+        game.rating >= ratings[1].selected &&
+        game.rating <= ratings[2].selected)
+  );
 };
 
 const searchResultComparer = (a, b) => {
