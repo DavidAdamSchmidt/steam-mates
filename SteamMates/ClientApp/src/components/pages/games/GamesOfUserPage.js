@@ -1,6 +1,5 @@
 import React, { useContext } from "react";
 import styled from "styled-components";
-import { Redirect } from "react-router-dom";
 import useRequest from "../../../hooks/useRequest";
 import UserContext from "../../../contexts/UserContext";
 import LoadingIndicator from "../../common/LoadingIndicator";
@@ -11,7 +10,6 @@ import { getElapsedTimeText } from "../../../utils/updateInfoUtils";
 import { organizeByCount } from "../../../utils/gamesUtils";
 import tf2_luxury_lounge from "./../../../static/images/tf2_luxury_lounge.png";
 import { API_URL } from "../../../constants/api";
-import { HOME } from "../../../constants/routes";
 import { MEDIUM } from "../../../constants/style";
 
 const Wrapper = styled.div`
@@ -35,10 +33,6 @@ const GamesOfUserPage = () => {
     true,
     "GET"
   );
-
-  if (user == null) {
-    return <Redirect to={HOME} />;
-  }
 
   const hasError = checkPageError(status, error);
   if (hasError) {

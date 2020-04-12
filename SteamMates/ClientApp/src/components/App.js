@@ -3,9 +3,10 @@ import UserContext from "../contexts/UserContext";
 import useWindowSize from "../hooks/useWindowSize";
 import { FriendProvider } from "../contexts/FriendContext";
 import { SettingsProvider } from "../contexts/SettingsContext";
-import NavigationBar from "./navbar/NavigationBar";
-import MainContainer from "./MainContainer";
+import Router from "./Router";
 import LoadingIndicator from "./common/LoadingIndicator";
+import Layout from "./Layout";
+import NavigationBar from "./navbar/NavigationBar";
 
 const App = () => {
   const { loading, clearFriends } = useContext(UserContext);
@@ -26,7 +27,9 @@ const App = () => {
     <FriendProvider clearFriends={clearFriends}>
       <SettingsProvider>
         <NavigationBar />
-        <MainContainer />
+        <Layout>
+          <Router />
+        </Layout>
       </SettingsProvider>
     </FriendProvider>
   );

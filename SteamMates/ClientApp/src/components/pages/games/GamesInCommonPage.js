@@ -71,7 +71,7 @@ const GamesInCommonPage = () => {
     }
   }, [friends, privateProfiles]);
 
-  if (user == null || friends.length === 0 || friends.length > 3) {
+  if (friends.length === 0 || friends.length > 3) {
     return <Redirect to={HOME} />;
   }
 

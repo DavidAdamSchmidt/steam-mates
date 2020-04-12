@@ -1,6 +1,5 @@
 import React, { useContext, useState } from "react";
 import styled from "styled-components";
-import { Redirect } from "react-router-dom";
 import useWindowSize from "../../../hooks/useWindowSize";
 import UserContext from "../../../contexts/UserContext";
 import Header from "../../common/Header";
@@ -13,7 +12,6 @@ import {
 import { getElapsedTimeText } from "../../../utils/updateInfoUtils";
 import tf2_party from "./../../../static/images/tf2_kazotsky_kick.png";
 import { MEDIUM } from "../../../constants/style";
-import { HOME } from "../../../constants/routes";
 import {
   PERSONA_NAME,
   REAL_NAME,
@@ -47,10 +45,6 @@ const FriendsPage = () => {
   const { user } = useContext(UserContext);
   const [allFriends] = useState(getAllFriends(user.friends));
   const [width] = useWindowSize();
-
-  if (!user) {
-    return <Redirect to={HOME} />;
-  }
 
   const handleInputChange = newInput => {
     setInput(newInput);

@@ -1,23 +1,12 @@
-import React, { useContext } from "react";
+import React from "react";
 import { Redirect } from "react-router-dom";
 import useRequest from "../../../hooks/useRequest";
-import UserContext from "../../../contexts/UserContext";
 import { checkPageError } from "../../../utils/errorUtils";
 import { API_URL } from "../../../constants/api";
-import { HOME, GAMES } from "../../../constants/routes";
+import { GAMES } from "../../../constants/routes";
 
 const RandomGamePage = () => {
-  const { user } = useContext(UserContext);
-
-  const [, status, data, error] = useRequest(
-    `${API_URL}/games`,
-    user,
-    "GET"
-  );
-
-  if (user == null) {
-    return <Redirect to={HOME} />;
-  }
+  const [, status, data, error] = useRequest(`${API_URL}/games`, true, "GET");
 
   const hasError = checkPageError(status, error);
   if (hasError) {
