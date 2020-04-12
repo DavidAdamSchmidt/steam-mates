@@ -4,7 +4,7 @@ import styled, { css } from "styled-components";
 import UserContext from "../../../contexts/UserContext";
 import FriendContext from "../../../contexts/FriendContext";
 import StarRatings from "../../common/StarRatings";
-import { getGameCardBackgroundColor } from "../../../utils/gamesInCommonUtils";
+import { getCardBackground } from "../../../utils/gamesUtils";
 import game_card_default from "./../../../static/images/game_card_default.jpg";
 import { IMAGE_ROOT, LOGO_URL } from "../../../constants/steam";
 import { GAMES } from "../../../constants/routes";
@@ -24,7 +24,7 @@ const side = css`
   box-sizing: border-box;
   width: 100%;
   height: 100%;
-  background: ${({ rating }) => getGameCardBackgroundColor(rating)};
+  background: ${({ rating }) => getCardBackground(rating)};
 `;
 
 const Front = styled.div`
@@ -115,7 +115,7 @@ const Logo = styled.div.attrs(({ id }) => ({
 
 const Body = styled.div`
   height: 208px;
-  background: ${({ rating }) => getGameCardBackgroundColor(rating)};
+  background: rgba(0, 0, 39, 0.69);
   text-align: center;
 `;
 
@@ -210,10 +210,8 @@ const Footer = styled.div`
   color: ${({ color }) => color};
 `;
 
-const GameCard = ({ info }) => {
-  const [rating, setRating] = useState(
-    info.rating ? info.rating : info.averageOfRatings
-  );
+const GameCard = ({ info, allowRating }) => {
+  const [rating, setRating] = useState(info.rating);
   const [hasBigImage, setHasBigImage] = useState(true);
   const { user } = useContext(UserContext);
   const { friends } = useContext(FriendContext);
@@ -242,7 +240,7 @@ const GameCard = ({ info }) => {
         <Back rating={rating}>
           <Logo id={info.game.appId} />
           <Body>
-            {info.rating !== undefined && (
+            {allowRating ? (
               <RatingWrapper>
                 <StarRatings
                   amountOfStars={5}
@@ -251,8 +249,7 @@ const GameCard = ({ info }) => {
                   setRating={setRating}
                 />
               </RatingWrapper>
-            )}
-            {info.ratings && (
+            ) : (
               <Users even={friends.length % 2}>
                 {[user, ...friends].map(x => (
                   <AvatarContainer key={x.steamId}>

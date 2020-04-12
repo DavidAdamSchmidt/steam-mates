@@ -12,12 +12,11 @@ import {
   getLibraryError,
   checkPageError
 } from "../../../utils/errorUtils";
+import { getElapsedTimeText } from "../../../utils/updateInfoUtils";
 import {
   addAverageOfRatings,
-  ratingComparer
-} from "../../../utils/gamesInCommonUtils";
-import { getElapsedTimeText } from "../../../utils/updateInfoUtils";
-import { organizeByRatingCount } from "../../../utils/gameSearchUtils";
+  organizeByRatingCount
+} from "../../../utils/gamesUtils";
 import tf2_high_five from "./../../../static/images/tf2_high_five.png";
 import tf2_spy_shocked from "./../../../static/images/tf2_spy_shocked.png";
 import { API_URL } from "../../../constants/api";
@@ -129,7 +128,6 @@ const GamesInCommonPage = () => {
   }
 
   addAverageOfRatings(data.games);
-  data.games.sort(ratingComparer);
 
   return (
     <Wrapper>

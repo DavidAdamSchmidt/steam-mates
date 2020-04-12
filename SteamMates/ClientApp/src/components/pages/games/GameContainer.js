@@ -16,7 +16,7 @@ import AdvancedOptions from "./AdvancedOptions";
 import AmountOfRatings from "./AmountOfRatings";
 import GameCard from "./GameCard";
 import LoadingIndicator from "../../common/LoadingIndicator";
-import { filterGames } from "../../../utils/gameSearchUtils";
+import { filterGames } from "../../../utils/gamesUtils";
 import { copyData } from "../../../utils/sharedUtils";
 import { FRIENDS } from "../../../constants/style";
 
@@ -67,7 +67,7 @@ const CogIcon = styled.div`
 
 const pageSize = 32;
 
-const GameContainer = ({ data, dataOrganizer }) => {
+const GameContainer = ({ data, dataOrganizer, allowRating }) => {
   const increaseAmount = () => {
     setIsLoading(false);
     setAmount(prevState => prevState + pageSize);
@@ -127,7 +127,7 @@ const GameContainer = ({ data, dataOrganizer }) => {
         <Fragment key={info.game.appId}>
           {info.title && <AmountOfRatings text={info.title} />}
           {info.title && adjustAmount(index)}
-          <GameCard info={info} />
+          <GameCard info={info} allowRating={allowRating} />
         </Fragment>
       ))}
       {amount < games.length && (

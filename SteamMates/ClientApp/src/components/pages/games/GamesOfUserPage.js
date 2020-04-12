@@ -8,7 +8,7 @@ import Header from "../../common/Header";
 import GameContainer from "./GameContainer";
 import { checkPageError } from "../../../utils/errorUtils";
 import { getElapsedTimeText } from "../../../utils/updateInfoUtils";
-import { organizeByCount } from "../../../utils/gameSearchUtils";
+import { organizeByCount } from "../../../utils/gamesUtils";
 import tf2_luxury_lounge from "./../../../static/images/tf2_luxury_lounge.png";
 import { API_URL } from "../../../constants/api";
 import { HOME } from "../../../constants/routes";
@@ -53,10 +53,6 @@ const GamesOfUserPage = () => {
     return null;
   }
 
-  if ((data.games || []).length > 0) {
-    data.games[0].title = `Results (${data.games.length})`;
-  }
-
   return (
     <Wrapper>
       <Header title="Rating time!" image={tf2_luxury_lounge}>
@@ -79,7 +75,11 @@ const GamesOfUserPage = () => {
           Tags were updated {getElapsedTimeText(data.latestUpdates["tags"])}
         </LatestUpdate>
       </Header>
-      <GameContainer data={data.games} dataOrganizer={organizeByCount} />
+      <GameContainer
+        data={data.games}
+        dataOrganizer={organizeByCount}
+        allowRating={true}
+      />
     </Wrapper>
   );
 };
