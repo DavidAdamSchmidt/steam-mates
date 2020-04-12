@@ -2,22 +2,30 @@ import React, { useContext } from "react";
 import styled from "styled-components";
 import SettingsContext from "../../../contexts/SettingsContext";
 import { RATING, TITLE } from "../../../constants/orderByOptions";
-
-const Wrapper = styled.div`
-  display: ${({ display }) => display};
-  overflow: hidden;
-  margin: 0 60px 0 20px;
-`;
+import { MEDIUM } from "../../../constants/style";
 
 const Panel = styled.div`
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  border-radius: 4px;
-  padding: 0 40px;
+  display: ${({ display }) => display};
+  grid-template-rows: repeat(3, 1fr);
+  border-bottom-right-radius: 4px;
+  border-bottom-left-radius: 4px;
   box-sizing: border-box;
+  padding: 0 20px;
   width: 100%;
-  height: 200px;
+  min-width: 200px;
+  min-height: 600px;
   background: #dedede;
+
+  @media (min-width: 360px) {
+    min-height: initial;
+    padding: 0 40px;
+  }
+
+  @media (${MEDIUM}) {
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: none;
+    height: 200px;
+  }
 `;
 
 const Block = styled.div`
@@ -29,13 +37,19 @@ const List = styled.ul`
 `;
 
 const ListItem = styled.li`
+  display: flex;
+  flex-wrap: wrap;
   list-style: none;
-  margin: 5px 0;
+  margin: 8px 0;
+`;
+
+const Checkbox = styled.input`
+  margin-right: 8px;
 `;
 
 const DropdownText = styled.span`
   display: inline-block;
-  padding-left: 20px;
+  margin-left: 28px;
   width: 50px;
 `;
 
@@ -95,99 +109,97 @@ const AdvancedOptions = ({ show }) => {
   };
 
   return (
-    <Wrapper display={show ? "block" : "none"}>
-      <Panel>
-        <Block>
-          <h3>Filter by tags</h3>
-          <List>
-            {tags.map(tag => (
-              <ListItem key={tag.name}>
-                <input
-                  type="checkbox"
-                  checked={tag.checked}
-                  onChange={() => handleTagChange(tag)}
-                />
-                <span>{tag.name}</span>
-              </ListItem>
-            ))}
-          </List>
-        </Block>
-        <Block>
-          <h3>Filter by ratings</h3>
-          <List>
-            {ratings.map((rating, index) => (
-              <ListItem key={rating.name}>
-                {index === 0 || index === 3 ? (
-                  <>
-                    <input
-                      type="checkbox"
-                      checked={rating.checked}
-                      onChange={() => handleRatingChange(rating)}
-                    />
-                    <span>{rating.name}</span>
-                  </>
-                ) : (
-                  <>
-                    <DropdownText>{rating.name}</DropdownText>
-                    <Dropdown
-                      defaultValue={rating.selected}
-                      disabled={!ratings[0].checked}
-                      onChange={e => handleRatingValueChange(rating, e)}
-                    >
-                      {Array.from(Array(rating.max).keys())
-                        .slice(rating.min - 1, rating.max)
-                        .map(value => (
-                          <option key={value} value={value + 1}>
-                            {value + 1}
-                          </option>
-                        ))}
-                    </Dropdown>
-                  </>
-                )}
-              </ListItem>
-            ))}
-          </List>
-        </Block>
-        <Block>
-          <h3>Order by</h3>
-          <List>
-            <ListItem>
-              <Dropdown
-                defaultValue={orderBy.value}
-                marginRight={"15px"}
-                onChange={handleOrderByValueChange}
-              >
-                {[RATING, TITLE].map(property => (
-                  <option key={property} value={property}>
-                    {property}
-                  </option>
-                ))}
-              </Dropdown>
-              <Dropdown
-                defaultValue={orderBy.asc ? "Asc" : "Desc"}
-                onChange={handleOrderByDirectionChange}
-              >
-                {["Asc", "Desc"].map(property => (
-                  <option key={property} value={property}>
-                    {property}
-                  </option>
-                ))}
-              </Dropdown>
+    <Panel display={show ? "grid" : "none"}>
+      <Block>
+        <h3>Filter by tags</h3>
+        <List>
+          {tags.map(tag => (
+            <ListItem key={tag.name}>
+              <Checkbox
+                type="checkbox"
+                checked={tag.checked}
+                onChange={() => handleTagChange(tag)}
+              />
+              <span>{tag.name}</span>
             </ListItem>
-            <ListItem>
-              <ApplyToSearch>
-                <input
-                  type="checkbox"
-                  checked={orderBy.applyToSearch}
-                  onChange={handleApplyToSearchChange}
-                />
-                <span>Apply to search</span>
-              </ApplyToSearch>
+          ))}
+        </List>
+      </Block>
+      <Block>
+        <h3>Filter by ratings</h3>
+        <List>
+          {ratings.map((rating, index) => (
+            <ListItem key={rating.name}>
+              {index === 0 || index === 3 ? (
+                <>
+                  <Checkbox
+                    type="checkbox"
+                    checked={rating.checked}
+                    onChange={() => handleRatingChange(rating)}
+                  />
+                  <span>{rating.name}</span>
+                </>
+              ) : (
+                <>
+                  <DropdownText>{rating.name}</DropdownText>
+                  <Dropdown
+                    defaultValue={rating.selected}
+                    disabled={!ratings[0].checked}
+                    onChange={e => handleRatingValueChange(rating, e)}
+                  >
+                    {Array.from(Array(rating.max).keys())
+                      .slice(rating.min - 1, rating.max)
+                      .map(value => (
+                        <option key={value} value={value + 1}>
+                          {value + 1}
+                        </option>
+                      ))}
+                  </Dropdown>
+                </>
+              )}
             </ListItem>
-          </List>
-        </Block>
-      </Panel>
-    </Wrapper>
+          ))}
+        </List>
+      </Block>
+      <Block>
+        <h3>Order by</h3>
+        <List>
+          <ListItem>
+            <Dropdown
+              defaultValue={orderBy.value}
+              marginRight={"15px"}
+              onChange={handleOrderByValueChange}
+            >
+              {[RATING, TITLE].map(property => (
+                <option key={property} value={property}>
+                  {property}
+                </option>
+              ))}
+            </Dropdown>
+            <Dropdown
+              defaultValue={orderBy.asc ? "Asc" : "Desc"}
+              onChange={handleOrderByDirectionChange}
+            >
+              {["Asc", "Desc"].map(property => (
+                <option key={property} value={property}>
+                  {property}
+                </option>
+              ))}
+            </Dropdown>
+          </ListItem>
+          <ListItem>
+            <ApplyToSearch>
+              <Checkbox
+                type="checkbox"
+                checked={orderBy.applyToSearch}
+                onChange={handleApplyToSearchChange}
+              />
+              <span>Apply to search</span>
+            </ApplyToSearch>
+          </ListItem>
+        </List>
+      </Block>
+    </Panel>
   );
 };
 

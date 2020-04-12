@@ -7,10 +7,9 @@ import React, {
   useState
 } from "react";
 import styled from "styled-components";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCog } from "@fortawesome/free-solid-svg-icons";
-import SettingsContext from "../../../contexts/SettingsContext";
+import useWindowSize from "../../../hooks/useWindowSize";
 import useInfiniteScroll from "../../../hooks/useInfiniteScroll";
+import SettingsContext from "../../../contexts/SettingsContext";
 import SearchBox from "../../common/SearchBox";
 import AdvancedOptions from "./AdvancedOptions";
 import AmountOfRatings from "./AmountOfRatings";
@@ -18,10 +17,8 @@ import GameCard from "./GameCard";
 import LoadingIndicator from "../../common/LoadingIndicator";
 import { filterGames } from "../../../utils/gamesUtils";
 import { copyData } from "../../../utils/sharedUtils";
-import { FRIENDS } from "../../../constants/style";
 
 const Wrapper = styled.div`
-  position: relative;
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
@@ -38,31 +35,14 @@ const SearchBoxWrapper = styled.div`
   width: 100%;
 `;
 
-const CogIcon = styled.div`
-  position: absolute;
-  top: 20px;
-  right: 20px;
-  display: none;
-  border-top-right-radius: 25px;
-  border-bottom-right-radius: 25px;
-  width: 60px;
-  height: 35px;
-  background: #1e5b62;
-  user-select: none;
+const SearchResultWrapper = styled.div`
+  margin: 0 20px;
+`;
 
-  &:hover {
-    cursor: pointer;
-  }
-
-  @media (min-width: calc(284px + 17px)) {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-
-  @media (${FRIENDS.TIER_TWO}) {
-    height: 40px;
-  }
+const HiddenGames = styled.p`
+  font-style: italic;
+  text-align: right;
+  color: gray;
 `;
 
 const pageSize = 32;
@@ -80,6 +60,7 @@ const GameContainer = ({ data, dataOrganizer, allowRating }) => {
 
   const settings = useContext(SettingsContext);
 
+  const [width] = useWindowSize();
   const [isLoading, setIsLoading] = useInfiniteScroll(
     amount < games.length,
     useCallback(increaseAmount, [])
@@ -97,7 +78,7 @@ const GameContainer = ({ data, dataOrganizer, allowRating }) => {
     );
   }, [data, dataOrganizer, settings]);
 
-  const onInputChange = newInput => {
+  const handleInputChange = newInput => {
     setGames(filterGames(copyData(data), newInput, settings, dataOrganizer));
     inputRef.current = newInput;
   };
@@ -109,19 +90,27 @@ const GameContainer = ({ data, dataOrganizer, allowRating }) => {
     }
   };
 
+  const hidden = data.length - games.length;
+
   return (
     <Wrapper>
       <SearchBoxWrapper>
         <SearchBox
-          onInputChange={onInputChange}
           placeholder={"Search games..."}
+          handleInputChange={handleInputChange}
+          handleSettingsClick={() =>
+            setShowAdvancedOptions(prevState => !prevState)
+          }
         />
-        <CogIcon
-          onClick={() => setShowAdvancedOptions(prevState => !prevState)}
-        >
-          <FontAwesomeIcon size="lg" style={{ color: "white" }} icon={faCog} />
-        </CogIcon>
-        <AdvancedOptions show={showAdvancedOptions} />
+        <SearchResultWrapper>
+          <AdvancedOptions show={showAdvancedOptions} />
+          {!!hidden && inputRef.current.length < 3 && (
+            <HiddenGames>
+              {hidden} game{hidden > 1 ? "s were" : " was"} hidden
+              {width >= 768 && " based on your preferences"}
+            </HiddenGames>
+          )}
+        </SearchResultWrapper>
       </SearchBoxWrapper>
       {games.slice(0, amount).map((info, index) => (
         <Fragment key={info.game.appId}>

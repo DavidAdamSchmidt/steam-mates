@@ -52,7 +52,7 @@ const FriendsPage = () => {
     return <Redirect to={HOME} />;
   }
 
-  const onInputChange = newInput => {
+  const handleInputChange = newInput => {
     setInput(newInput);
     setResults(() => getMatchingFriends(user.friends, newInput.toLowerCase()));
   };
@@ -72,12 +72,12 @@ const FriendsPage = () => {
       </Header>
       <Main>
         <SearchBox
-          onInputChange={onInputChange}
           placeholder={`Search friends${
             width > 620
               ? ` by ${PERSONA_NAME}, ${REAL_NAME}, ${VANITY_ID} or ${STEAM_ID_64}`
               : ""
           }...`}
+          handleInputChange={handleInputChange}
         />
         <FriendsTable>
           {(input.length > 0 ? results : allFriends).map(result => (

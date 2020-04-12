@@ -1,19 +1,60 @@
 import React from "react";
 import styled from "styled-components";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCog, faSearch } from "@fortawesome/free-solid-svg-icons";
 import { FRIENDS } from "../../constants/style";
 
-const InputField = styled.input`
+const Wrapper = styled.div`
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: 60px auto 60px;
+  align-items: center;
   margin-top: 40px;
   box-shadow: 0 0 5px #9d9d9d;
   -moz-box-shadow: 0 0 5px #9d9d9d;
   -webkit-box-shadow: 0 0 5px #9d9d9d;
   box-sizing: border-box;
-  border: none;
   border-radius: 25px;
   width: 100%;
   min-width: 244px;
   height: 35px;
-  padding: 0 70px 0 25px;
+  background: white;
+
+  @media (${FRIENDS.TIER_FIVE}) {
+    margin: 0;
+  }
+
+  @media (${FRIENDS.TIER_TWO}) {
+    height: 40px;
+  }
+`;
+
+const SearchIcon = styled.div`
+  justify-self: center;
+`;
+
+const CogIcon = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-top-right-radius: 25px;
+  border-bottom-right-radius: 25px;
+  width: 100%;
+  height: 100%;
+  background: #393f4d;
+  user-select: none;
+
+  &:hover {
+    cursor: pointer;
+  }
+`;
+
+const InputField = styled.input`
+  border: none;
+  box-sizing: border-box;
+  width: 100%;
+  height: 100%;
   font-size: 16px;
   color: gray;
 
@@ -25,23 +66,29 @@ const InputField = styled.input`
     font-style: italic;
     color: #bababa;
   }
-
-  @media (${FRIENDS.TIER_FIVE}) {
-    margin: 0;
-  }
-
-  @media (${FRIENDS.TIER_TWO}) {
-    height: 40px;
-  }
 `;
 
-const SearchBox = ({ onInputChange, placeholder }) => {
+const SearchBox = ({ placeholder, handleInputChange, handleSettingsClick }) => {
   return (
-    <InputField
-      type="text"
-      placeholder={placeholder}
-      onChange={e => onInputChange(e.target.value)}
-    />
+    <Wrapper>
+      <SearchIcon>
+        <FontAwesomeIcon
+          size="lg"
+          style={{ color: "silver" }}
+          icon={faSearch}
+        />
+      </SearchIcon>
+      <InputField
+        type="text"
+        placeholder={placeholder}
+        onChange={e => handleInputChange(e.target.value)}
+      />
+      {handleSettingsClick && (
+        <CogIcon onClick={handleSettingsClick}>
+          <FontAwesomeIcon size="lg" style={{ color: "silver" }} icon={faCog} />
+        </CogIcon>
+      )}
+    </Wrapper>
   );
 };
 
