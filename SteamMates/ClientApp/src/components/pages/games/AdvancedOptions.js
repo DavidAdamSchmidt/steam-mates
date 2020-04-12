@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "styled-components";
+import { RATING, TITLE } from "../../../constants/orderByOptions";
 
 const Wrapper = styled.div`
   display: ${({ display }) => display};
@@ -9,7 +10,7 @@ const Wrapper = styled.div`
 
 const Panel = styled.div`
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: repeat(3, 1fr);
   border-radius: 4px;
   padding: 0 40px;
   box-sizing: border-box;
@@ -38,12 +39,27 @@ const DropdownText = styled.span`
 `;
 
 const Dropdown = styled.select`
+  margin-right: ${({ marginRight }) => marginRight};
+
   &:disabled {
     background: #dadada;
   }
 `;
 
-const AdvancedOptions = ({ show, tags, setTags, ratings, setRatings }) => {
+const ApplyToSearch = styled.span`
+  display: inline-block;
+  margin-top: 10px;
+`;
+
+const AdvancedOptions = ({
+  show,
+  tags,
+  setTags,
+  ratings,
+  setRatings,
+  orderBy,
+  setOrderBy
+}) => {
   const handleTagChange = tag => {
     tag.checked = !tag.checked;
     setTags([...tags]);
@@ -59,6 +75,21 @@ const AdvancedOptions = ({ show, tags, setTags, ratings, setRatings }) => {
     ratings[1].max = ratings[2].selected;
     ratings[2].min = ratings[1].selected;
     setRatings([...ratings]);
+  };
+
+  const handleOrderByDirectionChange = e => {
+    orderBy.asc = e.target.value === "Asc";
+    setOrderBy({ ...orderBy });
+  };
+
+  const handleOrderByValueChange = e => {
+    orderBy.value = e.target.value;
+    setOrderBy({ ...orderBy });
+  };
+
+  const handleApplyToSearchChange = () => {
+    orderBy.applyToSearch = !orderBy.applyToSearch;
+    setOrderBy({ ...orderBy });
   };
 
   return (
@@ -114,6 +145,44 @@ const AdvancedOptions = ({ show, tags, setTags, ratings, setRatings }) => {
                 )}
               </ListItem>
             ))}
+          </List>
+        </Block>
+        <Block>
+          <h3>Order by</h3>
+          <List>
+            <ListItem>
+              <Dropdown
+                defaultValue={orderBy.value}
+                marginRight={"15px"}
+                onChange={handleOrderByValueChange}
+              >
+                {[RATING, TITLE].map(property => (
+                  <option key={property} value={property}>
+                    {property}
+                  </option>
+                ))}
+              </Dropdown>
+              <Dropdown
+                defaultValue={orderBy.asc ? "Asc" : "Desc"}
+                onChange={handleOrderByDirectionChange}
+              >
+                {["Asc", "Desc"].map(property => (
+                  <option key={property} value={property}>
+                    {property}
+                  </option>
+                ))}
+              </Dropdown>
+            </ListItem>
+            <ListItem>
+              <ApplyToSearch>
+                <input
+                  type="checkbox"
+                  checked={orderBy.applyToSearch}
+                  onChange={handleApplyToSearchChange}
+                />
+                <span>Apply to search</span>
+              </ApplyToSearch>
+            </ListItem>
           </List>
         </Block>
       </Panel>

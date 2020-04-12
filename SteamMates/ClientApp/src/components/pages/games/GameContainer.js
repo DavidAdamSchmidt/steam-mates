@@ -17,6 +17,7 @@ import LoadingIndicator from "../../common/LoadingIndicator";
 import { filterGames } from "../../../utils/gameSearchUtils";
 import { copyData } from "../../../utils/sharedUtils";
 import { FRIENDS } from "../../../constants/style";
+import { RATING } from "../../../constants/orderByOptions";
 
 const Wrapper = styled.div`
   position: relative;
@@ -84,6 +85,11 @@ const GameContainer = ({ data, dataOrganizer }) => {
     { name: "To", type: "dropdown", min: 1, max: 5, selected: 5 },
     { name: "Unrated", type: "checkbox", checked: true }
   ]);
+  const [orderBy, setOrderBy] = useState({
+    value: RATING,
+    asc: false,
+    applyToSearch: false
+  });
   const [amount, setAmount] = useState(pageSize);
   const [currentTitleIndex, setCurrentTitleIndex] = useState(0);
   const [showAdvancedOptions, setShowAdvancedOptions] = useState(false);
@@ -105,14 +111,22 @@ const GameContainer = ({ data, dataOrganizer }) => {
         tags,
         ratings,
         inputRef.current,
+        orderBy,
         dataOrganizer
       )
     );
-  }, [tags, ratings, data, dataOrganizer]);
+  }, [tags, ratings, orderBy, data, dataOrganizer]);
 
   const onInputChange = newInput => {
     setGames(
-      filterGames(copyData(data), tags, ratings, newInput, dataOrganizer)
+      filterGames(
+        copyData(data),
+        tags,
+        ratings,
+        newInput,
+        orderBy,
+        dataOrganizer
+      )
     );
     inputRef.current = newInput;
   };
@@ -142,13 +156,13 @@ const GameContainer = ({ data, dataOrganizer }) => {
           setTags={setTags}
           ratings={ratings}
           setRatings={setRatings}
+          orderBy={orderBy}
+          setOrderBy={setOrderBy}
         />
       </SearchBoxWrapper>
       {games.slice(0, amount).map((info, index) => (
         <Fragment key={info.game.appId}>
-          {info.title && (!index || inputRef.current.length < 3) && (
-            <AmountOfRatings text={info.title} />
-          )}
+          {info.title && <AmountOfRatings text={info.title} />}
           {info.title && adjustAmount(index)}
           <GameCard info={info} />
         </Fragment>
