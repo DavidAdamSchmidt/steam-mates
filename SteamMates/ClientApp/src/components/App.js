@@ -2,6 +2,7 @@ import React, { useContext, useEffect } from "react";
 import UserContext from "../contexts/UserContext";
 import useWindowSize from "../hooks/useWindowSize";
 import { FriendProvider } from "../contexts/FriendContext";
+import { SettingsProvider } from "../contexts/SettingsContext";
 import NavigationBar from "./navbar/NavigationBar";
 import MainContainer from "./MainContainer";
 import LoadingIndicator from "./common/LoadingIndicator";
@@ -23,8 +24,10 @@ const App = () => {
 
   return (
     <FriendProvider clearFriends={clearFriends}>
-      <NavigationBar />
-      <MainContainer />
+      <SettingsProvider>
+        <NavigationBar />
+        <MainContainer />
+      </SettingsProvider>
     </FriendProvider>
   );
 };

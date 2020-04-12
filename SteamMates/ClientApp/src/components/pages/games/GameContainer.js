@@ -1,6 +1,7 @@
 import React, {
   Fragment,
   useCallback,
+  useContext,
   useEffect,
   useRef,
   useState
@@ -8,6 +9,7 @@ import React, {
 import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCog } from "@fortawesome/free-solid-svg-icons";
+import SettingsContext from "../../../contexts/SettingsContext";
 import useInfiniteScroll from "../../../hooks/useInfiniteScroll";
 import SearchBox from "../../common/SearchBox";
 import AdvancedOptions from "./AdvancedOptions";
@@ -17,7 +19,6 @@ import LoadingIndicator from "../../common/LoadingIndicator";
 import { filterGames } from "../../../utils/gameSearchUtils";
 import { copyData } from "../../../utils/sharedUtils";
 import { FRIENDS } from "../../../constants/style";
-import { RATING } from "../../../constants/orderByOptions";
 
 const Wrapper = styled.div`
   position: relative;
@@ -73,26 +74,12 @@ const GameContainer = ({ data, dataOrganizer }) => {
   };
 
   const [games, setGames] = useState(data);
-  const [tags, setTags] = useState([
-    { name: "Multiplayer", checked: true },
-    { name: "Local Multiplayer", checked: true },
-    { name: "Online Co-Op", checked: true },
-    { name: "Local Co-Op", checked: true }
-  ]);
-  const [ratings, setRatings] = useState([
-    { name: "Rated", type: "checkbox", checked: true },
-    { name: "From", type: "dropdown", min: 1, max: 5, selected: 1 },
-    { name: "To", type: "dropdown", min: 1, max: 5, selected: 5 },
-    { name: "Unrated", type: "checkbox", checked: true }
-  ]);
-  const [orderBy, setOrderBy] = useState({
-    value: RATING,
-    asc: false,
-    applyToSearch: false
-  });
   const [amount, setAmount] = useState(pageSize);
   const [currentTitleIndex, setCurrentTitleIndex] = useState(0);
   const [showAdvancedOptions, setShowAdvancedOptions] = useState(false);
+
+  const settings = useContext(SettingsContext);
+
   const [isLoading, setIsLoading] = useInfiniteScroll(
     amount < games.length,
     useCallback(increaseAmount, [])
@@ -106,28 +93,12 @@ const GameContainer = ({ data, dataOrganizer }) => {
 
   useEffect(() => {
     setGames(
-      filterGames(
-        copyData(data),
-        tags,
-        ratings,
-        inputRef.current,
-        orderBy,
-        dataOrganizer
-      )
+      filterGames(copyData(data), inputRef.current, settings, dataOrganizer)
     );
-  }, [tags, ratings, orderBy, data, dataOrganizer]);
+  }, [data, dataOrganizer, settings]);
 
   const onInputChange = newInput => {
-    setGames(
-      filterGames(
-        copyData(data),
-        tags,
-        ratings,
-        newInput,
-        orderBy,
-        dataOrganizer
-      )
-    );
+    setGames(filterGames(copyData(data), newInput, settings, dataOrganizer));
     inputRef.current = newInput;
   };
 
@@ -150,15 +121,7 @@ const GameContainer = ({ data, dataOrganizer }) => {
         >
           <FontAwesomeIcon size="lg" style={{ color: "white" }} icon={faCog} />
         </CogIcon>
-        <AdvancedOptions
-          show={showAdvancedOptions}
-          tags={tags}
-          setTags={setTags}
-          ratings={ratings}
-          setRatings={setRatings}
-          orderBy={orderBy}
-          setOrderBy={setOrderBy}
-        />
+        <AdvancedOptions show={showAdvancedOptions} />
       </SearchBoxWrapper>
       {games.slice(0, amount).map((info, index) => (
         <Fragment key={info.game.appId}>

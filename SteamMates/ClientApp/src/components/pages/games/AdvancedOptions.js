@@ -1,5 +1,6 @@
-import React from "react";
+import React, { useContext } from "react";
 import styled from "styled-components";
+import SettingsContext from "../../../contexts/SettingsContext";
 import { RATING, TITLE } from "../../../constants/orderByOptions";
 
 const Wrapper = styled.div`
@@ -51,15 +52,16 @@ const ApplyToSearch = styled.span`
   margin-top: 10px;
 `;
 
-const AdvancedOptions = ({
-  show,
-  tags,
-  setTags,
-  ratings,
-  setRatings,
-  orderBy,
-  setOrderBy
-}) => {
+const AdvancedOptions = ({ show }) => {
+  const {
+    tags,
+    setTags,
+    ratings,
+    setRatings,
+    orderBy,
+    setOrderBy
+  } = useContext(SettingsContext);
+
   const handleTagChange = tag => {
     tag.checked = !tag.checked;
     setTags([...tags]);
@@ -113,9 +115,9 @@ const AdvancedOptions = ({
         <Block>
           <h3>Filter by ratings</h3>
           <List>
-            {ratings.map(rating => (
+            {ratings.map((rating, index) => (
               <ListItem key={rating.name}>
-                {rating.type === "checkbox" && (
+                {index === 0 || index === 3 ? (
                   <>
                     <input
                       type="checkbox"
@@ -124,8 +126,7 @@ const AdvancedOptions = ({
                     />
                     <span>{rating.name}</span>
                   </>
-                )}
-                {rating.type === "dropdown" && (
+                ) : (
                   <>
                     <DropdownText>{rating.name}</DropdownText>
                     <Dropdown

@@ -1,22 +1,37 @@
 import { RATING, TITLE } from "../constants/orderByOptions";
 
-export const filterGames = (
-  games,
-  tags,
-  ratings,
-  searchTerm,
-  orderBy,
-  dataOrganizer
-) => {
-  const matchingGames = getMatchingGames(
-    games,
-    tags,
-    ratings,
-    orderBy,
-    searchTerm.toLowerCase()
+export const filterGames = (games, searchTerm, settings, dataOrganizer) => {
+  let results = [];
+  const filteredByTags = settings.tags.some(tag => !tag.checked)
+    ? filterGamesByTags(games, settings.tags)
+    : games;
+  const filteredByRatings = filterGamesByRatings(
+    filteredByTags,
+    settings.ratings
   );
 
-  return dataOrganizer(matchingGames, searchTerm, orderBy);
+  if (searchTerm.length > 2) {
+    for (const game of filteredByRatings) {
+      let startIndex = game.game.name.toLowerCase().indexOf(searchTerm);
+
+      if (startIndex > -1) {
+        game.startIndex = startIndex;
+        results.push(game);
+      }
+    }
+  } else {
+    results = filteredByRatings;
+  }
+
+  results.sort(
+    getComparer(
+      settings.orderBy,
+      searchTerm,
+      games.some(game => game.averageOfRatings)
+    )
+  );
+
+  return dataOrganizer(results, searchTerm, settings.orderBy);
 };
 
 export const organizeByCount = games => {
@@ -50,37 +65,6 @@ export const organizeByRatingCount = (games, searchTerm, orderBy) => {
   }
 
   return data;
-};
-
-const getMatchingGames = (games, tags, ratings, orderBy, searchTerm) => {
-  let results = [];
-  const filteredByTags = tags.some(tag => !tag.checked)
-    ? filterGamesByTags(games, tags)
-    : games;
-  const filteredByRatings = filterGamesByRatings(filteredByTags, ratings);
-
-  if (searchTerm.length > 2) {
-    for (const game of filteredByRatings) {
-      let startIndex = game.game.name.toLowerCase().indexOf(searchTerm);
-
-      if (startIndex > -1) {
-        game.startIndex = startIndex;
-        results.push(game);
-      }
-    }
-  } else {
-    results = filteredByRatings;
-  }
-
-  results.sort(
-    getComparer(
-      orderBy,
-      searchTerm,
-      games.some(game => game.averageOfRatings)
-    )
-  );
-
-  return results;
 };
 
 const filterGamesByTags = (games, tags) => {
