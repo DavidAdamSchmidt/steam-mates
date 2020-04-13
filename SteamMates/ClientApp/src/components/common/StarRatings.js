@@ -50,7 +50,7 @@ const StarRatings = ({
   const { user } = useContext(UserContext);
   const values = [...Array(amountOfStars).keys()].map(i => i + 1);
 
-  const [, status, , error] = useRequest(
+  const { status, error } = useRequest(
     `${API_URL}/games/rate`,
     sendRequest,
     "PUT",

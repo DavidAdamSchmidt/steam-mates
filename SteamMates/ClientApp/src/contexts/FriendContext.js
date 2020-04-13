@@ -1,9 +1,12 @@
-import React, { createContext, useState, useEffect } from "react";
+import React, { createContext, useState, useEffect, useContext } from "react";
+import UserContext from "./UserContext";
 import { FRIENDS } from "../constants/localStorage";
 
 const FriendContext = createContext(null);
 
 export const FriendProvider = props => {
+  const { clearFriends } = useContext(UserContext);
+
   const [friends, setFriends] = useState(
     JSON.parse(localStorage.getItem(FRIENDS)) || []
   );
@@ -13,11 +16,11 @@ export const FriendProvider = props => {
   }, [friends]);
 
   useEffect(() => {
-    if (props.clearFriends) {
+    if (clearFriends) {
       localStorage.removeItem(FRIENDS);
       setFriends([]);
     }
-  }, [props.clearFriends]);
+  }, [clearFriends]);
 
   const tryToAddFriend = friend => {
     if (friends.length < 3) {

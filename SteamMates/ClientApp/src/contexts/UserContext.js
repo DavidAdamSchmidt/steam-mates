@@ -1,5 +1,6 @@
 import React, { createContext, useEffect, useState } from "react";
 import useRequest from "../hooks/useRequest";
+import RequestHandler from "../components/RequestHandler";
 import { API_URL } from "../constants/api";
 import { USER_ID } from "../constants/localStorage";
 
@@ -8,29 +9,36 @@ const UserContext = createContext(null);
 export const UserProvider = props => {
   const [clearFriends, setClearFriends] = useState(false);
 
-  const [loading, status, user, error, logout] = useRequest(
-    `${API_URL}/user/info`,
-    true
-  );
+  const request = useRequest(`${API_URL}/user/info`, true);
+  const { loading, status, data, error, reset } = request;
 
   useEffect(() => {
-    if (!user) {
+    if (!data) {
       return;
     }
 
-    if (user.steamId !== localStorage.getItem(USER_ID)) {
+    if (data.steamId !== localStorage.getItem(USER_ID)) {
       setClearFriends(true);
     }
 
-    localStorage.setItem(USER_ID, user.steamId);
-  }, [user]);
+    localStorage.setItem(USER_ID, data.steamId);
+  }, [data]);
 
   return (
-    <UserContext.Provider
-      value={{ loading, status, user, error, logout, clearFriends }}
-    >
-      {props.children}
-    </UserContext.Provider>
+    <RequestHandler request={request}>
+      <UserContext.Provider
+        value={{
+          loading,
+          status,
+          user: data,
+          error,
+          logout: reset,
+          clearFriends
+        }}
+      >
+        {props.children}
+      </UserContext.Provider>
+    </RequestHandler>
   );
 };
 

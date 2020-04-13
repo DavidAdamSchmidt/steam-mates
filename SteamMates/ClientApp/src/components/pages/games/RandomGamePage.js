@@ -6,7 +6,7 @@ import { API_URL } from "../../../constants/api";
 import { GAMES } from "../../../constants/routes";
 
 const RandomGamePage = () => {
-  const [, status, data, error] = useRequest(`${API_URL}/games`, true, "GET");
+  const { status, data, error } = useRequest(`${API_URL}/games`, true, "GET");
 
   const hasError = checkPageError(status, error);
   if (hasError) {

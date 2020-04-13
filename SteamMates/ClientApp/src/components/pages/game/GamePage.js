@@ -3,11 +3,10 @@ import { Redirect } from "react-router-dom";
 import useRequest from "../../../hooks/useRequest";
 import UserContext from "../../../contexts/UserContext";
 import FriendContext from "../../../contexts/FriendContext";
-import LoadingIndicator from "../../common/LoadingIndicator";
+import RequestHandler from "../../RequestHandler";
 import GamePageHeader from "./GamePageHeader";
 import GamePageBody from "./GamePageBody";
 import { constructGamePageUrl } from "../../../utils/urlUtils";
-import { checkPageError } from "../../../utils/errorUtils";
 import { constructUserInfo } from "../../../utils/userInfoUtils";
 import { HOME } from "../../../constants/routes";
 
@@ -17,11 +16,12 @@ const GamePage = ({ match }) => {
   const { user } = useContext(UserContext);
   const { friends } = useContext(FriendContext);
 
-  const [loading, status, data, error] = useRequest(
+  const request = useRequest(
     constructGamePageUrl(id, friends),
     user != null && id != null,
     "GET"
   );
+  const { data } = request;
 
   useEffect(() => {
     const convertedId = parseInt(match.params.id);
@@ -34,36 +34,27 @@ const GamePage = ({ match }) => {
     }
   }, [match.params.id]);
 
-  const hasError = checkPageError(status, error);
-  if (hasError) {
-    return hasError;
-  }
-
-  if (user == null || isInvalidId) {
+  if (isInvalidId) {
     return <Redirect to={HOME} />;
   }
 
-  if (loading) {
-    return <LoadingIndicator marginTop={"100px"} />;
-  }
-
-  if (!data) {
-    return null;
-  }
-
-  const info = constructUserInfo(user, friends, data.userInfo);
+  const info = data ? constructUserInfo(user, friends, data.userInfo) : null;
 
   return (
-    <div>
-      <GamePageHeader
-        id={id}
-        name={data.name}
-        developers={data.developers}
-        publishers={data.publishers}
-        owned={info[0].rating || info[0].hasGame}
-      />
-      <GamePageBody id={id} data={data} info={info} />
-    </div>
+    <RequestHandler request={request}>
+      {data && (
+        <div>
+          <GamePageHeader
+            id={id}
+            name={data.name}
+            developers={data.developers}
+            publishers={data.publishers}
+            owned={info[0].rating || info[0].hasGame}
+          />
+          <GamePageBody id={id} data={data} info={info} />
+        </div>
+      )}
+    </RequestHandler>
   );
 };
 

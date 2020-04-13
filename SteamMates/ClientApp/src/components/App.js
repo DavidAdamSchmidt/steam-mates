@@ -1,15 +1,13 @@
-import React, { useContext, useEffect } from "react";
-import UserContext from "../contexts/UserContext";
+import React, { useEffect } from "react";
+import { UserProvider } from "../contexts/UserContext";
 import useWindowSize from "../hooks/useWindowSize";
 import { FriendProvider } from "../contexts/FriendContext";
 import { SettingsProvider } from "../contexts/SettingsContext";
 import Router from "./Router";
-import LoadingIndicator from "./common/LoadingIndicator";
 import Layout from "./Layout";
 import NavigationBar from "./navbar/NavigationBar";
 
 const App = () => {
-  const { loading, clearFriends } = useContext(UserContext);
   const [width] = useWindowSize();
 
   useEffect(() => {
@@ -19,19 +17,17 @@ const App = () => {
     );
   }, [width]);
 
-  if (loading) {
-    return <LoadingIndicator marginTop={"100px"} />;
-  }
-
   return (
-    <FriendProvider clearFriends={clearFriends}>
-      <SettingsProvider>
-        <NavigationBar />
-        <Layout>
-          <Router />
-        </Layout>
-      </SettingsProvider>
-    </FriendProvider>
+    <UserProvider>
+      <FriendProvider>
+        <SettingsProvider>
+          <NavigationBar />
+          <Layout>
+            <Router />
+          </Layout>
+        </SettingsProvider>
+      </FriendProvider>
+    </UserProvider>
   );
 };
 

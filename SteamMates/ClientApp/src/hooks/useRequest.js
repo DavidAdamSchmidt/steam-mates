@@ -60,7 +60,7 @@ const useRequest = (
     dispatch(resetState());
   };
 
-  return [state.loading, state.status, state.data, state.error, reset];
+  return { ...state, reset };
 };
 
 export default useRequest;

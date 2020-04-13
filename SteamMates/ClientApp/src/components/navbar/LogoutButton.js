@@ -6,7 +6,7 @@ import { API_URL } from "../../constants/api";
 const LogoutButton = ({ children }) => {
   const [sendRequest, setSendRequest] = useState(false);
   const context = useContext(UserContext);
-  const [, status] = useRequest(`${API_URL}/user/logout`, sendRequest, "POST");
+  const { status } = useRequest(`${API_URL}/user/logout`, sendRequest, "POST");
 
   if (status === 204) {
     context.logout();
