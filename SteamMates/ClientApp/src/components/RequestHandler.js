@@ -1,12 +1,17 @@
-import React from "react";
+import React, { useRef } from "react";
 import LoadingIndicator from "./common/LoadingIndicator";
 import { checkPageError } from "../utils/errorUtils";
 
 const RequestHandler = ({
   request: { loading, status, data, error },
+  ignoreEmptyData,
   children
 }) => {
+  const requestStarted = useRef(false);
+
   if (loading) {
+    requestStarted.current = true;
+
     return <LoadingIndicator marginTop={"100px"} />;
   }
 
@@ -15,7 +20,7 @@ const RequestHandler = ({
     return hasError;
   }
 
-  if (!data) {
+  if (!data && !(ignoreEmptyData && requestStarted.current)) {
     return null;
   }
 

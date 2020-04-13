@@ -25,7 +25,7 @@ export const UserProvider = props => {
   }, [data]);
 
   return (
-    <RequestHandler request={request}>
+    <RequestHandler request={request} ignoreEmptyData>
       <UserContext.Provider
         value={{
           loading,
