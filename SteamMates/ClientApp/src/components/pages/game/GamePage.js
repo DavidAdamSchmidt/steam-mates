@@ -6,8 +6,10 @@ import FriendContext from "../../../contexts/FriendContext";
 import RequestHandler from "../../RequestHandler";
 import GamePageHeader from "./GamePageHeader";
 import GamePageBody from "./GamePageBody";
-import { constructGamePageUrl } from "../../../utils/urlUtils";
-import { constructUserInfo } from "../../../utils/userInfoUtils";
+import {
+  constructGamePageUrl,
+  constructUserInfo
+} from "../../../utils/gameUtils";
 import { HOME } from "../../../constants/routes";
 
 const GamePage = ({ match }) => {

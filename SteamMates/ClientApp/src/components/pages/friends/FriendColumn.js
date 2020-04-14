@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import { getPropertyValue } from "../../../utils/friendSearchUtils";
+import { getPropertyValue } from "../../../utils/friendsUtils";
 import { BIG, FRIENDS, MEDIUM } from "../../../constants/style";
 
 export const ColumnKey = styled.span`

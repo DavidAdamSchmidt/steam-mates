@@ -1,3 +1,37 @@
+import { API_URL } from "../constants/api";
+
+export const constructGamePageUrl = (gameId, friends) => {
+  return `${API_URL}/games/${gameId}${
+    friends.length > 0 ? "?" : ""
+  }${friends
+    .map((friend, index) => `${index ? "&" : ""}userId=${friend.steamId}`)
+    .join("")}`;
+};
+
+export const calculateTitleFontSize = titleLength => {
+  switch (true) {
+    case titleLength > 60:
+      return 18;
+    case titleLength > 40:
+      return 22;
+    case titleLength > 30:
+      return 25;
+    case titleLength > 20:
+      return 28;
+    default:
+      return 31;
+  }
+};
+
+export const calculateCreatorsFontSize = (
+  developersTextLength,
+  publishersTextLength
+) => {
+  return (
+    10 - Math.floor(Math.max(developersTextLength, publishersTextLength) / 30)
+  );
+};
+
 export const constructUserInfo = (user, friends, info) => {
   const userDetails = mergeInfoWithUserData(user, info);
 

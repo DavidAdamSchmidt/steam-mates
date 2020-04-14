@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import FriendContext from "../../../contexts/FriendContext";
 import SectionTitle from "./SectionTitle";
 import StarRatings from "../../common/StarRatings";
-import { calculatePlayTime } from "../../../utils/userInfoUtils";
+import { calculatePlayTime } from "../../../utils/gameUtils";
 import { FRIENDS } from "../../../constants/routes";
 import { PROFILE_URL } from "../../../constants/steam";
 import { MEDIUM, BIG } from "../../../constants/style";

@@ -8,8 +8,8 @@ import FriendRow from "./FriendRow";
 import {
   getAllFriends,
   getMatchingFriends
-} from "../../../utils/friendSearchUtils";
-import { getElapsedTimeText } from "../../../utils/updateInfoUtils";
+} from "../../../utils/friendsUtils";
+import { getElapsedTimeText } from "../../../utils/sharedUtils";
 import tf2_party from "./../../../static/images/tf2_kazotsky_kick.png";
 import { MEDIUM } from "../../../constants/style";
 import {

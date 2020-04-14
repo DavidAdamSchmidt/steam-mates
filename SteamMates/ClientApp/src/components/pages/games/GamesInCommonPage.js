@@ -8,7 +8,7 @@ import RequestHandler from "../../RequestHandler";
 import Header from "../../common/Header";
 import GameContainer from "./GameContainer";
 import { showError, getLibraryError } from "../../../utils/errorUtils";
-import { getElapsedTimeText } from "../../../utils/updateInfoUtils";
+import { getElapsedTimeText } from "../../../utils/sharedUtils";
 import {
   addAverageOfRatings,
   organizeByRatingCount

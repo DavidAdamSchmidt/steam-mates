@@ -16,7 +16,7 @@ import AmountOfRatings from "./AmountOfRatings";
 import GameCard from "./GameCard";
 import LoadingIndicator from "../../common/LoadingIndicator";
 import { filterGames } from "../../../utils/gamesUtils";
-import { copyData } from "../../../utils/sharedUtils";
+import { copy } from "../../../utils/sharedUtils";
 
 const Wrapper = styled.div`
   display: flex;
@@ -74,12 +74,12 @@ const GameContainer = ({ data, dataOrganizer, allowRating }) => {
 
   useEffect(() => {
     setGames(
-      filterGames(copyData(data), inputRef.current, settings, dataOrganizer)
+      filterGames(copy(data), inputRef.current, settings, dataOrganizer)
     );
   }, [data, dataOrganizer, settings]);
 
   const handleInputChange = newInput => {
-    setGames(filterGames(copyData(data), newInput, settings, dataOrganizer));
+    setGames(filterGames(copy(data), newInput, settings, dataOrganizer));
     inputRef.current = newInput;
   };
 

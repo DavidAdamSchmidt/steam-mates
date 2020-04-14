@@ -5,7 +5,7 @@ import UserContext from "../../../contexts/UserContext";
 import RequestHandler from "../../RequestHandler";
 import Header from "../../common/Header";
 import GameContainer from "./GameContainer";
-import { getElapsedTimeText } from "../../../utils/updateInfoUtils";
+import { getElapsedTimeText } from "../../../utils/sharedUtils";
 import { organizeByCount } from "../../../utils/gamesUtils";
 import tf2_luxury_lounge from "./../../../static/images/tf2_luxury_lounge.png";
 import { API_URL } from "../../../constants/api";

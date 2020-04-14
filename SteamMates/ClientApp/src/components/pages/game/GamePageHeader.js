@@ -3,7 +3,7 @@ import styled, { css } from "styled-components";
 import {
   calculateTitleFontSize,
   calculateCreatorsFontSize
-} from "../../../utils/gamePageUtils";
+} from "../../../utils/gameUtils";
 import library_hero_default from "../../../static/images/library_hero_default.png";
 import { IMAGE_ROOT, STORE_PAGE } from "../../../constants/steam";
 import { MEDIUM, BIG } from "../../../constants/style";
