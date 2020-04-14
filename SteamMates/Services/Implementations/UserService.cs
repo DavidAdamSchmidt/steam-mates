@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Options;
+using SteamMates.Exceptions;
 using SteamMates.Models;
 using SteamMates.Services.Interfaces;
 using SteamMates.Utils;
@@ -55,7 +56,18 @@ namespace SteamMates.Services.Implementations
 
             if (user.CommunityVisibilityState == 3)
             {
-                user.Friends = await FetchFriendsAsync(userId);
+                try
+                {
+                    user.Friends = await FetchFriendsAsync(userId);
+                }
+                catch (ApiUnavailableException)
+                {
+                    var key = SiteUtils.CacheKeys.UserInfo;
+
+                    _cache.Remove(key);
+
+                    throw;
+                }
             }
 
             user.LatestUpdate = DateTime.Now;
