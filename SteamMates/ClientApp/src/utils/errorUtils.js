@@ -15,7 +15,7 @@ export const showError = message => {
   );
 };
 
-export const checkPageError = (status, error) => {
+export const checkPageError = (status, error, user, friends) => {
   if (!error) {
     return;
   }
@@ -30,6 +30,20 @@ export const checkPageError = (status, error) => {
     (status === 404 && (error.tagName || error.gameId))
   ) {
     return showError(error.message);
+  }
+
+  if (status === 404 && error.userId) {
+    if (error.userId === user.steamId) {
+      return showError(
+        "Could not access your library. Please make sure your game details are set to public."
+      );
+    }
+
+    return showError(
+      `Could not access ${
+        friends.find(friend => friend.steamId === error.userId).personaName
+      }'s library`
+    );
   }
 };
 
