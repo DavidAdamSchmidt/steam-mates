@@ -116,7 +116,11 @@ const HomePage = () => {
   const { status, error } = useContext(UserContext);
 
   if (status === 503 && (error || {}).apiName === "Steam") {
-    return showError(error.message);
+    return showError(
+      `${error.message}` +
+        " This could be related either to Steam or your privacy settings." +
+        " Please make sure your basic details, game details and friends list are all public."
+    );
   }
 
   if ((error || {}).message === NETWORK_ERROR) {

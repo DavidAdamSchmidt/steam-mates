@@ -9,8 +9,8 @@ const RequestHandler = ({
   ignoreEmptyData,
   children
 }) => {
-  const { user } = useContext(UserContext) || {};
-  const { friends } = useContext(FriendContext) || {};
+  const { user } = useContext(UserContext);
+  const { friends } = useContext(FriendContext);
   const requestStarted = useRef(false);
 
   if (loading) {
@@ -24,7 +24,7 @@ const RequestHandler = ({
     return hasError;
   }
 
-  if (!data && !(ignoreEmptyData && requestStarted.current)) {
+  if (!data) {
     return null;
   }
 

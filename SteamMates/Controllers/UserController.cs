@@ -51,6 +51,8 @@ namespace SteamMates.Controllers
             }
             catch (ApiUnavailableException e)
             {
+                DeleteCookie();
+
                 return StatusCode(503, new { e.ApiName, e.Message });
             }
         }
@@ -58,9 +60,14 @@ namespace SteamMates.Controllers
         [HttpPost("logout")]
         public IActionResult Logout()
         {
-            Response.Cookies.Delete(SiteUtils.UserCookieName);
+            DeleteCookie();
 
             return NoContent();
+        }
+
+        private void DeleteCookie()
+        {
+            Response.Cookies.Delete(SiteUtils.UserCookieName);
         }
     }
 }

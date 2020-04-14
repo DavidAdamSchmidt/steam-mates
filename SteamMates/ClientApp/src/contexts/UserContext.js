@@ -1,6 +1,6 @@
 import React, { createContext, useEffect, useState } from "react";
 import useRequest from "../hooks/useRequest";
-import RequestHandler from "../components/RequestHandler";
+import LoadingIndicator from "../components/common/LoadingIndicator";
 import { API_URL } from "../constants/api";
 import { USER_ID } from "../constants/localStorage";
 
@@ -24,21 +24,22 @@ export const UserProvider = props => {
     localStorage.setItem(USER_ID, data.steamId);
   }, [data]);
 
+  if (loading) {
+    return <LoadingIndicator marginTop={"100px"} />;
+  }
+
   return (
-    <RequestHandler request={request} ignoreEmptyData>
-      <UserContext.Provider
-        value={{
-          loading,
-          status,
-          user: data,
-          error,
-          logout: reset,
-          clearFriends
-        }}
-      >
-        {props.children}
-      </UserContext.Provider>
-    </RequestHandler>
+    <UserContext.Provider
+      value={{
+        status,
+        user: data,
+        error,
+        logout: reset,
+        clearFriends
+      }}
+    >
+      {props.children}
+    </UserContext.Provider>
   );
 };
 
