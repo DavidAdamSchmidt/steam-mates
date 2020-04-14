@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from "react";
 import styled, { css } from "styled-components";
 import useRequest from "../../hooks/useRequest";
 import UserContext from "../../contexts/UserContext";
-import Error from "../pages/games/Error";
+import { showError } from "../../utils/errorUtils";
 import full_star from "../../static/images/full_star.gif";
 import empty_star from "../../static/images/empty_star.gif";
 import { API_URL } from "../../constants/api";
@@ -43,10 +43,9 @@ const StarRatings = ({
 }) => {
   const [requestBody, setRequestBody] = useState({});
   const [sendRequest, setSendRequest] = useState(false);
-  const [databaseError, setDatabaseError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
   const [currentValue, setCurrentValue] = useState(rating);
   const [selectedValue, setSelectedValue] = useState(rating);
-  const [previousValue, setPreviousValue] = useState(rating);
   const { user } = useContext(UserContext);
   const values = [...Array(amountOfStars).keys()].map(i => i + 1);
 
@@ -58,23 +57,26 @@ const StarRatings = ({
   );
 
   useEffect(() => {
-    setDatabaseError(
-      status === 500 && (error || {}).message === DATABASE_ERROR
-    );
+    if (status === 500 && (error || {}).message === DATABASE_ERROR) {
+      setErrorMessage("Database error. Your rating has not been saved.");
+    } else if (status && status !== 201 && status !== 204) {
+      setErrorMessage(
+        "An unknown error has occurred. Your rating may not have been saved."
+      );
+    }
   }, [status, error]);
 
   useEffect(() => {
-    if (setRating && sendRequest && (status === 201 || status === 204)) {
+    if (setRating && sendRequest) {
       setRating(selectedValue);
     }
-  }, [status, setRating, sendRequest, selectedValue]);
+  }, [setRating, sendRequest, selectedValue]);
 
   const rateGame = () => {
     if (selectedValue === currentValue) {
       return;
     }
 
-    setPreviousValue(selectedValue);
     setSelectedValue(currentValue);
     setRequestBody({
       userId: user.steamId,
@@ -84,14 +86,12 @@ const StarRatings = ({
     setSendRequest(true);
   };
 
-  if (databaseError && selectedValue !== previousValue) {
-    setSelectedValue(previousValue);
-    setCurrentValue(previousValue);
+  if (errorMessage) {
+    return showError(errorMessage);
   }
 
   return (
     <Wrapper size={size}>
-      {databaseError && <Error message="Database Error" />}
       {values.map(value =>
         frozen ? (
           <StarRating
