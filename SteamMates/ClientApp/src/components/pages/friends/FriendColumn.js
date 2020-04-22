@@ -1,7 +1,6 @@
 import React from "react";
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 import { getPropertyValue } from "../../../utils/friendsUtils";
-import { BIG, FRIENDS, MEDIUM } from "../../../constants/style";
 
 export const ColumnKey = styled.span`
   font-size: 14px;
@@ -10,7 +9,7 @@ export const ColumnKey = styled.span`
   display: none;
   white-space: nowrap;
 
-  @media (${FRIENDS.TIER_THREE}) {
+  @media (min-width: 420px) {
     display: inline;
   }
 `;
@@ -23,23 +22,25 @@ const Wrapper = styled.span`
   margin-right: 26px;
   font-size: 14px;
 
-  @media (${FRIENDS.TIER_THREE}) {
+  @media (min-width: 420px) {
     font-size: 16px;
   }
 
-  @media (${FRIENDS.TIER_ONE}) {
+  @media (min-width: 648px) {
     flex-direction: column;
   }
 
-  @media (${MEDIUM}) {
-    flex-direction: row;
-  }
+  ${({ theme }) => css`
+    @media (${theme.queries.medium}) {
+      flex-direction: row;
+    }
 
-  @media (${BIG}) {
-    flex-direction: column;
-    flex-basis: 50%;
-    flex-grow: 0;
-  }
+    @media (${theme.queries.big}) {
+      flex-direction: column;
+      flex-basis: 50%;
+      flex-grow: 0;
+    }
+  `}
 `;
 
 const Match = styled.span`

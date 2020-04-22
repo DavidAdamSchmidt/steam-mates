@@ -1,7 +1,6 @@
 import React from "react";
 import play_video_button from "../../../static/images/play_video_button.png";
 import styled, { css } from "styled-components";
-import { MEDIUM, BIG } from "../../../constants/style";
 
 const Container = styled.div`
   position: relative;
@@ -9,13 +8,15 @@ const Container = styled.div`
   width: calc(20% - 4px);
   height: 10.56vw;
 
-  @media (${MEDIUM}) {
-    height: 6.38vw;
-  }
+  ${({ theme }) => css`
+    @media (${theme.queries.medium}) {
+      height: 6.38vw;
+    }
 
-  @media (${BIG}) {
-    height: 73px;
-  }
+    @media (${theme.queries.big}) {
+      height: 73px;
+    }
+  `}
 
   ${({ selected }) =>
     selected
@@ -44,10 +45,12 @@ const PlayButton = styled.img`
   height: 3.5vw;
   cursor: pointer;
 
-  @media (${BIG}) {
-    width: 40px;
-    height: 40px;
-  }
+  ${({ theme }) => css`
+    @media (${theme.queries.big}) {
+      width: 40px;
+      height: 40px;
+    }
+  `}
 `;
 
 const Thumbnail = ({

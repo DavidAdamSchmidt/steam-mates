@@ -1,15 +1,16 @@
 import React from "react";
-import styled from "styled-components";
-import { BIG, FRIENDS, MEDIUM } from "../../constants/style";
+import styled, { css } from "styled-components";
 
 const Wrapper = styled.div`
   display: flex;
   padding: 0 20px;
   justify-content: space-between;
 
-  @media (${BIG}) {
-    margin: 20px;
-  }
+  ${({ theme }) => css`
+    @media (${theme.queries.big}) {
+      margin: 20px;
+    }
+  `}
 `;
 
 const TextBox = styled.div`
@@ -17,13 +18,15 @@ const TextBox = styled.div`
   line-height: 1.6;
   font-family: noticia, Georgia, Cambria, "Times New Roman", serif;
 
-  @media (${FRIENDS.TIER_FIVE}) {
-    display: block;
-  }
+  ${({ theme }) => css`
+    @media (${theme.queries.extraSmall}) {
+      display: block;
+    }
 
-  @media (${MEDIUM}) {
-    padding-right: 30px;
-  }
+    @media (${theme.queries.medium}) {
+      padding-right: 30px;
+    }
+  `}
 `;
 
 const TextBoxMain = styled.h1`
@@ -31,25 +34,29 @@ const TextBoxMain = styled.h1`
   font-family: boxed, helvetica neue, Helvetica, Roboto, Arial, sans-serif;
   color: #0f0f0f;
 
-  @media (${FRIENDS.TIER_TWO}) {
-    font-size: 29px;
-  }
+  ${({ theme }) => css`
+    @media (${theme.queries.small}) {
+      font-size: 29px;
+    }
+  `}
 `;
 
 const Image = styled.img`
   display: none;
   align-self: flex-end;
 
-  @media (${MEDIUM}) {
-    display: inline;
-    max-width: 289px;
-    max-height: 252px;
-  }
+  ${({ theme }) => css`
+    @media (${theme.queries.medium}) {
+      display: inline;
+      max-width: 289px;
+      max-height: 252px;
+    }
 
-  @media (${BIG}) {
-    max-width: 400px;
-    max-height: 350px;
-  }
+    @media (${theme.queries.big}) {
+      max-width: 400px;
+      max-height: 350px;
+    }
+  `}
 `;
 
 const Header = ({ title, children, image }) => {

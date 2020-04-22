@@ -13,9 +13,11 @@ const Avatar = styled.img`
       filter: brightness(50%);
     `}
 
-  @media (min-width: 450px) {
-    width: 45px;
-  }
+  ${({ theme }) => css`
+    @media (${theme.queries.smaller}) {
+      width: 45px;
+    }
+  `}
 `;
 
 const Remove = styled.span`

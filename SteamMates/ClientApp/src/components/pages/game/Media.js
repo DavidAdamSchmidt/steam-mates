@@ -1,28 +1,32 @@
 import React, { useState } from "react";
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 import Thumbnail from "./Thumbnail";
-import { MEDIUM, BIG } from "../../../constants/style";
 
 const Container = styled.div`
-  @media (${MEDIUM}) {
-    padding-top: 0;
-  }
+  ${({ theme }) => css`
+    @media (${theme.queries.medium}) {
+      padding-top: 0;
+    }
+  `}
 `;
 
 const Selected = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  height: calc((360 / 640) * (100vw - 2.6vw * 2 - var(--scrollbar-width)));
   background: black;
 
-  @media (${MEDIUM}) {
-    height: calc((360 / 640) * 56.37vw);
-  }
+  ${({ theme }) => css`
+    height: calc((360 / 640) * (100vw - 2.6vw * 2 - ${theme.scrollbarWidth}px));
 
-  @media (${BIG}) {
-    height: 360px;
-  }
+    @media (${theme.queries.medium}) {
+      height: calc((360 / 640) * 56.37vw);
+    }
+
+    @media (${theme.queries.big}) {
+      height: 360px;
+    }
+  `}
 `;
 
 const Video = styled.video`

@@ -1,6 +1,5 @@
 import React from "react";
 import styled, { css } from "styled-components";
-import { MEDIUM } from "../../constants/style";
 
 const Text = styled.div`
   display: flex;
@@ -25,7 +24,7 @@ const Text = styled.div`
     cursor: pointer;
     color: white;
   }
-  
+
   ${({ clickable }) =>
     !clickable &&
     css`
@@ -33,11 +32,12 @@ const Text = styled.div`
         cursor: default;
       }
     `}
-  
 
-  @media (${MEDIUM}) {
-    color: #b1b1b1;
-  }
+  ${({ theme }) => css`
+    @media (${theme.queries.medium}) {
+      color: #b1b1b1;
+    }
+  `}
 `;
 
 const Menu = ({ text, disabled, clickable }) => {

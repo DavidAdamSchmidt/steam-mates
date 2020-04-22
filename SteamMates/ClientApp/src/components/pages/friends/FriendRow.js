@@ -1,8 +1,7 @@
 import React, { useContext } from "react";
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 import FriendContext from "../../../contexts/FriendContext";
 import FriendColumn, { ColumnKey, ColumnValue } from "./FriendColumn";
-import { MEDIUM, BIG, FRIENDS } from "../../../constants/style";
 
 const Wrapper = styled.div`
   display: flex;
@@ -26,10 +25,12 @@ const Wrapper = styled.div`
     }
   }
 
-  @media (${FRIENDS.TIER_FIVE}) {
-    display: grid;
-    grid-template-columns: auto 1fr;
-  }
+  ${({ theme }) => css`
+    @media (${theme.queries.extraSmall}) {
+      display: grid;
+      grid-template-columns: auto 1fr;
+    }
+  `}
 `;
 
 const AvatarContainer = styled.div`
@@ -39,9 +40,11 @@ const AvatarContainer = styled.div`
   width: 60px;
   padding: 0 20px;
 
-  @media (${MEDIUM}) {
-    width: 40px;
-  }
+  ${({ theme }) => css`
+    @media (${theme.queries.medium}) {
+      width: 40px;
+    }
+  `}
 `;
 
 const Avatar = styled.img`
@@ -54,7 +57,7 @@ const FriendDetails = styled.div`
   display: flex;
   flex-direction: column;
 
-  @media (${FRIENDS.TIER_ONE}) {
+  @media (min-width: 648px) {
     flex-direction: row;
   }
 `;
@@ -68,7 +71,7 @@ const ColumnWrapper = styled.div`
   & ${ColumnValue} {
     display: none;
 
-    @media (${FRIENDS.TIER_FOUR}) {
+    @media (min-width: 326px) {
       display: inline;
     }
   }
@@ -77,12 +80,14 @@ const ColumnWrapper = styled.div`
     display: inline;
     padding: 0 0 10px 20px;
 
-    @media (${FRIENDS.TIER_FIVE}) {
-      padding: 0;
-    }
+    ${({ theme }) => css`
+      @media (${theme.queries.extraSmall}) {
+        padding: 0;
+      }
+    `}
   }
 
-  @media (${FRIENDS.TIER_ONE}) {
+  @media (min-width: 648px) {
     flex-direction: column;
 
     &:first-of-type ${ColumnKey} {
@@ -94,9 +99,11 @@ const ColumnWrapper = styled.div`
     }
   }
 
-  @media (${BIG}) {
-    flex-direction: row;
-  }
+  ${({ theme }) => css`
+    @media (${theme.queries.big}) {
+      flex-direction: row;
+    }
+  `}
 `;
 
 const FriendRow = ({ result, searchTerm }) => {

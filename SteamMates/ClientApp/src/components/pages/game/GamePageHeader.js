@@ -6,7 +6,6 @@ import {
 } from "../../../utils/gameUtils";
 import library_hero_default from "../../../static/images/library_hero_default.png";
 import { IMAGE_ROOT, STORE_PAGE } from "../../../constants/steam";
-import { MEDIUM, BIG } from "../../../constants/style";
 
 const Header = styled.div`
   position: relative;
@@ -14,29 +13,34 @@ const Header = styled.div`
   height: 242px;
   font-weight: bold;
 
-  @media (${MEDIUM}) {
-    height: initial;
-  }
+  ${({ theme }) => css`
+    @media (${theme.queries.medium}) {
+      height: initial;
+    }
 
-  @media (${BIG}) {
-    width: 1050px;
-    height: 339px;
-  }
+    @media (${theme.queries.big}) {
+      width: ${theme.containerWidth}px;
+      height: 339px;
+    }
+  `}
 `;
 
 const Image = styled.img`
   position: absolute;
   left: 50%;
   transform: translateX(-50%);
-  width: 751px;
   height: 100%;
   vertical-align: bottom;
 
-  @media (${MEDIUM}) {
-    position: initial;
-    transform: translateX(0);
-    width: 100%;
-  }
+  ${({ theme }) => css`
+    width: ${theme.sizes.medium - theme.scrollbarWidth}px;
+
+    @media (${theme.queries.medium}) {
+      position: initial;
+      transform: translateX(0);
+      width: 100%;
+    }
+  `}
 `;
 
 const Anchor = styled.a`
@@ -59,15 +63,17 @@ const Title = styled.div`
   text-transform: uppercase;
   color: white;
 
-  @media (${MEDIUM}) {
-    margin: 2.81vw;
-    font-size: 1.3em;
-  }
+  ${({ theme }) => css`
+    @media (${theme.queries.medium}) {
+      margin: 2.81vw;
+      font-size: 1.3em;
+    }
 
-  @media (${BIG}) {
-    margin: 30px;
-    font-size: 1.8em;
-  }
+    @media (${theme.queries.big}) {
+      margin: 30px;
+      font-size: 1.8em;
+    }
+  `}
 
   ${({ originalFontSize }) =>
     originalFontSize < 31 &&
@@ -105,15 +111,17 @@ const Creators = styled.div`
     padding: 8px 0 5px 0;
   }
 
-  @media (${MEDIUM}) {
-    margin: 2.81vw;
-    font-size: 1.4em;
-  }
+  ${({ theme }) => css`
+    @media (${theme.queries.medium}) {
+      margin: 2.81vw;
+      font-size: 1.4em;
+    }
 
-  @media (${BIG}) {
-    margin: 30px;
-    font-size: 1.6em;
-  }
+    @media (${theme.queries.big}) {
+      margin: 30px;
+      font-size: 1.6em;
+    }
+  `}
 `;
 
 const Button = styled.div`
@@ -134,9 +142,11 @@ const Button = styled.div`
     background: linear-gradient(#c4ffc8, #13cd13 40%);
   }
 
-  @media (${BIG}) {
-    display: initial;
-  }
+  ${({ theme }) => css`
+    @media (${theme.queries.big}) {
+      display: initial;
+    }
+  `}
 `;
 
 const GamePageHeader = ({ id, name, developers, publishers, owned }) => {

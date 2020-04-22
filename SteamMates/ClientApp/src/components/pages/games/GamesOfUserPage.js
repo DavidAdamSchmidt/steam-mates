@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 import useRequest from "../../../hooks/useRequest";
 import UserContext from "../../../contexts/UserContext";
 import RequestHandler from "../../RequestHandler";
@@ -9,12 +9,13 @@ import { getElapsedTimeText } from "../../../utils/sharedUtils";
 import { organizeByCount } from "../../../utils/gamesUtils";
 import tf2_luxury_lounge from "./../../../static/images/tf2_luxury_lounge.png";
 import { API_URL } from "../../../constants/api";
-import { MEDIUM } from "../../../constants/style";
 
 const Wrapper = styled.div`
-  @media (${MEDIUM}) {
-    margin-top: 100px;
-  }
+  ${({ theme }) => css`
+    @media (${theme.queries.medium}) {
+      margin-top: 100px;
+    }
+  `}
 `;
 
 const LatestUpdate = styled.p`

@@ -1,17 +1,13 @@
 import React, { useContext, useState } from "react";
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 import useWindowSize from "../../../hooks/useWindowSize";
 import UserContext from "../../../contexts/UserContext";
 import Header from "../../common/Header";
 import SearchBox from "../../common/SearchBox";
 import FriendRow from "./FriendRow";
-import {
-  getAllFriends,
-  getMatchingFriends
-} from "../../../utils/friendsUtils";
+import { getAllFriends, getMatchingFriends } from "../../../utils/friendsUtils";
 import { getElapsedTimeText } from "../../../utils/sharedUtils";
 import tf2_party from "./../../../static/images/tf2_kazotsky_kick.png";
-import { MEDIUM } from "../../../constants/style";
 import {
   PERSONA_NAME,
   REAL_NAME,
@@ -20,9 +16,11 @@ import {
 } from "../../../constants/user";
 
 const Wrapper = styled.div`
-  @media (${MEDIUM}) {
-    margin-top: 100px;
-  }
+  ${({ theme }) => css`
+    @media (${theme.queries.medium}) {
+      margin-top: 100px;
+    }
+  `}
 `;
 
 const LatestUpdate = styled.p`

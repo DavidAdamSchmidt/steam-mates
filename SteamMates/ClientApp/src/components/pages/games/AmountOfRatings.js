@@ -1,6 +1,5 @@
 import React from "react";
-import styled from "styled-components";
-import { MEDIUM } from "../../../constants/style";
+import styled, { css } from "styled-components";
 
 const Wrapper = styled.div`
   margin: 0 26px;
@@ -17,15 +16,17 @@ const Title = styled.div`
   letter-spacing: 1.1px;
   color: #4e4e4e;
 
-  @media (min-width: 360px) {
-    border-bottom: 1.5px solid #4e4e4e;
-    line-height: 0.1em;
-  }
+  ${({ theme }) => css`
+    @media (${theme.queries.verySmall}) {
+      border-bottom: 1.5px solid #4e4e4e;
+      line-height: 0.1em;
+    }
 
-  @media (${MEDIUM}) {
-    border-bottom: 2.5px solid #4e4e4e;
-    font-size: 27px;
-  }
+    @media (${theme.queries.medium}) {
+      border-bottom: 2.5px solid #4e4e4e;
+      font-size: 27px;
+    }
+  `}
 `;
 
 const Inner = styled.span`

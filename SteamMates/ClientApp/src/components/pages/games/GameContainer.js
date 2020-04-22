@@ -6,7 +6,7 @@ import React, {
   useRef,
   useState
 } from "react";
-import styled from "styled-components";
+import styled, { ThemeContext } from "styled-components";
 import useWindowSize from "../../../hooks/useWindowSize";
 import useInfiniteScroll from "../../../hooks/useInfiniteScroll";
 import SettingsContext from "../../../contexts/SettingsContext";
@@ -59,6 +59,7 @@ const GameContainer = ({ data, dataOrganizer, allowRating }) => {
   const [showAdvancedOptions, setShowAdvancedOptions] = useState(false);
 
   const settings = useContext(SettingsContext);
+  const { sizes } = useContext(ThemeContext);
 
   const [width] = useWindowSize();
   const [isLoading, setIsLoading] = useInfiniteScroll(
@@ -107,7 +108,7 @@ const GameContainer = ({ data, dataOrganizer, allowRating }) => {
           {!!hidden && inputRef.current.length < 3 && (
             <HiddenGames>
               {hidden} game{hidden > 1 ? "s were" : " was"} hidden
-              {width >= 768 && " based on your preferences"}
+              {width >= sizes.medium && " based on your preferences"}
             </HiddenGames>
           )}
         </SearchResultWrapper>

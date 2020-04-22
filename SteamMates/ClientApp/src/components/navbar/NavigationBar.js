@@ -5,7 +5,7 @@ import React, {
   useRef,
   useState
 } from "react";
-import styled, { css } from "styled-components";
+import styled, { css, ThemeContext } from "styled-components";
 import { useHistory } from "react-router-dom";
 import useWindowSize from "../../hooks/useWindowSize";
 import UserContext from "../../contexts/UserContext";
@@ -24,7 +24,6 @@ import {
   GAMES_IN_COMMON,
   RANDOM_GAME
 } from "../../constants/routes";
-import { MEDIUM, BIG } from "../../constants/style";
 import { HAMBURGER_ICON } from "../../constants/steam";
 
 const Wrapper = styled.div`
@@ -39,9 +38,11 @@ const Wrapper = styled.div`
     height: 6.56vw;
   }
 
-  @media (${BIG}) {
-    height: 70px;
-  }
+  ${({ theme }) => css`
+    @media (${theme.queries.big}) {
+      height: 70px;
+    }
+  `}
 `;
 
 const Container = styled.div`
@@ -52,10 +53,10 @@ const Container = styled.div`
   max-width: 1050px;
   height: 100%;
 
-  ${({ loggedIn }) =>
-    loggedIn &&
+  ${props =>
+    props.loggedIn &&
     css`
-      @media (${MEDIUM}) {
+      @media (${props.theme.queries.medium}) {
         display: grid;
         grid-template-columns: auto repeat(3, 1fr) auto;
       }
@@ -79,6 +80,7 @@ const NavigationBar = () => {
   const [showHamburgerMenu, setShowHamburgerMenu] = useState(false);
   const { user, error } = useContext(UserContext);
   const { friends } = useContext(FriendContext);
+  const { sizes } = useContext(ThemeContext);
   const togglerRef = useRef();
   const hamburgerMenuRef = useRef();
   const history = useHistory();
@@ -128,7 +130,7 @@ const NavigationBar = () => {
     );
   }
 
-  if (width < 768) {
+  if (width < sizes.medium) {
     return (
       <Wrapper>
         <Container loggedIn={user}>

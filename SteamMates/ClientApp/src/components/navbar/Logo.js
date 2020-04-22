@@ -1,8 +1,7 @@
 import React, { useContext } from "react";
-import styled, { css } from "styled-components";
+import styled, { css, ThemeContext } from "styled-components";
 import useWindowSize from "../../hooks/useWindowSize";
 import UserContext from "../../contexts/UserContext";
-import { BIG, MEDIUM } from "../../constants/style";
 
 const Wrapper = styled.span`
   padding: 0 20px;
@@ -11,17 +10,17 @@ const Wrapper = styled.span`
   color: white;
   user-select: none;
 
-  ${({ loggedIn }) =>
-    loggedIn
+  ${props =>
+    props.loggedIn
       ? css`
           display: none;
 
-          @media (${MEDIUM}) {
+          @media (${props.theme.queries.medium}) {
             display: block;
             font-size: 2.62vw;
           }
 
-          @media (${BIG}) {
+          @media (${props.theme.queries.big}) {
             font-size: 28px;
           }
         `
@@ -33,11 +32,12 @@ const Wrapper = styled.span`
 
 const Logo = () => {
   const { user } = useContext(UserContext);
+  const { sizes } = useContext(ThemeContext);
   const [width] = useWindowSize();
 
   return (
     <Wrapper loggedIn={user}>
-      {!user && width < 480 ? "SM" : "SteamMates"}
+      {!user && width < sizes.small ? "SM" : "SteamMates"}
     </Wrapper>
   );
 };

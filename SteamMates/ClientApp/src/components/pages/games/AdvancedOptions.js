@@ -1,8 +1,7 @@
 import React, { useContext } from "react";
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 import SettingsContext from "../../../contexts/SettingsContext";
 import { RATING, TITLE } from "../../../constants/orderByOptions";
-import { MEDIUM } from "../../../constants/style";
 
 const Panel = styled.div`
   display: ${({ display }) => display};
@@ -16,16 +15,18 @@ const Panel = styled.div`
   min-height: 600px;
   background: #dedede;
 
-  @media (min-width: 360px) {
-    min-height: initial;
-    padding: 0 40px;
-  }
+  ${({ theme }) => css`
+    @media (${theme.queries.verySmall}) {
+      min-height: initial;
+      padding: 0 40px;
+    }
 
-  @media (${MEDIUM}) {
-    grid-template-columns: repeat(3, 1fr);
-    grid-template-rows: none;
-    height: 200px;
-  }
+    @media (${theme.queries.medium}) {
+      grid-template-columns: repeat(3, 1fr);
+      grid-template-rows: none;
+      height: 200px;
+    }
+  `}
 `;
 
 const Block = styled.div`

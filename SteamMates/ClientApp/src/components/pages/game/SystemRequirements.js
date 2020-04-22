@@ -10,15 +10,16 @@ const Container = styled.div`
 const SelectionMenu = styled.div`
   display: flex;
   flex-direction: column;
-
-  @media (min-width: 450px) {
-    display: block;
-  }
-
   margin: 10px 0 20px 0;
   border-radius: 3px;
   padding: 12px;
   background: linear-gradient(#f3f3f3, #d4d4d4);
+
+  ${({ theme }) => css`
+    @media (${theme.queries.smaller}) {
+      display: block;
+    }
+  `}
 `;
 
 const Wrapper = styled.div`
@@ -36,17 +37,19 @@ const Option = styled.div`
   text-align: center;
   color: #5c5c5c;
 
-  @media (min-width: 450px) {
-    margin: 0 20px;
-    text-align: initial;
-  }
-
   ${({ selected }) =>
     selected &&
     css`
       border-radius: 3px;
       background: #c2c2c2;
     `}
+
+  ${({ theme }) => css`
+    @media (${theme.queries.smaller}) {
+      margin: 0 20px;
+      text-align: initial;
+    }
+  `}
 
   &:hover {
     ${({ selected }) =>
@@ -61,9 +64,11 @@ const Requirements = styled.span`
   width: 480px;
   line-height: 1.6;
 
-  @media (min-width: 450px) {
-    padding: 0 20px;
-  }
+  ${({ theme }) => css`
+    @media (${theme.queries.smaller}) {
+      padding: 0 20px;
+    }
+  `}
 `;
 
 const SystemRequirements = ({

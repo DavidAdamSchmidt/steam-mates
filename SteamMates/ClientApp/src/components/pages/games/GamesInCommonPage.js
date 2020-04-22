@@ -1,5 +1,5 @@
 import React, { useState, useContext, useEffect } from "react";
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 import { Redirect } from "react-router-dom";
 import useRequest from "../../../hooks/useRequest";
 import UserContext from "../../../contexts/UserContext";
@@ -17,12 +17,13 @@ import tf2_high_five from "./../../../static/images/tf2_high_five.png";
 import tf2_spy_shocked from "./../../../static/images/tf2_spy_shocked.png";
 import { API_URL } from "../../../constants/api";
 import { HOME } from "../../../constants/routes";
-import { MEDIUM } from "../../../constants/style";
 
 const Wrapper = styled.div`
-  @media (${MEDIUM}) {
-    margin-top: 100px;
-  }
+  ${({ theme }) => css`
+    @media (${theme.queries.medium}) {
+      margin-top: 100px;
+    }
+  `}
 `;
 
 const LatestUpdate = styled.p`

@@ -1,8 +1,7 @@
 import React from "react";
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCog, faSearch } from "@fortawesome/free-solid-svg-icons";
-import { FRIENDS } from "../../constants/style";
 
 const Wrapper = styled.div`
   position: relative;
@@ -21,13 +20,15 @@ const Wrapper = styled.div`
   height: 35px;
   background: white;
 
-  @media (${FRIENDS.TIER_FIVE}) {
-    margin: 0;
-  }
+  ${({ theme }) => css`
+    @media (${theme.queries.extraSmall}) {
+      margin: 0;
+    }
 
-  @media (${FRIENDS.TIER_TWO}) {
-    height: 40px;
-  }
+    @media (${theme.queries.small}) {
+      height: 40px;
+    }
+  `}
 `;
 
 const SearchIcon = styled.div`

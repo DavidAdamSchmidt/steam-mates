@@ -7,17 +7,18 @@ import StarRatings from "../../common/StarRatings";
 import { calculatePlayTime } from "../../../utils/gameUtils";
 import { FRIENDS } from "../../../constants/routes";
 import { PROFILE_URL } from "../../../constants/steam";
-import { MEDIUM, BIG } from "../../../constants/style";
 
 const MainWrapper = styled.div`
   display: flex;
   flex-wrap: wrap;
   margin-bottom: 15px;
 
-  @media (${MEDIUM}) {
-    display: initial;
-    margin-bottom: 0;
-  }
+  ${({ theme }) => css`
+    @media (${theme.queries.medium}) {
+      display: initial;
+      margin-bottom: 0;
+    }
+  `}
 `;
 
 const Row = styled.div`
@@ -29,27 +30,29 @@ const Row = styled.div`
   margin: 10px 0;
   overflow: hidden;
 
-  ${({ hasFriends }) =>
+  ${({ hasFriends, theme }) =>
     hasFriends &&
     css`
-      @media (min-width: 450px) {
+      @media (${theme.queries.smaller}) {
         grid-template-columns: 10.43vw auto;
-        grid-column-gap: 5.21vw;
-        flex-basis: 50%;
-        margin: 2.6vw 0;
-    `};
+            grid-column-gap: 5.21vw;
+            flex-basis: 50%;
+            margin: 2.6vw 0;
+        `}
 
-  @media (${MEDIUM}) {
-    grid-template-columns: 7vw auto;
-    grid-column-gap: 3.47vw;
-    margin: 1.68vw 0;
-  }
+  ${({ theme }) => css`
+    @media (${theme.queries.medium}) {
+      grid-template-columns: 7vw auto;
+      grid-column-gap: 3.47vw;
+      margin: 1.68vw 0;
+    }
 
-  @media (${BIG}) {
-    grid-template-columns: 80px auto;
-    grid-column-gap: 40px;
-    margin: 20px 0;
-  }
+    @media (${theme.queries.big}) {
+      grid-template-columns: 80px auto;
+      grid-column-gap: 40px;
+      margin: 20px 0;
+    }
+  `}
 `;
 
 const AvatarContainer = styled.div`
@@ -62,24 +65,25 @@ const AvatarContainer = styled.div`
     background: #2da258;
   }
 
-  ${({ hasFriends }) =>
+  ${({ hasFriends, theme }) =>
     hasFriends &&
     css`
-      @media (min-width: 450px) {
+      @media (${theme.queries.smaller}) {
         width: 10.43vw;
         height: 10.43vw;
-      }
-    `};
+      `}
 
-  @media (${MEDIUM}) {
-    width: 7vw;
-    height: 7vw;
-  }
+  ${({ theme }) => css`
+    @media (${theme.queries.medium}) {
+      width: 7vw;
+      height: 7vw;
+    }
 
-  @media (${BIG}) {
-    width: 80px;
-    height: 80px;
-  }
+    @media (${theme.queries.big}) {
+      width: 80px;
+      height: 80px;
+    }
+  `}
 `;
 
 const Anchor = styled.a`
@@ -106,24 +110,25 @@ const RatingWrapper = styled.div`
   width: 170px;
   height: 32px;
 
-  ${({ hasFriends }) =>
+  ${({ hasFriends, theme }) =>
     hasFriends &&
     css`
-      @media (min-width: 450px) {
+      @media (${theme.queries.smaller}) {
         width: 22.16vw;
         height: 4.17vw;
-      }
-    `};
+      `}
 
-  @media (${MEDIUM}) {
-    width: 14.91vw;
-    height: 2.72vw;
-  }
+  ${({ theme }) => css`
+    @media (${theme.queries.medium}) {
+      width: 14.91vw;
+      height: 2.72vw;
+    }
 
-  @media (${BIG}) {
-    width: 170px;
-    height: 32px;
-  }
+    @media (${theme.queries.big}) {
+      width: 170px;
+      height: 32px;
+    }
+  `}
 `;
 
 const PlayTime = styled.div`
@@ -134,19 +139,21 @@ const PlayTime = styled.div`
   letter-spacing: 0.8px;
   color: #414141;
 
-  @media (min-width: 450px) {
-    width: 75%;
-  }
+  ${({ theme }) => css`
+    @media (${theme.queries.smaller}) {
+      width: 75%;
+    }
 
-  @media (${MEDIUM}) {
-    width: 100%;
-    padding-top: 0.84vw;
-  }
+    @media (${theme.queries.medium}) {
+      width: 100%;
+      padding-top: 0.84vw;
+    }
 
-  @media (${BIG}) {
-    padding-top: 10px;
-    font-size: 16px;
-  }
+    @media (${theme.queries.big}) {
+      padding-top: 10px;
+      font-size: 16px;
+    }
+  `}
 `;
 
 const NotOwned = styled.div`
@@ -155,9 +162,11 @@ const NotOwned = styled.div`
   font-weight: bold;
   color: #da0000;
 
-  @media (${BIG}) {
-    font-size: 18px;
-  }
+  ${({ theme }) => css`
+    @media (${theme.queries.big}) {
+      font-size: 18px;
+    }
+  `}
 `;
 
 const Tip = styled.div`
