@@ -123,7 +123,7 @@ const GamesInCommonPage = () => {
           ) : (
             <Header title=":(" image={tf2_spy_shocked}>
               <p>
-                No match were found with{" "}
+                No match was found with{" "}
                 {friends.length === 1 ? "this friend" : "these friends"}. Try
                 another combination.
               </p>

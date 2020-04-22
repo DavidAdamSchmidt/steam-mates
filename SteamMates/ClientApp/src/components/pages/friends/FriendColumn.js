@@ -44,7 +44,8 @@ const Wrapper = styled.span`
 
 const Match = styled.span`
   font-weight: bold;
-  color: red;
+  background: orange;
+  color: white;
 `;
 
 const NoMatch = styled.span`

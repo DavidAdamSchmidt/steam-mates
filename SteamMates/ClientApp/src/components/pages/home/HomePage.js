@@ -1,5 +1,6 @@
 import React, { useContext } from "react";
 import styled, { keyframes } from "styled-components";
+import useWindowSize from "../../../hooks/useWindowSize";
 import UserContext from "../../../contexts/UserContext";
 import { showError } from "../../../utils/errorUtils";
 import hero from "../../../static/images/home_page_hero.jpg";
@@ -42,8 +43,7 @@ const Header = styled.div`
   position: relative;
   width: 100%;
   max-width: 1050px;
-  height: 100%;
-  max-height: 61vh;
+  height: ${({ height }) => height};
   background: url(${hero}) no-repeat bottom;
   background-size: cover;
 `;
@@ -58,7 +58,7 @@ const Wrapper = styled.div`
 
 const TextBox = styled.div`
   position: absolute;
-  top: 18%;
+  top: 25%;
   left: 50%;
   transform: translate(-50%, -50%);
   margin-left: 1.22vw;
@@ -113,6 +113,7 @@ const TextBoxSub = styled.span`
 `;
 
 const HomePage = () => {
+  const [width, height] = useWindowSize();
   const { status, error } = useContext(UserContext);
 
   if (status === 503 && (error || {}).apiName === "Steam") {
@@ -129,7 +130,7 @@ const HomePage = () => {
 
   return (
     <Wrapper>
-      <Header>
+      <Header height={Math.min(width, 1050) / height > 1.25 ? "100%" : "68vh"}>
         <TextBox>
           <TextBoxMain>steam mates</TextBoxMain>
           <TextBoxSub>find the best games to play with your friends</TextBoxSub>

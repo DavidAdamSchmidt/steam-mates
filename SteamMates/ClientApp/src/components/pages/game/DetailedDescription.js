@@ -8,7 +8,7 @@ const Container = styled.div`
 
 const Description = styled.div`
   overflow: hidden;
-  line-height: 1.2em;
+  line-height: 1.6;
 
   ${({ collapse }) =>
   collapse &&

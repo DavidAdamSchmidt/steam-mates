@@ -1,14 +1,7 @@
 import React, { useState } from "react";
-import styled, { css } from "styled-components";
+import styled from "styled-components";
 import Thumbnail from "./Thumbnail";
 import { MEDIUM, BIG } from "../../../constants/style";
-
-const contentSize = css`
-  width: auto;
-  height: auto;
-  max-width: 100%;
-  max-height: 100%;
-`;
 
 const Container = styled.div`
   @media (${MEDIUM}) {
@@ -33,14 +26,16 @@ const Selected = styled.div`
 `;
 
 const Video = styled.video`
-  ${contentSize};
-
+  width: 100%;
+  height: 100%;
   outline: 0;
 `;
 
 const Screenshot = styled.img`
-  ${contentSize};
-
+  width: auto;
+  height: auto;
+  max-width: 100%;
+  max-height: 100%;
   cursor: pointer;
 `;
 

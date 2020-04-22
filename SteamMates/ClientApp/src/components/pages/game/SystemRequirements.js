@@ -59,6 +59,7 @@ const Option = styled.div`
 
 const Requirements = styled.span`
   width: 480px;
+  line-height: 1.6;
 
   @media (min-width: 450px) {
     padding: 0 20px;
