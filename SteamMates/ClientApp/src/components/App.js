@@ -2,22 +2,22 @@ import React from "react";
 import { UserProvider } from "../contexts/UserContext";
 import { FriendProvider } from "../contexts/FriendContext";
 import { SettingsProvider } from "../contexts/SettingsContext";
+import { ThemeProvider } from "../contexts/ThemeContext";
 import Router from "./Router";
 import Layout from "./Layout";
 import NavigationBar from "./navbar/NavigationBar";
-import Theme from "./Theme";
 
 const App = () => {
   return (
     <UserProvider>
       <FriendProvider>
         <SettingsProvider>
-          <Theme>
+          <ThemeProvider>
             <NavigationBar />
             <Layout>
               <Router />
             </Layout>
-          </Theme>
+          </ThemeProvider>
         </SettingsProvider>
       </FriendProvider>
     </UserProvider>

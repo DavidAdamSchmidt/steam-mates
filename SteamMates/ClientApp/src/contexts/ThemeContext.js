@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { ThemeProvider } from "styled-components";
+import { ThemeContext, ThemeProvider as Provider } from "styled-components";
 import useWindowSize from "../hooks/useWindowSize";
 
 const containerWidth = 1050;
@@ -35,7 +35,7 @@ const updateScrollbarWidth = (theme, scrollbarWidth) => {
   return theme;
 };
 
-const Theme = ({ children }) => {
+export const ThemeProvider = ({ children }) => {
   const [theme, setTheme] = useState(initialThemeState);
   const [width] = useWindowSize();
 
@@ -48,7 +48,7 @@ const Theme = ({ children }) => {
     }
   }, [theme, width]);
 
-  return <ThemeProvider theme={theme}>{children}</ThemeProvider>;
+  return <Provider theme={theme}>{children}</Provider>;
 };
 
-export default Theme;
+export default ThemeContext;
