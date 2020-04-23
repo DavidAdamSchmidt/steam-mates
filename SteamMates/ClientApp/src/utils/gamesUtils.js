@@ -1,5 +1,5 @@
 import { css } from "styled-components";
-import { RATING, TITLE } from "../constants/orderByOptions";
+import { ORDER } from "../constants";
 
 export const filterGames = (games, searchTerm, settings, dataOrganizer) => {
   let results = [];
@@ -36,7 +36,7 @@ export const organizeByCount = games => {
 
 export const organizeByRatingCount = (games, searchTerm, orderBy) => {
   if (
-    orderBy.value === TITLE ||
+    orderBy.value === ORDER.TITLE ||
     (searchTerm.length > 2 && !orderBy.applyToSearch)
   ) {
     return organizeByCount(games);
@@ -117,7 +117,7 @@ const getComparer = (orderBy, searchTerm) => {
   const x = orderBy.asc ? 1 : -1;
   const y = orderBy.asc ? -1 : 1;
 
-  if (orderBy.value === RATING) {
+  if (orderBy.value === ORDER.RATING) {
     return (a, b) =>
       a.rating === b.rating
         ? a.game.name < b.game.name

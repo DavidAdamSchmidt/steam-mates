@@ -16,15 +16,7 @@ import UserPanel from "./UserPanel";
 import HamburgerMenu from "./HamburgerMenu";
 import SimpleMenu from "./SimpleMenu";
 import DropdownMenu from "./DropdownMenu";
-import { NETWORK_ERROR } from "../../constants/request";
-import {
-  HOME,
-  FRIENDS,
-  GAMES_OF_USER,
-  GAMES_IN_COMMON,
-  RANDOM_GAME
-} from "../../constants/routes";
-import { HAMBURGER_ICON } from "../../constants/steam";
+import { PATH, ERROR, STEAM } from "../../constants";
 
 const Wrapper = styled.div`
   position: fixed;
@@ -103,20 +95,21 @@ const NavigationBar = () => {
   }, [handleClick]);
 
   const entries = [
-    { name: "Home", path: HOME, disabled: false },
-    { name: "Friends", path: FRIENDS, disabled: false },
+    { name: "Home", path: PATH.HOME, disabled: false },
+    { name: "Friends", path: PATH.FRIENDS, disabled: false },
     {
       name: "My Games",
-      path: GAMES_OF_USER,
-      disabled: history.location.pathname === GAMES_OF_USER
+      path: PATH.GAMES_OF_USER,
+      disabled: history.location.pathname === PATH.GAMES_OF_USER
     },
     {
       name: "Common",
-      path: GAMES_IN_COMMON,
+      path: PATH.GAMES_IN_COMMON,
       disabled:
-        friends.length === 0 || history.location.pathname === GAMES_IN_COMMON
+        friends.length === 0 ||
+        history.location.pathname === PATH.GAMES_IN_COMMON
     },
-    { name: "Random", path: RANDOM_GAME, disabled: false }
+    { name: "Random", path: PATH.RANDOM_GAME, disabled: false }
   ];
 
   if (!user) {
@@ -124,7 +117,7 @@ const NavigationBar = () => {
       <Wrapper>
         <Container loggedIn={false}>
           <Logo />
-          {(error || {}).message !== NETWORK_ERROR && <LoginButton />}
+          {(error || {}).message !== ERROR.NETWORK_ERROR && <LoginButton />}
         </Container>
       </Wrapper>
     );
@@ -136,7 +129,7 @@ const NavigationBar = () => {
         <Container loggedIn={user}>
           <TogglerWrapper>
             <Toggler
-              src={HAMBURGER_ICON}
+              src={STEAM.HAMBURGER_ICON}
               alt="Toggler"
               ref={togglerRef}
               onClick={() => setShowHamburgerMenu(prevState => !prevState)}
@@ -160,8 +153,8 @@ const NavigationBar = () => {
     <Wrapper>
       <Container loggedIn={user}>
         <Logo />
-        <SimpleMenu name="Home" path={HOME} />
-        <SimpleMenu name="Friends" path={FRIENDS} />
+        <SimpleMenu name="Home" path={PATH.HOME} />
+        <SimpleMenu name="Friends" path={PATH.FRIENDS} />
         <DropdownMenu name="Games" entries={entries.slice(2)} />
         <UserPanel />
       </Container>

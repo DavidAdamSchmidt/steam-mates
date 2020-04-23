@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import login_button from "../../static/images/login_button.png";
-import { API_URL } from "../../constants/api";
+import { API_ROOT } from "../../constants";
 
 const Wrapper = styled.div`
   padding: 0 20px;
@@ -35,7 +35,7 @@ const Button = styled.button`
 const LoginButton = () => {
   return (
     <Wrapper>
-      <Form action={`${API_URL}/user/auth`} method="post">
+      <Form action={`${API_ROOT}/user/auth`} method="post">
         <Button>
           <img src={login_button} alt="LoginButton" />
         </Button>

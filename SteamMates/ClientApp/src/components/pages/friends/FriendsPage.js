@@ -8,12 +8,7 @@ import FriendRow from "./FriendRow";
 import { getAllFriends, getMatchingFriends } from "../../../utils/friendsUtils";
 import { getElapsedTimeText } from "../../../utils/sharedUtils";
 import tf2_party from "./../../../static/images/tf2_kazotsky_kick.png";
-import {
-  PERSONA_NAME,
-  REAL_NAME,
-  VANITY_ID,
-  STEAM_ID_64
-} from "../../../constants/user";
+import { PROFILE } from "../../../constants";
 
 const Wrapper = styled.div`
   ${({ theme }) => css`
@@ -65,8 +60,9 @@ const FriendsPage = () => {
       <Main>
         <SearchBox
           placeholder={`Search friends${
-            width > 620
-              ? ` by ${PERSONA_NAME}, ${REAL_NAME}, ${VANITY_ID} or ${STEAM_ID_64}`
+            width > 696
+              ? ` by ${PROFILE.PERSONA_NAME}, ${PROFILE.REAL_NAME},` +
+                ` ${PROFILE.VANITY_ID} or ${PROFILE.STEAM_ID_64}`
               : ""
           }...`}
           handleInputChange={handleInputChange}

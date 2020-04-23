@@ -1,20 +1,15 @@
-import {
-  PERSONA_NAME,
-  REAL_NAME,
-  VANITY_ID,
-  STEAM_ID_64
-} from "../constants/user";
+import { PROFILE } from "../constants";
 
-const types = [PERSONA_NAME, REAL_NAME, VANITY_ID, STEAM_ID_64];
+const types = Object.values(PROFILE);
 
 export const getAllFriends = friends => {
   return friends.map(obj => ({
     user: obj,
     matches: [
-      { type: PERSONA_NAME, startIndex: -1 },
-      { type: REAL_NAME, startIndex: -1 },
-      { type: VANITY_ID, startIndex: -1 },
-      { type: STEAM_ID_64, startIndex: -1 }
+      { type: PROFILE.PERSONA_NAME, startIndex: -1 },
+      { type: PROFILE.REAL_NAME, startIndex: -1 },
+      { type: PROFILE.VANITY_ID, startIndex: -1 },
+      { type: PROFILE.STEAM_ID_64, startIndex: -1 }
     ]
   }));
 };
@@ -38,13 +33,13 @@ export const getMatchingFriends = (friends, searchTerm) => {
 
 export const getPropertyValue = (user, type) => {
   switch (type) {
-    case PERSONA_NAME:
+    case PROFILE.PERSONA_NAME:
       return user.personaName;
-    case REAL_NAME:
+    case PROFILE.REAL_NAME:
       return user.realName;
-    case VANITY_ID:
+    case PROFILE.VANITY_ID:
       return user.vanityId;
-    case STEAM_ID_64:
+    case PROFILE.STEAM_ID_64:
       return user.steamId;
     default:
       return null;

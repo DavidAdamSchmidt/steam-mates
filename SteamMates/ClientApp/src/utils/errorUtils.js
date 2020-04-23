@@ -1,14 +1,13 @@
 import React from "react";
 import { Redirect } from "react-router-dom";
-import { ERROR } from "../constants/routes";
-import { DATABASE_ERROR } from "../constants/request";
+import { ERROR, PATH } from "../constants";
 
 export const showError = message => {
   return (
     <Redirect
       push
       to={{
-        pathname: ERROR,
+        pathname: PATH.ERROR,
         state: { message }
       }}
     />
@@ -26,7 +25,7 @@ export const checkPageError = (status, error, user, friends) => {
 
   if (
     (status === 503 && error.apiName) ||
-    (status === 500 && error.message === DATABASE_ERROR) ||
+    (status === 500 && error.message === ERROR.DATABASE_ERROR) ||
     (status === 404 && (error.tagName || error.gameId))
   ) {
     return showError(error.message);

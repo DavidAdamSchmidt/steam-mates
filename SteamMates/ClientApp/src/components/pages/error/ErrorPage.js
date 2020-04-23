@@ -2,7 +2,7 @@ import React, { useRef, useContext, useEffect } from "react";
 import styled from "styled-components";
 import { useHistory, Redirect } from "react-router-dom";
 import FriendContext from "../../../contexts/FriendContext";
-import { HOME } from "../../../constants/routes";
+import { PATH } from "../../../constants";
 
 const Wrapper = styled.div`
   margin-top: 100px;
@@ -41,7 +41,7 @@ const ErrorPage = props => {
     );
   }
 
-  return <Redirect to={HOME} />;
+  return <Redirect to={PATH.HOME} />;
 };
 
 export default ErrorPage;

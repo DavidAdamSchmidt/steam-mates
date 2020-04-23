@@ -1,18 +1,13 @@
-import {
-  REQUEST_STARTED,
-  REQUEST_SUCCESSFUL,
-  REQUEST_FAILED,
-  RESET_STATE
-} from "../constants/request";
+import { REQUEST } from "../constants";
 
 const requestReducer = (state, action) => {
   switch (action.type) {
-    case REQUEST_STARTED:
+    case REQUEST.STARTED:
       return {
         ...state,
         loading: true
       };
-    case REQUEST_SUCCESSFUL:
+    case REQUEST.SUCCESSFUL:
       return {
         ...state,
         loading: false,
@@ -20,14 +15,14 @@ const requestReducer = (state, action) => {
         data: action.data,
         error: null
       };
-    case REQUEST_FAILED:
+    case REQUEST.FAILED:
       return {
         ...state,
         loading: false,
         status: action.status,
         error: action.error
       };
-    case RESET_STATE:
+    case REQUEST.RESET_STATE:
       return {
         loading: false,
         status: null,

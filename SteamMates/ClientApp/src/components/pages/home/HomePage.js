@@ -4,7 +4,7 @@ import useWindowSize from "../../../hooks/useWindowSize";
 import UserContext from "../../../contexts/UserContext";
 import { showError } from "../../../utils/errorUtils";
 import hero from "../../../static/images/home_page_hero.jpg";
-import { NETWORK_ERROR } from "../../../constants/request";
+import { ERROR } from "../../../constants";
 
 const moveInFromLeft = keyframes`
   0% {
@@ -127,7 +127,7 @@ const HomePage = () => {
     );
   }
 
-  if ((error || {}).message === NETWORK_ERROR) {
+  if ((error || {}).message === ERROR.NETWORK_ERROR) {
     return showError("Could not connect to the server.");
   }
 

@@ -8,7 +8,7 @@ import GameContainer from "./GameContainer";
 import { getElapsedTimeText } from "../../../utils/sharedUtils";
 import { organizeByCount } from "../../../utils/gamesUtils";
 import tf2_luxury_lounge from "./../../../static/images/tf2_luxury_lounge.png";
-import { API_URL } from "../../../constants/api";
+import { API_ROOT } from "../../../constants";
 
 const Wrapper = styled.div`
   ${({ theme }) => css`
@@ -28,7 +28,7 @@ const LatestUpdate = styled.p`
 const GamesOfUserPage = () => {
   const { user } = useContext(UserContext);
 
-  const request = useRequest(`${API_URL}/games`, true, "GET");
+  const request = useRequest(`${API_ROOT}/games`, true, "GET");
   const { data } = request;
 
   return (

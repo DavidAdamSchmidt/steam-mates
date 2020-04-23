@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
 import styled, { css } from "styled-components";
 import SettingsContext from "../../../contexts/SettingsContext";
-import { RATING, TITLE } from "../../../constants/orderByOptions";
+import { ORDER } from "../../../constants";
 
 const Panel = styled.div`
   display: ${({ display }) => display};
@@ -171,7 +171,7 @@ const AdvancedOptions = ({ show }) => {
               marginRight={"15px"}
               onChange={handleOrderByValueChange}
             >
-              {[RATING, TITLE].map(property => (
+              {[ORDER.RATING, ORDER.TITLE].map(property => (
                 <option key={property} value={property}>
                   {property}
                 </option>

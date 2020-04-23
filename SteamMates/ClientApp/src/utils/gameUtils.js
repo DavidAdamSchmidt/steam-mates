@@ -1,7 +1,7 @@
-import { API_URL } from "../constants/api";
+import { API_ROOT } from "../constants";
 
 export const constructGamePageUrl = (gameId, friends) => {
-  return `${API_URL}/games/${gameId}${
+  return `${API_ROOT}/games/${gameId}${
     friends.length > 0 ? "?" : ""
   }${friends
     .map((friend, index) => `${index ? "&" : ""}userId=${friend.steamId}`)

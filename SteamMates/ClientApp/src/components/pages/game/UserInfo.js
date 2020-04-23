@@ -5,8 +5,7 @@ import FriendContext from "../../../contexts/FriendContext";
 import SectionTitle from "./SectionTitle";
 import StarRatings from "../../common/StarRatings";
 import { calculatePlayTime } from "../../../utils/gameUtils";
-import { FRIENDS } from "../../../constants/routes";
-import { PROFILE_URL } from "../../../constants/steam";
+import { PATH, STEAM } from "../../../constants";
 
 const MainWrapper = styled.div`
   display: flex;
@@ -186,7 +185,7 @@ const UserInfo = ({ id, info }) => {
           <Row key={x.steamId} hasFriends={friends.length}>
             <AvatarContainer hasFriends={friends.length}>
               <Anchor
-                href={`${PROFILE_URL}/${x.steamId}`}
+                href={`${STEAM.PROFILE_ROOT}/${x.steamId}`}
                 target="_blank"
                 rel="noopener noreferrer"
                 hasFriends={friends.length}
@@ -221,7 +220,7 @@ const UserInfo = ({ id, info }) => {
       </MainWrapper>
       {info.length === 1 && (
         <Tip>
-          <Link to={FRIENDS}>Select</Link> up to 3 friends to compare your
+          <Link to={PATH.FRIENDS}>Select</Link> up to 3 friends to compare your
           rating with
         </Tip>
       )}

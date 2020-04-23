@@ -6,8 +6,7 @@ import FriendContext from "../../../contexts/FriendContext";
 import StarRatings from "../../common/StarRatings";
 import { getCardBackground } from "../../../utils/gamesUtils";
 import game_card_default from "./../../../static/images/game_card_default.jpg";
-import { IMAGE_ROOT, LOGO_URL } from "../../../constants/steam";
-import { GAMES } from "../../../constants/routes";
+import { PATH, STEAM } from "../../../constants";
 
 const Wrapper = styled.div`
   margin: 14px;
@@ -100,7 +99,7 @@ const Image = styled.img`
 
 const Logo = styled.div.attrs(({ id }) => ({
   style: {
-    backgroundImage: `url(${IMAGE_ROOT}/${id}/logo.png)`
+    backgroundImage: `url(${STEAM.IMAGE_ROOT}/${id}/logo.png)`
   }
 }))`
   box-sizing: border-box;
@@ -222,7 +221,7 @@ const GameCard = ({ info, allowRating }) => {
         <Front rating={rating}>
           <Title>{info.game.name}</Title>
           <Icon
-            src={`${LOGO_URL}/${info.game.appId}/${info.game.imgIconUrl}.jpg`}
+            src={`${STEAM.OLD_IMAGE_ROOT}/${info.game.appId}/${info.game.imgIconUrl}.jpg`}
             alt="GameIcon"
           />
           <ImageContainer logoUsed={!hasBigImage}>
@@ -230,8 +229,8 @@ const GameCard = ({ info, allowRating }) => {
               logoUsed={!hasBigImage}
               src={
                 hasBigImage
-                  ? `${IMAGE_ROOT}/${info.game.appId}/library_600x900.jpg`
-                  : `${LOGO_URL}/${info.game.appId}/${info.game.imgLogoUrl}.jpg`
+                  ? `${STEAM.IMAGE_ROOT}/${info.game.appId}/library_600x900.jpg`
+                  : `${STEAM.OLD_IMAGE_ROOT}/${info.game.appId}/${info.game.imgLogoUrl}.jpg`
               }
               onError={() => setHasBigImage(false)}
             />
@@ -262,7 +261,7 @@ const GameCard = ({ info, allowRating }) => {
                 ))}
               </Users>
             )}
-            <Button to={`${GAMES}/${info.game.appId}`}>Page</Button>
+            <Button to={`${PATH.GAMES}/${info.game.appId}`}>Page</Button>
             <Tags>
               {[
                 "Multiplayer",

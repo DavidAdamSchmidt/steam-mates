@@ -10,7 +10,7 @@ import {
   constructGamePageUrl,
   constructUserInfo
 } from "../../../utils/gameUtils";
-import { HOME } from "../../../constants/routes";
+import { PATH } from "../../../constants";
 
 const GamePage = ({ match }) => {
   const [id, setId] = useState(null);
@@ -37,7 +37,7 @@ const GamePage = ({ match }) => {
   }, [match.params.id]);
 
   if (isInvalidId) {
-    return <Redirect to={HOME} />;
+    return <Redirect to={PATH.HOME} />;
   }
 
   const info = data ? constructUserInfo(user, friends, data.userInfo) : null;

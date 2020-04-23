@@ -1,15 +1,16 @@
 import React, { createContext, useEffect, useState } from "react";
 import useRequest from "../hooks/useRequest";
 import LoadingIndicator from "../components/common/LoadingIndicator";
-import { API_URL } from "../constants/api";
-import { USER_ID } from "../constants/localStorage";
+import { STORAGE, API_ROOT } from "../constants";
 
 const UserContext = createContext(null);
+
+const key = STORAGE.USER_ID;
 
 export const UserProvider = props => {
   const [clearFriends, setClearFriends] = useState(false);
 
-  const request = useRequest(`${API_URL}/user/info`, true);
+  const request = useRequest(`${API_ROOT}/user/info`, true);
   const { loading, status, data, error, reset } = request;
 
   useEffect(() => {
@@ -17,11 +18,11 @@ export const UserProvider = props => {
       return;
     }
 
-    if (data.steamId !== localStorage.getItem(USER_ID)) {
+    if (data.steamId !== localStorage.getItem(key)) {
       setClearFriends(true);
     }
 
-    localStorage.setItem(USER_ID, data.steamId);
+    localStorage.setItem(key, data.steamId);
   }, [data]);
 
   if (loading) {

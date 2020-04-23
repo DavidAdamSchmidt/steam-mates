@@ -1,27 +1,22 @@
-import {
-  REQUEST_STARTED,
-  REQUEST_SUCCESSFUL,
-  REQUEST_FAILED,
-  RESET_STATE,
-  NETWORK_ERROR
-} from "../constants/request";
+import { REQUEST, ERROR } from "../constants";
 
 export const requestStarted = () => ({
-  type: REQUEST_STARTED
+  type: REQUEST.STARTED
 });
 
 export const requestSuccessful = response => ({
-  type: REQUEST_SUCCESSFUL,
+  type: REQUEST.SUCCESSFUL,
   status: response.status,
   data: response.data
 });
 
 export const requestFailed = error => ({
-  type: REQUEST_FAILED,
+  type: REQUEST.FAILED,
   status: (error.response || {}).status,
-  error: error.message === NETWORK_ERROR ? error : (error.response || {}).data
+  error:
+    error.message === ERROR.NETWORK_ERROR ? error : (error.response || {}).data
 });
 
 export const resetState = () => ({
-  type: RESET_STATE
+  type: REQUEST.RESET_STATE
 });

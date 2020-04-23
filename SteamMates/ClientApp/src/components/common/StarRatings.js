@@ -5,8 +5,7 @@ import UserContext from "../../contexts/UserContext";
 import { showError } from "../../utils/errorUtils";
 import full_star from "../../static/images/full_star.gif";
 import empty_star from "../../static/images/empty_star.gif";
-import { API_URL } from "../../constants/api";
-import { DATABASE_ERROR } from "../../constants/request";
+import { ERROR, API_ROOT } from "../../constants";
 
 const Wrapper = styled.div`
   display: flex;
@@ -50,14 +49,14 @@ const StarRatings = ({
   const values = [...Array(amountOfStars).keys()].map(i => i + 1);
 
   const { status, error } = useRequest(
-    `${API_URL}/games/rate`,
+    `${API_ROOT}/games/rate`,
     sendRequest,
     "PUT",
     requestBody
   );
 
   useEffect(() => {
-    if (status === 500 && (error || {}).message === DATABASE_ERROR) {
+    if (status === 500 && (error || {}).message === ERROR.DATABASE_ERROR) {
       setErrorMessage("Database error. Your rating has not been saved.");
     } else if (status && status !== 201 && status !== 204) {
       setErrorMessage(

@@ -15,8 +15,7 @@ import {
 } from "../../../utils/gamesUtils";
 import tf2_high_five from "./../../../static/images/tf2_high_five.png";
 import tf2_spy_shocked from "./../../../static/images/tf2_spy_shocked.png";
-import { API_URL } from "../../../constants/api";
-import { HOME } from "../../../constants/routes";
+import { PATH, API_ROOT } from "../../../constants";
 
 const Wrapper = styled.div`
   ${({ theme }) => css`
@@ -41,7 +40,7 @@ const GamesInCommonPage = () => {
   const { friends } = useContext(FriendContext);
 
   const request = useRequest(
-    `${API_URL}/games/common?${queryString}`,
+    `${API_ROOT}/games/common?${queryString}`,
     sendRequest,
     "GET"
   );
@@ -63,7 +62,7 @@ const GamesInCommonPage = () => {
   }, [friends, privateProfiles]);
 
   if (friends.length === 0) {
-    return <Redirect to={HOME} />;
+    return <Redirect to={PATH.HOME} />;
   }
 
   if (privateProfiles.length > 0) {

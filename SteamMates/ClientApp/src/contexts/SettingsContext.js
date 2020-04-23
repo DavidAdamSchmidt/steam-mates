@@ -1,5 +1,5 @@
 import React, { createContext, useState } from "react";
-import { RATING } from "../constants/orderByOptions";
+import { ORDER } from "../constants";
 
 const SettingsContext = createContext(null);
 
@@ -17,7 +17,7 @@ export const SettingsProvider = props => {
     { name: "Unrated", checked: true }
   ]);
   const [orderBy, setOrderBy] = useState({
-    value: RATING,
+    value: ORDER.RATING,
     asc: false,
     applyToSearch: false
   });

@@ -2,13 +2,13 @@ import React, { useContext } from "react";
 import { Redirect, Route } from "react-router-dom";
 import UserContext from "../contexts/UserContext";
 import { showError } from "../utils/errorUtils";
-import { HOME } from "../constants/routes";
+import { PATH } from "../constants";
 
 const PrivateRoute = ({ component, ...options }) => {
   const { user } = useContext(UserContext);
 
   if (!user) {
-    return <Redirect to={HOME} />;
+    return <Redirect to={PATH.HOME} />;
   }
 
   if (user.communityVisibilityState === 1) {

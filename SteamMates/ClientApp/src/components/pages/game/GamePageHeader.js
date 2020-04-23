@@ -5,7 +5,7 @@ import {
   calculateCreatorsFontSize
 } from "../../../utils/gameUtils";
 import library_hero_default from "../../../static/images/library_hero_default.png";
-import { IMAGE_ROOT, STORE_PAGE } from "../../../constants/steam";
+import { STEAM } from "../../../constants";
 
 const Header = styled.div`
   position: relative;
@@ -161,11 +161,11 @@ const GamePageHeader = ({ id, name, developers, publishers, owned }) => {
     <Header>
       <Image
         onError={e => (e.target.src = library_hero_default)}
-        src={`${IMAGE_ROOT}/${id}/library_hero.jpg`}
+        src={`${STEAM.IMAGE_ROOT}/${id}/library_hero.jpg`}
         alt="LibraryHero"
       />
       <Anchor
-        href={`${STORE_PAGE}/${id}`}
+        href={`${STEAM.STORE_ROOT}/${id}`}
         target="_blank"
         rel="noopener noreferrer"
       >
